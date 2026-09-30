@@ -3,174 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA PANNA - Tinh Hoa Ngọt Ngào</title>
-    <meta name="description" content="LA PANNA - Bánh Panna Cotta tinh tế, ngọt ngào, đậm đà hương vị tự nhiên.">
+    <title>LA PANNA - Panna Cotta Thủ Công Chuẩn Vị Ý</title>
+    <meta name="description" content="LA PANNA - Bánh Panna Cotta thủ công tinh tế, ngọt ngào, đậm đà hương vị tự nhiên. Tươi mới mỗi ngày.">
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Cormorant for headings (elegant serif) & Montserrat for body (clean sans-serif) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Navbar -->
-    <header class="header">
+    <header class="header" id="header">
         <div class="container navbar">
             <a href="#" class="logo">LA PANNA</a>
             <nav class="nav-links">
                 <a href="#home">Trang chủ</a>
-                <a href="#products">Sản phẩm</a>
-                <a href="#about">Về chúng tôi</a>
-                <a href="#contact">Liên hệ</a>
+                <a href="#products">Thực đơn</a>
+                <a href="#mix-box">Mix vị</a>
+                <a href="#about">Câu chuyện</a>
+                <a href="#reviews">Đánh giá</a>
             </nav>
             <div class="nav-actions">
-                <button class="cart-icon" id="cartBtn">
-                    <i class="fa-solid fa-cart-shopping"></i>
+                <button class="cart-icon" id="cartBtn" aria-label="Giỏ hàng">
+                    <i class="fa-solid fa-bag-shopping"></i>
                     <span class="cart-count" id="cartCount">0</span>
                 </button>
-                <a href="#products" class="btn-primary btn-sm">Đặt hàng ngay</a>
             </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#home">Trang chủ</a>
+            <a href="#products">Thực đơn</a>
+            <a href="#mix-box">Mix vị</a>
+            <a href="#about">Câu chuyện</a>
+            <a href="#reviews">Đánh giá</a>
         </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Sự Tinh Tế Trong Từng Thìa Bánh</h1>
-            <p>Trải nghiệm hương vị Panna Cotta chuẩn Ý với nguyên liệu tự nhiên cao cấp. Ngọt ngào, mềm mịn, tan ngay trong miệng.</p>
-            <a href="#products" class="btn-primary btn-lg">Khám Phá Ngay</a>
+        <div class="hero-bg-accent"></div>
+        <div class="container hero-container">
+            <div class="hero-content reveal fade-up">
+                <div class="hero-subtitle"><i class="fa-solid fa-crown"></i> www.lapannavietnam.vn</div>
+                <h1>Panna Cotta Thủ Công Mềm Tan - <br><span class="text-primary italic-serif">Chuẩn Vị Ý,</span> Tươi Mới Mỗi Ngày</h1>
+                <p>Trải nghiệm lớp kem mềm mịn, bồng bềnh với 100% sữa tươi nguyên kem và whipping cream hảo hạng, hòa quyện sốt trái cây nhiệt đới nấu chậm giữ trọn vị thanh mát tự nhiên.</p>
+                <div class="hero-actions">
+                    <a href="#products" class="btn-primary btn-lg">Khám Phá Thực Đơn <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#mix-box" class="btn-outline btn-lg"><i class="fa-solid fa-gift"></i> Chọn Hộp Quà (Tặng Kèm)</a>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class="fa-solid fa-leaf"></i></div>
+                        <span>100% Sữa tươi & Cream xịn<br><small>Béo nhẹ, không ngấy</small></span>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class="fa-solid fa-calendar-day"></i></div>
+                        <span>0% Chất bảo quản<br><small>Làm mới mỗi ngày</small></span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image-wrapper reveal fade-left delay-1">
+                <div class="hero-image-card">
+                    <img src="assets/mango_panna_cotta_1790435259241.png" alt="Panna Cotta Xoài" class="hero-img">
+                    <div class="floating-badge badge-top-right">
+                        <i class="fa-solid fa-star text-yellow"></i> 4.9 (1.2k+ Đánh giá)
+                    </div>
+                    <div class="floating-badge badge-bottom-left">
+                        <span class="badge-tag">Ngọt thanh, Trái cây tươi</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <img src="assets/hero_banner_1790435237535.png" alt="Panna Cotta Hero Banner" class="hero-bg">
     </section>
 
     <!-- Product Section -->
     <section class="products-section container" id="products">
-        <div class="section-title">
-            <h2>Thực Đơn Panna Cotta</h2>
-            <p>Khám phá bộ sưu tập các hương vị Panna Cotta độc đáo từ La Panna</p>
+        <div class="section-header reveal fade-up">
+            <span class="section-subtitle">THỰC ĐƠN THỦ CÔNG</span>
+            <h2>Các Vị Panna Cotta Được Yêu Thích Nhất</h2>
+            <p>Mỗi hũ panna cotta là sự chăm chút tỉ mỉ từ khâu chọn nguyên liệu đến khi nấu. Bảo quản lạnh tuyệt đối 2-6°C.</p>
         </div>
+        
+        <div class="category-filter reveal fade-up delay-1">
+            <button class="filter-btn active" data-filter="all">Tất Cả</button>
+            <button class="filter-btn" data-filter="fruit"><span class="dot fruit-dot"></span> Trái Cây Tươi Mát</button>
+            <button class="filter-btn" data-filter="tea"><span class="dot tea-dot"></span> Trà & Thảo Mộc</button>
+            <button class="filter-btn" data-filter="coffee"><span class="dot coffee-dot"></span> Cacao & Caramel</button>
+        </div>
+
         <div class="product-grid" id="productGrid">
             <!-- Rendered by JS -->
         </div>
     </section>
 
+    <!-- Mix Box Section -->
+    <section class="mix-box-section" id="mix-box">
+        <div class="container">
+            <div class="mix-box-wrapper reveal fade-up">
+                <div class="mix-box-info">
+                    <span class="section-subtitle">CÁ NHÂN HÓA TRẢI NGHIỆM</span>
+                    <h2>Tự Phối Hộp Mix Vị <br><span class="italic-serif text-primary">Theo Sở Thích & Khẩu Vị Của Riêng Bạn</span></h2>
+                    <p>Lựa chọn danh sách những hương vị đang bán chạy nhất để tạo nên món quà ngọt ngào dành tặng người thân, bạn bè hoặc đãi tiệc, trà tại nhà.</p>
+
+                    <div class="box-options" id="boxOptions">
+                        <label class="box-option active">
+                            <input type="radio" name="boxSize" value="4" checked>
+                            <div class="box-option-content">
+                                <div class="box-option-header">
+                                    <div class="box-title">Hộp Sweet Trio & More (Set 4 Hũ)</div>
+                                    <div class="box-price">180.000đ</div>
+                                </div>
+                                <div class="box-desc">Gợi ý tuyệt vời cho buổi trà chiều!</div>
+                            </div>
+                        </label>
+                        <label class="box-option">
+                            <input type="radio" name="boxSize" value="6">
+                            <div class="box-option-content">
+                                <div class="box-badge">Giảm 10%</div>
+                                <div class="box-option-header">
+                                    <div class="box-title">Hộp Đại Tiệc Mini Grand (Set 6 Hũ)</div>
+                                    <div class="box-price">270.000đ</div>
+                                </div>
+                                <div class="box-desc">Khám phá trọn bộ các vị Panna Cotta yêu thích nhất</div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="mix-box-action">
+                        <button class="btn-primary btn-block btn-lg" id="addMixBoxToCartBtn" disabled>
+                            <i class="fa-solid fa-basket-shopping"></i> Chọn đủ vị để thêm vào giỏ (0/4)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mix-box-selection">
+                    <div class="selection-header">
+                        <span class="selection-title">Hãy chọn <span id="mixTargetCount">4</span> vị Panna Cotta:</span>
+                        <div class="selection-slots" id="selectionSlots">
+                            <!-- JS rendered slots -->
+                        </div>
+                    </div>
+                    
+                    <div class="mix-flavors-grid" id="mixFlavorsGrid">
+                        <!-- JS rendered -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section class="about-section" id="about">
-        <div class="container about-container">
-            <div class="about-text">
-                <h2>Câu Chuyện Của La Panna</h2>
-                <p>Khởi nguồn từ tình yêu với những món tráng miệng ngọt ngào của nước Ý, La Panna mang đến cho bạn không chỉ là một chiếc bánh, mà là một trải nghiệm trọn vẹn của vị giác.</p>
-                <p>Chúng tôi cam kết sử dụng 100% nguyên liệu tự nhiên: whipping cream hảo hạng, sữa tươi thanh trùng và các loại trái cây tươi ngon nhất. Không chất bảo quản, không hương liệu nhân tạo.</p>
-                <ul class="features">
-                    <li><i class="fa-solid fa-check"></i> Nguyên liệu cao cấp</li>
-                    <li><i class="fa-solid fa-check"></i> Công thức chuẩn Ý</li>
-                    <li><i class="fa-solid fa-check"></i> Làm mới mỗi ngày</li>
-                </ul>
+        <div class="container">
+            <div class="section-header text-center reveal fade-up">
+                <span class="section-subtitle">TRIẾT LÝ NGHỆ NHÂN</span>
+                <h2>Nghệ Thuật Tráng Miệng Từ Sự Tỉ Mỉ & Tươi Mới</h2>
+                <p>Chúng tôi tin rằng, món tráng miệng ngon không chỉ mang lại cảm giác thăng hoa, mà còn phải lành mạnh cho cơ thể và nhẹ nhàng cho tâm hồn.</p>
             </div>
-            <div class="about-images">
-                <img src="assets/vanilla_panna_cotta_1790435249043.png" alt="About La Panna" class="about-img">
+            
+            <div class="features-grid">
+                <div class="feature-card reveal fade-up delay-1">
+                    <div class="feature-icon"><i class="fa-solid fa-box-open"></i></div>
+                    <h3>Nguyên Liệu Tự Nhiên</h3>
+                    <p>Không phẩm màu nhân tạo, không hương liệu tổng hợp. Màu sắc & mùi thơm của panna cotta hoàn toàn từ trái cây tươi sên và Madagascar vanilla thật.</p>
+                </div>
+                <div class="feature-card reveal fade-up delay-2">
+                    <div class="feature-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <h3>Công Thức Ít Đường</h3>
+                    <p>Giảm 40% lượng đường so với công thức truyền thống, dùng đường thốt nốt/cỏ ngọt để giữ trọn vị thanh tao và giúp bạn thưởng thức mà không lo tăng cân.</p>
+                </div>
+                <div class="feature-card reveal fade-up delay-3">
+                    <div class="feature-icon"><i class="fa-solid fa-heart"></i></div>
+                    <h3>Làm Thủ Công Mỗi Ngày</h3>
+                    <p>Bánh được nấu theo từng mẻ nhỏ vào mỗi buổi sáng, đảm bảo độ tươi mới và kết cấu mềm mịn mượt mà hoàn hảo nhất khi đến tay bạn.</p>
+                </div>
+                <div class="feature-card reveal fade-up delay-4">
+                    <div class="feature-icon"><i class="fa-solid fa-snowflake"></i></div>
+                    <h3>Bảo Quản Lạnh Tuyệt Đối</h3>
+                    <p>Quy trình giao hàng khép kín với túi bạc giữ nhiệt và đá gel lạnh khô chuyên dụng, cam kết bánh không bị chảy hay biến đổi chất lượng.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Reviews Section -->
-    <section class="reviews-section container">
-        <div class="section-title">
-            <h2>Khách Hàng Nói Gì?</h2>
-        </div>
-        <div class="reviews-grid">
-            <div class="review-card">
-                <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                <p class="review-text">"Panna Cotta trà xanh ở đây thực sự đỉnh cao. Vị chát nhẹ của matcha kết hợp với độ béo ngậy của kem tươi làm mình ăn không biết chán."</p>
-                <p class="reviewer">- Minh Tuấn, TP.HCM</p>
+    <section class="reviews-section" id="reviews">
+        <div class="container">
+            <div class="section-header reveal fade-up">
+                <span class="section-subtitle">TRẢI NGHIỆM THỰC TẾ</span>
+                <div class="reviews-header-flex">
+                    <h2>Cảm Nhận Từ Thực Khách Yêu Bánh</h2>
+                    <div class="overall-rating">
+                        <span class="rating-score">4.9/5</span>
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <span class="rating-count">(Hơn 1,200 đánh giá thực tế)</span>
+                    </div>
+                </div>
             </div>
-            <div class="review-card">
-                <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                <p class="review-text">"Bánh siêu mềm mịn, vị ngọt rất thanh không hề bị gắt. Packaging cũng rất xinh xắn, mua làm quà tặng rất hợp lý!"</p>
-                <p class="reviewer">- Thu Hà, Hà Nội</p>
-            </div>
-            <div class="review-card">
-                <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
-                <p class="review-text">"Lần đầu thử vị xoài và thực sự ấn tượng. Sốt xoài tươi chua chua ngọt ngọt ăn kèm panna cotta siêu hợp."</p>
-                <p class="reviewer">- Ngọc Linh, Đà Nẵng</p>
+            
+            <div class="reviews-grid">
+                <div class="review-card reveal fade-up delay-1">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">N</div>
+                        <div class="reviewer-info">
+                            <h4>Nguyễn Linh Đan</h4>
+                            <span class="review-date">Mua lần 3 - 12/08/2026</span>
+                        </div>
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    </div>
+                    <p class="review-text">"Đã thử qua rất nhiều tiệm panna cotta ở Sài Gòn nhưng La Panna là chân ái! Vị ngọt thanh, kem mềm tan chảy trong miệng, sốt trái cây chua chua ngọt ngọt rất vừa vặn. Packaging xịn xò mua tặng cũng rất sang."</p>
+                    <div class="review-product"><i class="fa-solid fa-check-circle text-green"></i> Đã mua Hộp Sweet Trio 4 Hũ</div>
+                </div>
+                <div class="review-card reveal fade-up delay-2">
+                    <div class="review-header">
+                        <div class="reviewer-avatar avatar-2">T</div>
+                        <div class="reviewer-info">
+                            <h4>Trần Minh Hoàng</h4>
+                            <span class="review-date">Mua lần 1 - 05/08/2026</span>
+                        </div>
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    </div>
+                    <p class="review-text">"Panna Cotta Matcha thực sự đỉnh! Vị đắng nhẹ thanh tao của matcha kết hợp với độ béo của kem tươi tạo nên tổng thể rất hài hòa, không hề bị ngấy. Giao hàng cực nhanh, bánh vẫn lạnh ngắt."</p>
+                    <div class="review-product"><i class="fa-solid fa-check-circle text-green"></i> Đã mua Panna Cotta Matcha</div>
+                </div>
+                <div class="review-card reveal fade-up delay-3">
+                    <div class="review-header">
+                        <div class="reviewer-avatar avatar-3">M</div>
+                        <div class="reviewer-info">
+                            <h4>Mai Anh Vũ</h4>
+                            <span class="review-date">Mua lần 2 - 28/07/2026</span>
+                        </div>
+                        <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    </div>
+                    <p class="review-text">"Vị caramel muối hạnh nhân là best seller trong lòng mình. Lớp sốt caramel đắng nhẹ thơm phức quyện với hạnh nhân nướng giòn rụm. Trẻ con ở nhà cũng mê tít vị dâu tây."</p>
+                    <div class="review-product"><i class="fa-solid fa-check-circle text-green"></i> Đã mua Hộp Đại Tiệc 6 Hũ</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact & Order Form -->
-    <section class="contact-section" id="contact">
-        <div class="container contact-container">
-            <div class="contact-info">
-                <h2>Liên Hệ & Đặt Hàng</h2>
-                <p>Hãy để lại thông tin, chúng tôi sẽ giao những chiếc Panna Cotta ngọt ngào đến tận tay bạn trong thời gian sớm nhất.</p>
-                <div class="info-item">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>123 Đường Ngọt Ngào, Quận 1, TP.HCM</span>
-                </div>
-                <div class="info-item">
-                    <i class="fa-solid fa-phone"></i>
-                    <span>0123 456 789</span>
-                </div>
-                <div class="info-item">
-                    <i class="fa-solid fa-envelope"></i>
-                    <span>hello@lapanna.vn</span>
-                </div>
+    <!-- CTA / Discount Section -->
+    <section class="cta-section reveal fade-up">
+        <div class="container cta-container">
+            <div class="cta-content">
+                <h2>Nhận Mã Giảm 15% Cho Đơn Hàng Đầu Tiên</h2>
+                <p>Để lại email để nhận ngay mã ưu đãi và cập nhật các vị bánh theo mùa mới nhất từ La Panna.</p>
             </div>
-            <div class="contact-form">
-                <form id="orderForm">
-                    <div class="form-group">
-                        <label for="name">Họ và tên *</label>
-                        <input type="text" id="name" name="name" required placeholder="Nhập họ tên của bạn">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Số điện thoại *</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="Nhập số điện thoại">
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Địa chỉ giao hàng *</label>
-                        <input type="text" id="address" name="address" required placeholder="Nhập địa chỉ giao hàng">
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">Ghi chú (tùy chọn)</label>
-                        <textarea id="notes" name="notes" rows="4" placeholder="Ví dụ: Giao giờ hành chính, thêm thìa..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary btn-block" id="submitBtn">Gửi Yêu Cầu Đặt Hàng</button>
-                    <div id="formStatus" class="form-status"></div>
-                </form>
-            </div>
+            <form class="cta-form">
+                <input type="email" placeholder="Nhập email của bạn..." required>
+                <button type="button" class="btn-primary">Đăng Ký Ngay</button>
+            </form>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container footer-content">
-            <div class="footer-col">
-                <h3 class="logo">LA PANNA</h3>
-                <p>Đỉnh cao của sự tinh tế, ngọt ngào từ nước Ý.</p>
+            <div class="footer-col brand-col">
+                <h3 class="logo footer-logo">LA PANNA</h3>
+                <p>Nghệ thuật tráng miệng thủ công tinh tế, ngọt ngào từ nước Ý, mang lại trải nghiệm vị giác trọn vẹn và an lành.</p>
                 <div class="social-links">
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Tiktok"><i class="fa-brands fa-tiktok"></i></a>
                 </div>
             </div>
             <div class="footer-col">
-                <h4>Khám Phá</h4>
-                <a href="#home">Trang chủ</a>
-                <a href="#products">Sản phẩm</a>
-                <a href="#about">Về chúng tôi</a>
-            </div>
-            <div class="footer-col">
-                <h4>Chính Sách</h4>
+                <h4>Chính Sách & Hỗ Trợ</h4>
                 <a href="#">Chính sách giao hàng</a>
                 <a href="#">Đổi trả & Hoàn tiền</a>
                 <a href="#">Bảo mật thông tin</a>
+                <a href="#">Câu hỏi thường gặp</a>
             </div>
             <div class="footer-col">
-                <h4>Giờ Mở Cửa</h4>
-                <p>Thứ 2 - Thứ 6: 08:00 - 22:00</p>
-                <p>Thứ 7 - Chủ Nhật: 09:00 - 23:00</p>
+                <h4>Hệ Thống Tiệm Bánh</h4>
+                <div class="store-info">
+                    <strong><i class="fa-solid fa-store"></i> Chi nhánh Quận 1:</strong>
+                    <p>123 Lê Thánh Tôn, P. Bến Nghé, Q.1, TP.HCM</p>
+                </div>
+                <div class="store-info">
+                    <strong><i class="fa-solid fa-store"></i> Chi nhánh Quận 7:</strong>
+                    <p>45 Nguyễn Thị Thập, P. Tân Phú, Q.7, TP.HCM</p>
+                </div>
+                <div class="contact-hotline">
+                    <span>Hotline đặt bánh:</span>
+                    <a href="tel:19001234">1900 1234</a>
+                </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 LA PANNA. All rights reserved.</p>
+        <div class="footer-bottom container">
+            <p>&copy; 2026 LA PANNA. Mọi quyền được bảo lưu.</p>
+            <div class="payment-methods">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-apple-pay"></i>
+            </div>
         </div>
     </footer>
 
@@ -178,18 +307,57 @@
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h3>Giỏ Hàng Của Bạn</h3>
-            <button class="close-cart" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h3>Giỏ Hàng <span class="cart-count-badge" id="cartHeaderCount">0</span></h3>
+            <button class="close-cart" id="closeCartBtn" aria-label="Đóng giỏ hàng"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        
         <div class="cart-items" id="cartItems">
             <!-- Items rendered by JS -->
         </div>
+        
         <div class="cart-footer">
             <div class="cart-total">
-                <span>Tổng cộng:</span>
-                <span id="cartTotalPrice">0đ</span>
+                <span>Tổng Tạm Tính:</span>
+                <span id="cartTotalPrice" class="total-price">0đ</span>
             </div>
-            <a href="#contact" class="btn-primary btn-block" id="checkoutBtn">Thanh Toán Ngay</a>
+            <button class="btn-primary btn-block btn-lg" id="checkoutBtn">
+                Thanh Toán Đơn Hàng <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+            <p class="cart-note"><i class="fa-solid fa-shield-halved"></i> Thanh toán an toàn & bảo mật</p>
+        </div>
+    </div>
+
+    <!-- Order Modal (for contact info after clicking checkout) -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Thông Tin Giao Hàng</h3>
+                <button class="close-modal" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="orderForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Họ và tên *</label>
+                            <input type="text" id="name" name="name" required placeholder="Nhập họ tên người nhận">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại *</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="Ví dụ: 0912345678">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Địa chỉ giao hàng chi tiết *</label>
+                        <input type="text" id="address" name="address" required placeholder="Số nhà, đường, phường/xã, quận/huyện...">
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Ghi chú thêm (tùy chọn)</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Ví dụ: Giao sau 5h chiều, lấy thêm 2 thìa..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary btn-block btn-lg mt-4" id="submitBtn">Xác Nhận Đặt Hàng</button>
+                    <div id="formStatus" class="form-status"></div>
+                </form>
+            </div>
         </div>
     </div>
 

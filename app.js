@@ -1,103 +1,296 @@
 // app.js
 
-// Products Data
+// --- Data ---
 const products = [
-    { id: 1, name: 'Panna Cotta Vani Tradi', price: 45000, img: 'assets/vanilla_panna_cotta_1790435249043.png' },
-    { id: 2, name: 'Panna Cotta Xoài Nhiệt Đới', price: 50000, img: 'assets/mango_panna_cotta_1790435259241.png' },
-    { id: 3, name: 'Panna Cotta Dâu Tây', price: 55000, img: 'assets/strawberry_panna_cotta_1790435271258.png' },
-    { id: 4, name: 'Panna Cotta Matcha', price: 55000, img: 'assets/matcha_panna_cotta_1790435285155.png' },
-    { id: 5, name: 'Panna Cotta Caramel', price: 50000, img: 'assets/caramel_panna_cotta_1790435294553.png' }
+    { id: 1, name: 'Panna Cotta Dâu Tây Mọng Nước', price: 38000, img: 'assets/strawberry_panna_cotta_1790435271258.png', category: 'fruit', tag: 'Best Seller', tagType: 'danger', desc: 'Kết cấu dâu tây thanh mát chua nhẹ hòa hợp với whipping cream' },
+    { id: 2, name: 'Panna Cotta Xoài Cát Hòa Lộc', price: 38000, img: 'assets/mango_panna_cotta_1790435259241.png', category: 'fruit', tag: 'Mới', tagType: 'new', desc: 'Sốt xoài vàng ươm thơm lừng từ xoài chín tự nhiên, trọn vị' },
+    { id: 3, name: 'Panna Cotta Uji Matcha', price: 39000, img: 'assets/matcha_panna_cotta_1790435285155.png', category: 'tea', desc: 'Vị trà xanh đậm đà từ Uji, hòa quyện chút chát nhẹ thanh tao' },
+    { id: 4, name: 'Caramel Muối & Hạnh Nhân', price: 39000, img: 'assets/caramel_panna_cotta_1790435294553.png', category: 'coffee', tag: 'Signature', tagType: 'danger', desc: 'Sốt caramel thủ công đắng nhẹ béo ngậy, phủ hạnh nhân nướng' },
+    { id: 5, name: 'Panna Cotta Vani Tradi', price: 35000, img: 'assets/vanilla_panna_cotta_1790435249043.png', category: 'tea', desc: 'Nguyên bản hương vani Madagascar mộc mạc, tinh tế' }
 ];
 
-// Cart State
-let cart = JSON.parse(sessionStorage.getItem('lapanna_cart')) || [];
+// --- State ---
+const state = {
+    cart: JSON.parse(sessionStorage.getItem('lapanna_cart')) || [],
+    filter: 'all',
+    mixBox: { size: 4, price: 180000, flavors: [] }
+};
 
-// DOM Elements
-const productGrid = document.getElementById('productGrid');
-const cartBtn = document.getElementById('cartBtn');
-const cartOverlay = document.getElementById('cartOverlay');
-const cartSidebar = document.getElementById('cartSidebar');
-const closeCartBtn = document.getElementById('closeCartBtn');
-const cartItemsContainer = document.getElementById('cartItems');
-const cartCount = document.getElementById('cartCount');
-const cartTotalPrice = document.getElementById('cartTotalPrice');
-const checkoutBtn = document.getElementById('checkoutBtn');
-const orderForm = document.getElementById('orderForm');
-const formStatus = document.getElementById('formStatus');
+// --- Format Utilities ---
+const formatMoney = (amount) => amount.toLocaleString('vi-VN') + 'đ';
 
-// Initialize
-function init() {
+// --- Initialization ---
+document.addEventListener('DOMContentLoaded', () => {
+    initScrollReveal();
+    initNavbar();
+    initMobileMenu();
     renderProducts();
+    initFilters();
+    initMixBox();
     updateCartUI();
 
-    // Event Listeners
-    cartBtn.addEventListener('click', toggleCart);
-    closeCartBtn.addEventListener('click', toggleCart);
-    cartOverlay.addEventListener('click', toggleCart);
-    checkoutBtn.addEventListener('click', () => {
-        toggleCart();
-        window.location.hash = '#contact';
+    // Global Events
+    document.getElementById('cartBtn').addEventListener('click', toggleCart);
+    document.getElementById('closeCartBtn').addEventListener('click', toggleCart);
+    document.getElementById('cartOverlay').addEventListener('click', toggleCart);
+    
+    document.getElementById('checkoutBtn').addEventListener('click', openCheckoutModal);
+    document.getElementById('closeModalBtn').addEventListener('click', closeCheckoutModal);
+    document.getElementById('orderForm').addEventListener('submit', handleOrderSubmit);
+});
+
+// --- Scroll Reveal & Interactions ---
+function initScrollReveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+    reveals.forEach(reveal => observer.observe(reveal));
+}
+
+function initNavbar() {
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
     });
-    orderForm.addEventListener('submit', handleOrderSubmit);
 }
 
-// Format Currency
-function formatMoney(amount) {
-    return amount.toLocaleString('vi-VN') + 'đ';
+function initMobileMenu() {
+    const btn = document.getElementById('mobileMenuBtn');
+    const menu = document.getElementById('mobileMenu');
+    btn.addEventListener('click', () => {
+        menu.classList.toggle('open');
+        const icon = btn.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-xmark');
+    });
+    
+    menu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+            menu.classList.remove('open');
+            btn.querySelector('i').className = 'fa-solid fa-bars';
+        });
+    });
 }
 
-// Render Products
+// --- Product Listing ---
 function renderProducts() {
-    productGrid.innerHTML = products.map(product => `
+    const grid = document.getElementById('productGrid');
+    const filtered = state.filter === 'all' ? products : products.filter(p => p.category === state.filter);
+    
+    grid.innerHTML = filtered.map(product => `
         <div class="product-card">
-            <img src="${product.img}" alt="${product.name}" class="product-img" loading="lazy">
+            ${product.tag ? `<span class="product-tag tag-${product.tagType}">${product.tag}</span>` : ''}
+            <div class="product-image-wrap">
+                <img src="${product.img}" alt="${product.name}" class="product-img" loading="lazy">
+            </div>
             <div class="product-info">
                 <h3 class="product-title">${product.name}</h3>
-                <p class="product-price">${formatMoney(product.price)}</p>
-                <button class="add-to-cart" onclick="addToCart(${product.id})">
-                    <i class="fa-solid fa-plus"></i> Thêm vào giỏ
-                </button>
+                <p class="product-desc">${product.desc}</p>
+                <div class="product-footer">
+                    <span class="product-price">${formatMoney(product.price)}</span>
+                    <button class="btn-add-cart" onclick="addToCart(${product.id}, 'single')" aria-label="Thêm vào giỏ">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
             </div>
         </div>
     `).join('');
 }
 
-// Cart Functions
+function initFilters() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            buttons.forEach(b => b.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            state.filter = e.currentTarget.dataset.filter;
+            renderProducts();
+        });
+    });
+}
+
+// --- Mix Box Logic ---
+function initMixBox() {
+    const radios = document.querySelectorAll('input[name="boxSize"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            document.querySelectorAll('.box-option').forEach(opt => opt.classList.remove('active'));
+            e.target.closest('.box-option').classList.add('active');
+            
+            const size = parseInt(e.target.value);
+            state.mixBox.size = size;
+            state.mixBox.price = size === 4 ? 180000 : 270000;
+            // Trim flavors if needed
+            if (state.mixBox.flavors.length > size) {
+                state.mixBox.flavors = state.mixBox.flavors.slice(0, size);
+            }
+            renderMixBox();
+        });
+    });
+
+    renderMixBoxGrid();
+    renderMixBox();
+    
+    document.getElementById('addMixBoxToCartBtn').addEventListener('click', addMixBoxToCart);
+}
+
+function renderMixBoxGrid() {
+    const grid = document.getElementById('mixFlavorsGrid');
+    grid.innerHTML = products.map(product => `
+        <div class="mix-flavor-card" onclick="toggleMixFlavor(${product.id})">
+            <div class="mix-flavor-count" id="mix-count-${product.id}">0</div>
+            <img src="${product.img}" alt="${product.name}" class="mix-flavor-img" loading="lazy">
+            <span class="mix-flavor-name">${product.name.replace('Panna Cotta ', '')}</span>
+        </div>
+    `).join('');
+}
+
+function toggleMixFlavor(productId) {
+    const count = state.mixBox.flavors.filter(id => id === productId).length;
+    
+    if (state.mixBox.flavors.length < state.mixBox.size) {
+        // Add flavor
+        state.mixBox.flavors.push(productId);
+    } else {
+        // Full, try to remove one if clicking the same
+        if (count > 0) {
+            const index = state.mixBox.flavors.indexOf(productId);
+            state.mixBox.flavors.splice(index, 1);
+        } else {
+            // Provide subtle feedback that it's full (e.g. shake)
+            const btn = document.getElementById('addMixBoxToCartBtn');
+            btn.style.transform = 'translateX(5px)';
+            setTimeout(() => btn.style.transform = 'translateX(-5px)', 100);
+            setTimeout(() => btn.style.transform = 'translateX(0)', 200);
+            return;
+        }
+    }
+    renderMixBox();
+}
+
+function renderMixBox() {
+    const { size, flavors } = state.mixBox;
+    
+    // Update labels
+    document.getElementById('mixTargetCount').innerText = size;
+    const btn = document.getElementById('addMixBoxToCartBtn');
+    
+    if (flavors.length === size) {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-basket-shopping"></i> Thêm Hộp Mix (Đã Chọn ${flavors.length}/${size}) Vào Giỏ`;
+    } else {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-basket-shopping"></i> Chọn thêm ${size - flavors.length} vị để hoàn tất`;
+    }
+
+    // Render Slots
+    let slotsHTML = '';
+    for (let i = 0; i < size; i++) {
+        if (i < flavors.length) {
+            const product = products.find(p => p.id === flavors[i]);
+            slotsHTML += `<div class="slot filled" style="background-image: url('${product.img}')" onclick="removeFlavorAt(${i})" title="Bấm để xóa"></div>`;
+        } else {
+            slotsHTML += `<div class="slot"></div>`;
+        }
+    }
+    document.getElementById('selectionSlots').innerHTML = slotsHTML;
+
+    // Update Grid visual counts
+    products.forEach(p => {
+        const count = flavors.filter(id => id === p.id).length;
+        const card = document.getElementById(`mix-count-${p.id}`).parentElement;
+        const countBadge = document.getElementById(`mix-count-${p.id}`);
+        
+        if (count > 0) {
+            card.classList.add('selected');
+            countBadge.innerText = count;
+        } else {
+            card.classList.remove('selected');
+        }
+    });
+}
+
+function removeFlavorAt(index) {
+    state.mixBox.flavors.splice(index, 1);
+    renderMixBox();
+}
+
+function addMixBoxToCart() {
+    const { size, price, flavors } = state.mixBox;
+    
+    // Count flavors nicely
+    const flavorCounts = {};
+    flavors.forEach(id => {
+        const name = products.find(p => p.id === id).name.replace('Panna Cotta ', '');
+        flavorCounts[name] = (flavorCounts[name] || 0) + 1;
+    });
+    
+    const desc = Object.entries(flavorCounts).map(([name, count]) => `${name} (x${count})`).join(', ');
+    const boxName = size === 4 ? 'Hộp Sweet Trio (4 Hũ)' : 'Hộp Mini Grand (6 Hũ)';
+    
+    // Create unique ID for this exact mix
+    const mixId = 'mix_' + size + '_' + flavors.sort().join('_');
+    
+    addToCart(mixId, 'mix', {
+        id: mixId,
+        name: boxName,
+        desc: desc,
+        price: price,
+        img: products[0].img // Use first flavor image as representative or a box image
+    });
+    
+    // Reset Mix Box
+    state.mixBox.flavors = [];
+    renderMixBox();
+}
+
+// --- Cart System ---
 function toggleCart() {
     document.body.classList.toggle('cart-open');
 }
 
-function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    const existingItem = cart.find(item => item.id === productId);
+function addToCart(itemId, type = 'single', customData = null) {
+    const existingItem = state.cart.find(item => String(item.id) === String(itemId));
 
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ ...product, quantity: 1 });
+        if (type === 'single') {
+            const product = products.find(p => p.id === itemId);
+            state.cart.push({ id: product.id, name: product.name, price: product.price, img: product.img, quantity: 1, type: 'single' });
+        } else if (type === 'mix') {
+            state.cart.push({ ...customData, quantity: 1, type: 'mix' });
+        }
     }
 
     saveCart();
     updateCartUI();
 
-    // Add small animation to cart icon
+    // Feedback
+    const cartBtn = document.getElementById('cartBtn');
     cartBtn.style.transform = 'scale(1.2)';
     setTimeout(() => cartBtn.style.transform = 'scale(1)', 200);
 }
 
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
+function removeFromCart(itemId) {
+    state.cart = state.cart.filter(item => String(item.id) !== String(itemId));
     saveCart();
     updateCartUI();
 }
 
-function updateQuantity(productId, change) {
-    const item = cart.find(item => item.id === productId);
+function updateQuantity(itemId, change) {
+    const item = state.cart.find(item => String(item.id) === String(itemId));
     if (item) {
         item.quantity += change;
-        if (item.quantity <= 0) {
-            removeFromCart(productId);
-        } else {
+        if (item.quantity <= 0) removeFromCart(itemId);
+        else {
             saveCart();
             updateCartUI();
         }
@@ -105,96 +298,84 @@ function updateQuantity(productId, change) {
 }
 
 function saveCart() {
-    sessionStorage.setItem('lapanna_cart', JSON.stringify(cart));
+    sessionStorage.setItem('lapanna_cart', JSON.stringify(state.cart));
 }
 
 function updateCartUI() {
-    // Update count
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCount.innerText = totalItems;
+    const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cartCount').innerText = totalItems;
+    document.getElementById('cartHeaderCount').innerText = `(${totalItems})`;
 
-    // Update items
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p class="empty-cart-msg">Giỏ hàng của bạn đang trống.</p>';
-        checkoutBtn.style.pointerEvents = 'none';
-        checkoutBtn.style.opacity = '0.5';
+    const container = document.getElementById('cartItems');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    
+    if (state.cart.length === 0) {
+        container.innerHTML = `<div class="empty-cart-msg"><i class="fa-solid fa-basket-shopping"></i><p>Giỏ hàng chưa có sản phẩm nào.</p></div>`;
+        checkoutBtn.disabled = true;
     } else {
-        checkoutBtn.style.pointerEvents = 'auto';
-        checkoutBtn.style.opacity = '1';
-        cartItemsContainer.innerHTML = cart.map(item => `
+        checkoutBtn.disabled = false;
+        container.innerHTML = state.cart.map(item => `
             <div class="cart-item">
                 <img src="${item.img}" alt="${item.name}" class="cart-item-img">
                 <div class="cart-item-info">
                     <h4 class="cart-item-title">${item.name}</h4>
+                    ${item.type === 'mix' ? `<p style="font-size: 0.8rem; color: #7A6961; margin-bottom: 4px;">${item.desc}</p>` : ''}
                     <p class="cart-item-price">${formatMoney(item.price)}</p>
                     <div class="cart-item-actions">
-                        <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-                        <button class="remove-btn" onclick="removeFromCart(${item.id})">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                            <span class="qty-val">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart('${item.id}')">Xóa</button>
                     </div>
                 </div>
             </div>
         `).join('');
     }
 
-    // Update total
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    cartTotalPrice.innerText = formatMoney(total);
+    const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.getElementById('cartTotalPrice').innerText = formatMoney(total);
 }
 
-// Order Form Submission (Simulated Google Sheets API)
+// --- Checkout System ---
+function openCheckoutModal() {
+    if (state.cart.length === 0) return;
+    document.body.classList.remove('cart-open');
+    document.body.classList.add('modal-open');
+}
+
+function closeCheckoutModal() {
+    document.body.classList.remove('modal-open');
+}
+
 async function handleOrderSubmit(e) {
     e.preventDefault();
+    if (state.cart.length === 0) return;
 
-    if (cart.length === 0) {
-        formStatus.innerHTML = '<span class="error-msg">Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi đặt hàng!</span>';
-        return;
-    }
-
-    const formData = new FormData(orderForm);
-    const orderData = {
-        name: formData.get('name'),
-        phone: formData.get('phone'),
-        address: formData.get('address'),
-        notes: formData.get('notes'),
-        items: cart.map(item => `${item.name} (x${item.quantity})`).join(', '),
-        total: cartTotalPrice.innerText,
-        timestamp: new Date().toISOString()
-    };
-
+    const form = e.target;
+    const formData = new FormData(form);
+    
+    // Simulate API Call
     const submitBtn = document.getElementById('submitBtn');
+    const formStatus = document.getElementById('formStatus');
+    
     submitBtn.disabled = true;
-    submitBtn.innerText = 'Đang xử lý...';
+    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang xử lý...';
 
-    try {
-        // SIMULATED GOOGLE SHEETS API CALL
-        // Thay URL bên dưới bằng URL từ Google Apps Script của bạn
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwbR6S9wpTiccxtCoUvuGHy39zOUBQtG6u9ZZphDKKyfLDXswGYzfnA5rfVyZWCjNep/exec';
+    // Fake delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
-        const response = await fetch(scriptURL, { method: 'POST', body: new URLSearchParams(orderData) });
-        const result = await response.text();
-
-        if (result === 'Success') {
-            formStatus.innerHTML = '<span class="success-msg">Đặt hàng thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.</span>';
-            orderForm.reset();
-            cart = [];
-            saveCart();
-            updateCartUI();
-        } else {
-            throw new Error('Google Apps Script Error');
-        }
-
-    } catch (error) {
-        formStatus.innerHTML = '<span class="error-msg">Có lỗi xảy ra. Vui lòng thử lại sau!</span>';
-    } finally {
+    formStatus.innerHTML = '<span class="success-msg"><i class="fa-solid fa-circle-check"></i> Đặt hàng thành công! Chúng tôi sẽ liên hệ sớm.</span>';
+    
+    setTimeout(() => {
+        form.reset();
+        state.cart = [];
+        saveCart();
+        updateCartUI();
+        closeCheckoutModal();
+        formStatus.innerHTML = '';
         submitBtn.disabled = false;
-        submitBtn.innerText = 'Gửi Yêu Cầu Đặt Hàng';
-        setTimeout(() => { formStatus.innerHTML = ''; }, 5000);
-    }
+        submitBtn.innerHTML = 'Xác Nhận Đặt Hàng';
+    }, 2000);
 }
-
-// Run
-document.addEventListener('DOMContentLoaded', init);
