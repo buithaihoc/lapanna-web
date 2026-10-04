@@ -384,7 +384,7 @@ async function handleOrderSubmit(e) {
     const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz5iIGW_k5dIVxDYtXaL1Z0KCW3iVEy4F3EvYNTmz66MZfMmq1R3nWnpW8KfgayA5c/exec';
 
     try {
-        if (GOOGLE_SHEET_URL === 'https://script.google.com/macros/s/AKfycbz5iIGW_k5dIVxDYtXaL1Z0KCW3iVEy4F3EvYNTmz66MZfMmq1R3nWnpW8KfgayA5c/exec') {
+        if (GOOGLE_SHEET_URL === 'YOUR_GOOGLE_WEB_APP_URL_HERE') {
             console.warn("Chưa cấu hình Google Sheet URL. Chạy giả lập API...");
             await new Promise(resolve => setTimeout(resolve, 1500)); // Fake delay
         } else {
