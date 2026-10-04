@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cartBtn').addEventListener('click', toggleCart);
     document.getElementById('closeCartBtn').addEventListener('click', toggleCart);
     document.getElementById('cartOverlay').addEventListener('click', toggleCart);
-    
+
     document.getElementById('checkoutBtn').addEventListener('click', openCheckoutModal);
     document.getElementById('closeModalBtn').addEventListener('click', closeCheckoutModal);
     document.getElementById('orderForm').addEventListener('submit', handleOrderSubmit);
@@ -70,7 +70,7 @@ function initMobileMenu() {
         icon.classList.toggle('fa-bars');
         icon.classList.toggle('fa-xmark');
     });
-    
+
     menu.querySelectorAll('a').forEach(a => {
         a.addEventListener('click', () => {
             menu.classList.remove('open');
@@ -83,7 +83,7 @@ function initMobileMenu() {
 function renderProducts() {
     const grid = document.getElementById('productGrid');
     const filtered = state.filter === 'all' ? products : products.filter(p => p.category === state.filter);
-    
+
     grid.innerHTML = filtered.map(product => `
         <div class="product-card">
             ${product.tag ? `<span class="product-tag tag-${product.tagType}">${product.tag}</span>` : ''}
@@ -123,7 +123,7 @@ function initMixBox() {
         radio.addEventListener('change', (e) => {
             document.querySelectorAll('.box-option').forEach(opt => opt.classList.remove('active'));
             e.target.closest('.box-option').classList.add('active');
-            
+
             const size = parseInt(e.target.value);
             state.mixBox.size = size;
             state.mixBox.price = size === 4 ? 180000 : 270000;
@@ -137,7 +137,7 @@ function initMixBox() {
 
     renderMixBoxGrid();
     renderMixBox();
-    
+
     document.getElementById('addMixBoxToCartBtn').addEventListener('click', addMixBoxToCart);
 }
 
@@ -154,7 +154,7 @@ function renderMixBoxGrid() {
 
 function toggleMixFlavor(productId) {
     const count = state.mixBox.flavors.filter(id => id === productId).length;
-    
+
     if (state.mixBox.flavors.length < state.mixBox.size) {
         // Add flavor
         state.mixBox.flavors.push(productId);
@@ -177,11 +177,11 @@ function toggleMixFlavor(productId) {
 
 function renderMixBox() {
     const { size, flavors } = state.mixBox;
-    
+
     // Update labels
     document.getElementById('mixTargetCount').innerText = size;
     const btn = document.getElementById('addMixBoxToCartBtn');
-    
+
     if (flavors.length === size) {
         btn.disabled = false;
         btn.innerHTML = `<i class="fa-solid fa-basket-shopping"></i> Thêm Hộp Mix (Đã Chọn ${flavors.length}/${size}) Vào Giỏ`;
@@ -207,7 +207,7 @@ function renderMixBox() {
         const count = flavors.filter(id => id === p.id).length;
         const card = document.getElementById(`mix-count-${p.id}`).parentElement;
         const countBadge = document.getElementById(`mix-count-${p.id}`);
-        
+
         if (count > 0) {
             card.classList.add('selected');
             countBadge.innerText = count;
@@ -224,20 +224,20 @@ function removeFlavorAt(index) {
 
 function addMixBoxToCart() {
     const { size, price, flavors } = state.mixBox;
-    
+
     // Count flavors nicely
     const flavorCounts = {};
     flavors.forEach(id => {
         const name = products.find(p => p.id === id).name.replace('Panna Cotta ', '');
         flavorCounts[name] = (flavorCounts[name] || 0) + 1;
     });
-    
+
     const desc = Object.entries(flavorCounts).map(([name, count]) => `${name} (x${count})`).join(', ');
     const boxName = size === 4 ? 'Hộp Sweet Trio (4 Hũ)' : 'Hộp Mini Grand (6 Hũ)';
-    
+
     // Create unique ID for this exact mix
     const mixId = 'mix_' + size + '_' + flavors.sort().join('_');
-    
+
     addToCart(mixId, 'mix', {
         id: mixId,
         name: boxName,
@@ -245,7 +245,7 @@ function addMixBoxToCart() {
         price: price,
         img: products[0].img // Use first flavor image as representative or a box image
     });
-    
+
     // Reset Mix Box
     state.mixBox.flavors = [];
     renderMixBox();
@@ -308,7 +308,7 @@ function updateCartUI() {
 
     const container = document.getElementById('cartItems');
     const checkoutBtn = document.getElementById('checkoutBtn');
-    
+
     if (state.cart.length === 0) {
         container.innerHTML = `<div class="empty-cart-msg"><i class="fa-solid fa-basket-shopping"></i><p>Giỏ hàng chưa có sản phẩm nào.</p></div>`;
         checkoutBtn.disabled = true;
@@ -355,27 +355,66 @@ async function handleOrderSubmit(e) {
 
     const form = e.target;
     const formData = new FormData(form);
-    
-    // Simulate API Call
+
     const submitBtn = document.getElementById('submitBtn');
     const formStatus = document.getElementById('formStatus');
-    
+
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang xử lý...';
 
-    // Fake delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // 1. Chuẩn bị dữ liệu đơn hàng
+    const orderDetails = state.cart.map(item => {
+        let detail = `- ${item.name} x${item.quantity}`;
+        if (item.type === 'mix') detail += `\n  (${item.desc})`;
+        return detail;
+    }).join('\n');
 
-    formStatus.innerHTML = '<span class="success-msg"><i class="fa-solid fa-circle-check"></i> Đặt hàng thành công! Chúng tôi sẽ liên hệ sớm.</span>';
-    
-    setTimeout(() => {
-        form.reset();
-        state.cart = [];
-        saveCart();
-        updateCartUI();
-        closeCheckoutModal();
-        formStatus.innerHTML = '';
+    const totalPrice = formatMoney(state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0));
+
+    const orderData = {
+        name: formData.get('name'),
+        phone: formData.get('phone'),
+        address: formData.get('address'),
+        notes: formData.get('notes') || '',
+        cartDetails: orderDetails,
+        totalPrice: totalPrice
+    };
+
+    // --- TODO: THAY URL WEB APP CỦA GOOGLE APPS SCRIPT VÀO ĐÂY ---
+    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz5iIGW_k5dIVxDYtXaL1Z0KCW3iVEy4F3EvYNTmz66MZfMmq1R3nWnpW8KfgayA5c/exec';
+
+    try {
+        if (GOOGLE_SHEET_URL === 'https://script.google.com/macros/s/AKfycbz5iIGW_k5dIVxDYtXaL1Z0KCW3iVEy4F3EvYNTmz66MZfMmq1R3nWnpW8KfgayA5c/exec') {
+            console.warn("Chưa cấu hình Google Sheet URL. Chạy giả lập API...");
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Fake delay
+        } else {
+            // 2. Gửi dữ liệu tới Google Apps Script (Sử dụng text/plain để tránh lỗi CORS Preflight)
+            await fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify(orderData)
+            });
+        }
+
+        formStatus.innerHTML = '<span class="success-msg"><i class="fa-solid fa-circle-check"></i> Đặt hàng thành công! Chúng tôi sẽ liên hệ sớm.</span>';
+
+        setTimeout(() => {
+            form.reset();
+            state.cart = [];
+            saveCart();
+            updateCartUI();
+            closeCheckoutModal();
+            formStatus.innerHTML = '';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Xác Nhận Đặt Hàng';
+        }, 2000);
+
+    } catch (error) {
+        console.error('Lỗi khi gửi đơn hàng:', error);
+        formStatus.innerHTML = '<span class="error-msg" style="color: #dc3545; display: block; margin-top: 10px;"><i class="fa-solid fa-circle-exclamation"></i> Có lỗi xảy ra. Vui lòng thử lại hoặc liên hệ Hotline.</span>';
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'Xác Nhận Đặt Hàng';
-    }, 2000);
+    }
 }
