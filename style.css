@@ -644,3 +644,532 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     .footer-content { grid-template-columns: 1fr; }
     .form-row { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================================
+   Grand Opening & Promotion Styles
+   ========================================================================== */
+.announcement-bar {
+    background: linear-gradient(90deg, #A11531 0%, #C91C3E 50%, #E75973 100%);
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+    z-index: 1001;
+    box-shadow: 0 2px 8px rgba(161, 21, 49, 0.25);
+}
+.announcement-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    max-width: var(--container-max);
+    margin: 0 auto;
+}
+.pulse-icon {
+    animation: pulseIcon 1.5s infinite;
+    color: #FED7AA;
+}
+@keyframes pulseIcon {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+.announcement-link {
+    color: #FFF;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 10px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: var(--transition-fast);
+}
+.announcement-link:hover {
+    background: white;
+    color: var(--color-primary);
+}
+
+.logo-main {
+    display: block;
+    line-height: 1;
+}
+.logo-sub {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.nav-hotline {
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 6px 14px;
+    border: 1px solid var(--color-accent-pink);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-pink);
+    transition: var(--transition-fast);
+}
+.nav-hotline:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+/* Hero opening additions */
+.hero-badge-opening {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFF0F3;
+    border: 1px solid #FFCCD5;
+    color: var(--color-primary);
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-4);
+}
+.highlight-price {
+    color: var(--color-primary);
+    position: relative;
+    display: inline-block;
+}
+.highlight-price::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: rgba(245, 158, 11, 0.35);
+    z-index: -1;
+    border-radius: 4px;
+}
+
+.opening-summary-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: var(--space-8);
+}
+.promo-pill {
+    background: white;
+    border: 1px solid var(--color-border);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-sm);
+}
+.promo-pill.highlight {
+    background: #FFF7ED;
+    border-color: #FED7AA;
+    color: #9A3412;
+}
+.promo-pill.gift {
+    background: #FEF2F2;
+    border-color: #FECACA;
+    color: var(--color-primary);
+}
+.promo-pill.freeship {
+    background: #F0FDF4;
+    border-color: #BBF7D0;
+    color: #166534;
+}
+
+/* Flyer Card Mockup */
+.hero-flyer-card {
+    background: #FFFDF9;
+    border: 3px solid #F6DCD4;
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: 0 20px 45px rgba(201, 28, 62, 0.12);
+    position: relative;
+    overflow: hidden;
+    transform: rotate(1deg);
+    transition: var(--transition-slow);
+}
+.hero-flyer-card:hover {
+    transform: rotate(0deg) scale(1.02);
+}
+.flyer-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.flyer-brand {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #3D2B24;
+    letter-spacing: 1px;
+    line-height: 1;
+}
+.flyer-tag {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--color-primary);
+}
+.flyer-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.flyer-price-badge {
+    border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.flyer-price-badge.single {
+    background: #FFF;
+    border: 2px dashed #E5D5C8;
+}
+.flyer-price-badge.combo {
+    background: linear-gradient(135deg, #F87171 0%, #EF4444 100%);
+    color: white;
+    box-shadow: 0 8px 16px rgba(239, 68, 68, 0.25);
+}
+.badge-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.flyer-price-badge.single .badge-val {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+.flyer-price-badge.combo .badge-val {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1;
+    margin: 4px 0;
+}
+.badge-sub {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+.flyer-gift-banner {
+    background: #FEF08A;
+    color: #854D0E;
+    text-align: center;
+    padding: 10px;
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+.flyer-date-pill {
+    background: #15803D;
+    color: white;
+    text-align: center;
+    padding: 6px;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.flyer-freeship {
+    text-align: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #1E293B;
+    letter-spacing: 0.5px;
+    padding-top: 4px;
+}
+.flyer-footer {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #F1E5DC;
+    margin-top: 16px;
+    padding-top: 12px;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+/* Opening Banner Section */
+.opening-banner-section {
+    padding: var(--space-8) 0;
+}
+.opening-banner-box {
+    background: linear-gradient(135deg, #FFF7ED 0%, #FEF2F2 100%);
+    border: 2px solid #FED7AA;
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+.banner-badge {
+    display: inline-block;
+    background: var(--color-primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 12px;
+}
+.banner-subtitle {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-8);
+}
+.promo-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-6);
+}
+.p-feature {
+    background: white;
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    transition: var(--transition-normal);
+}
+.p-feature:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-sm);
+}
+.p-feature.highlight {
+    border-color: var(--color-primary);
+    background: #FFF5F5;
+}
+.p-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--color-accent-pink);
+    color: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin: 0 auto 12px;
+}
+.p-feature h3 {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.p-feature p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+/* Product Card Custom Additions */
+.product-flavor-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #D97706;
+    background: #FEF3C7;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    width: fit-content;
+    margin-bottom: 6px;
+}
+.price-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+.unit-text {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+.tag-success {
+    background-color: #10B981;
+    color: white;
+}
+.tag-warning {
+    background-color: #F59E0B;
+    color: white;
+}
+
+/* Mix Box Combo Styles */
+.combo-info-card {
+    background: white;
+    border: 2px solid #FED7AA;
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+}
+.combo-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--color-border);
+}
+.combo-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text-main);
+}
+.combo-prices {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.old-price {
+    text-decoration: line-through;
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+}
+.new-price {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+.combo-perks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.combo-perks li {
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mix-flavor-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: var(--color-accent-pink);
+    padding: 1px 6px;
+    border-radius: var(--radius-pill);
+    display: inline-block;
+    margin-top: 2px;
+}
+
+/* Cart Promotions & Rewards */
+.cart-promo-container {
+    padding: 0 var(--space-6);
+    margin-top: var(--space-4);
+}
+.cart-promo-reward {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: rewardPulse 2s infinite;
+}
+@keyframes rewardPulse {
+    0% { box-shadow: 0 0 0 0 rgba(201, 28, 62, 0.2); }
+    70% { box-shadow: 0 0 0 8px rgba(201, 28, 62, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(201, 28, 62, 0); }
+}
+.cart-promo-reward .promo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+.cart-promo-reward .promo-text {
+    font-size: 0.85rem;
+    line-height: 1.3;
+}
+.cart-promo-reward .promo-text strong {
+    display: block;
+    color: var(--color-primary);
+}
+.cart-promo-hint {
+    background: #FFFBEB;
+    border: 1px dashed #FDE68A;
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    color: #92400E;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cart-item-mix-desc {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+/* Checkout Summary in Modal */
+.checkout-summary-box {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-bottom: var(--space-4);
+}
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+.summary-line.gift-highlight {
+    background: #F0FDF4;
+    border: 1px dashed #86EFAC;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    margin: 8px 0;
+}
+.summary-line.total-line {
+    border-top: 1px solid var(--color-border);
+    padding-top: 8px;
+    margin-top: 8px;
+    font-size: 1.05rem;
+}
+.shipping-tag {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: #15803D;
+    font-weight: 600;
+}
+
+.form-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    background: white;
+    cursor: pointer;
+}
+.form-select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: var(--shadow-focus);
+}
+
