@@ -22,29 +22,29 @@ const SYSTEM_CONFIG = {
         freeShippingNote: 'FREESHIP KHU VỰC BKX (Bách Khoa - Kinh Tế - Xây Dựng)'
     },
 
-    // Cấu hình Khuyến Mãi Khai Trương (Config-Driven Promotion)
+    // Cấu hình Khuyến Mãi (Config-Driven Promotion)
     promotion: {
-        // CỜ BẬT / TẮT CHÍNH (true = Đang diễn ra khuyến mãi, false = Bình thường)
-        enabled: true,
+        // CỜ BẬT / TẮT CHÍNH (true = Đang diễn ra khuyến mãi, false = Đã tắt khuyến mãi / Bán bình thường)
+        enabled: false,
 
         id: 'KHAI_TRUONG_2026',
         title: 'Menu Khai Trương La Panna',
         dateRange: '11/10 ĐẾN HẾT 15/10',
         announcement: '🎉 MỪNG KHAI TRƯƠNG LA PANNA (11/10 - 15/10) • MUA 5 TẶNG 1, MUA 10 TẶNG 2 • FREESHIP KHU VỰC BKX',
 
-        // Quy tắc tặng quà: Mua 5 tặng 1, mua 10 tặng 2
+        // Quy tắc tặng quà (Tắt khi hết khuyến mãi)
         giftRule: {
-            active: true,
+            active: false,
             buyStep: 5,        // Cứ đủ 5 hộp
             freeGiftCount: 1,  // Tặng 1 hộp (10 hộp tặng 2, 15 hộp tặng 3,...)
             tagText: 'Mua 5 tặng 1, mua 10 tặng 2'
         },
 
-        // Combo 5 hộp mix vị tùy chọn (Giá 45k thay vì 50k)
+        // Combo 5 hộp mix vị (Giá về 50.000đ khi không khuyến mãi)
         combo5: {
-            enabled: true,
+            enabled: false,
             size: 5,
-            price: 45000,
+            price: 50000,
             regularPrice: 50000,
             name: 'Set 5 Hộp Mix Vị Tùy Chọn'
         },
@@ -164,7 +164,7 @@ function calculatePromotion(cart) {
 
     return {
         isPromoActive: promoActive,
-        promoName: promoActive ? SYSTEM_CONFIG.promotion.title : 'Giá Tiêu Chuẩn',
+        promoName: promoActive ? SYSTEM_CONFIG.promotion.title : 'Không áp dụng khuyến mãi',
         totalCups: totalCups,
         freeGifts: freeGifts,
         comboDiscount: comboDiscount,
@@ -188,9 +188,40 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('closeCartBtn').addEventListener('click', toggleCart);
     document.getElementById('cartOverlay').addEventListener('click', toggleCart);
 
+    const checkoutModal = document.getElementById('checkoutModal');
+    if (checkoutModal) {
+        checkoutModal.addEventListener('click', (e) => {
+            if (e.target === checkoutModal) closeCheckoutModal();
+        });
+    }
+
     document.getElementById('checkoutBtn').addEventListener('click', openCheckoutModal);
     document.getElementById('closeModalBtn').addEventListener('click', closeCheckoutModal);
     document.getElementById('orderForm').addEventListener('submit', handleOrderSubmit);
+
+    // Mobile Sticky Cart Bar Events
+    const mobileCheckoutBtn = document.getElementById('mobileStickyCheckoutBtn');
+    if (mobileCheckoutBtn) {
+        mobileCheckoutBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openCheckoutModal();
+        });
+    }
+    const mobileCartTrigger = document.getElementById('mobileStickyCartTrigger');
+    if (mobileCartTrigger) {
+        mobileCartTrigger.addEventListener('click', () => {
+            toggleCart();
+        });
+    }
+
+    // Phím ESC đóng modal/giỏ hàng
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeCheckoutModal();
+            document.body.classList.remove('cart-open');
+            document.documentElement.classList.remove('cart-open');
+        }
+    });
 });
 
 // --- Banner Thông Báo Khai Trương ---
@@ -308,6 +339,9 @@ function renderMixBoxGrid() {
 }
 
 function toggleMixFlavor(productId) {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(15);
+    }
     const count = state.mixBox.flavors.filter(id => id === productId).length;
 
     if (state.mixBox.flavors.length < state.mixBox.size) {
@@ -407,7 +441,8 @@ function addMixBoxToCart() {
 
 // --- Cart System ---
 function toggleCart() {
-    document.body.classList.toggle('cart-open');
+    const isOpen = document.body.classList.toggle('cart-open');
+    document.documentElement.classList.toggle('cart-open', isOpen);
 }
 
 function addToCart(itemId, type = 'single', customData = null) {
@@ -529,6 +564,27 @@ function updateCartUI() {
     }
 
     document.getElementById('cartTotalPrice').innerText = formatMoney(promo.finalTotal);
+
+    // Cập nhật thanh Mobile Sticky Quick Cart Bar
+    const mobileSticky = document.getElementById('mobileStickyCart');
+    const mobileStickyCount = document.getElementById('mobileStickyCount');
+    const mobileStickyPrice = document.getElementById('mobileStickyPrice');
+    const mobileStickySub = document.getElementById('mobileStickySub');
+
+    if (mobileSticky && mobileStickyCount && mobileStickyPrice) {
+        if (totalItems > 0) {
+            mobileSticky.classList.add('visible');
+            mobileStickyCount.innerText = totalItems;
+            mobileStickyPrice.innerText = formatMoney(promo.finalTotal);
+            if (promo.freeGifts > 0) {
+                mobileStickySub.innerHTML = `<span class="text-primary font-bold">+${promo.freeGifts} Hộp Tặng</span> • Freeship BKX`;
+            } else {
+                mobileStickySub.innerText = 'Freeship khu vực BKX';
+            }
+        } else {
+            mobileSticky.classList.remove('visible');
+        }
+    }
 }
 
 // --- Checkout System ---
@@ -585,11 +641,14 @@ function openCheckoutModal() {
     }
 
     document.body.classList.remove('cart-open');
+    document.documentElement.classList.remove('cart-open');
     document.body.classList.add('modal-open');
+    document.documentElement.classList.add('modal-open');
 }
 
 function closeCheckoutModal() {
     document.body.classList.remove('modal-open');
+    document.documentElement.classList.remove('modal-open');
 }
 
 /**
@@ -636,7 +695,7 @@ async function handleOrderSubmit(e) {
     };
 
     // URL Web App Google Apps Script
-    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwMz4WD9Xx4L9dd2wV6SrHNsgbTh0xGDrJ_YBiYznSpO3px5B_4U6bRj1iXoQ0fyUv8/exec';
+    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyvyFQ8xlVljOMXW0WhaN4KlLS5ommRvfamDoJV8m1_-FaghAt5X-FJB8p6AnEPTtRj/exec';
 
     try {
         if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL === 'YOUR_GOOGLE_WEB_APP_URL_HERE') {
@@ -644,13 +703,19 @@ async function handleOrderSubmit(e) {
             await new Promise(resolve => setTimeout(resolve, 1200));
         } else {
             // Gửi dữ liệu tới Google Apps Script (text/plain để tránh lỗi CORS Preflight)
-            await fetch(GOOGLE_SHEET_URL, {
+            const response = await fetch(GOOGLE_SHEET_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'text/plain;charset=utf-8'
                 },
                 body: JSON.stringify(orderData)
             });
+
+            const result = await response.json().catch(() => null);
+            if (result && result.status === 'error') {
+                console.error('Lỗi từ Google Apps Script:', result.message);
+                throw new Error(result.message);
+            }
         }
 
         formStatus.innerHTML = `
@@ -676,7 +741,7 @@ async function handleOrderSubmit(e) {
         formStatus.innerHTML = `
             <div class="error-msg">
                 <i class="fa-solid fa-circle-exclamation"></i> 
-                Đã gửi thông tin đơn hàng! Nếu nhân viên chưa gọi sau 15 phút, vui lòng gọi Hotline 0888231700.
+                ${error.message && !error.message.includes('fetch') ? error.message : 'Đã gửi thông tin đơn hàng! Nếu nhân viên chưa gọi sau 15 phút, vui lòng gọi Hotline 0888231700.'}
             </div>
         `;
         submitBtn.disabled = false;

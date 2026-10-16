@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA PANNA - Menu Khai Trương | Panna Cotta Thủ Công Chỉ 10K</title>
+    <title>LA PANNA - Panna Cotta Thủ Công Chuẩn Vị Ý</title>
     <meta name="description"
-        content="Mừng khai trương LA PANNA: Panna cotta handmade 10k/hộp, Set 5 hộp chỉ 45k. Ưu đãi mua 5 tặng 1, mua 10 tặng 2. Freeship khu vực BKX. Hotline: 0888231700.">
-    <link rel="stylesheet" href="style.css?v=2.0">
+        content="LA PANNA - Panna cotta thủ công 100% nguyên liệu tươi, không chất bảo quản, giá cả phải chăng. Tự phối hộp mix vị theo sở thích. Freeship khu vực BKX. Hotline: 0888231700.">
+    <link rel="stylesheet" href="style.css?v=3.0">
     <!-- Google Fonts: Cormorant & Montserrat -->
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,500;1,700&family=Montserrat:wght@300;400;500;600;700&display=swap"
@@ -16,10 +16,8 @@
 </head>
 
 <body>
-    <!-- Top Announcement Bar (Khuyến Mãi Khai Trương) -->
-    <div id="announcementBar" class="announcement-bar">
-        <!-- Rendered by JS -->
-    </div>
+    <!-- Top Announcement Bar (ẩn khi không có khuyến mãi) -->
+    <div id="announcementBar" class="announcement-bar" style="display:none;"></div>
 
     <!-- Navbar -->
     <header class="header" id="header">
@@ -30,9 +28,8 @@
             </a>
             <nav class="nav-links">
                 <a href="#home">Trang chủ</a>
-                <a href="#opening-promo">Ưu đãi khai trương</a>
-                <a href="#products">Menu 10k</a>
-                <a href="#mix-box">Set 5 hộp (45k)</a>
+                <a href="#products">Thực đơn</a>
+                <a href="#mix-box">Tự phối hộp</a>
                 <a href="#about">Về La Panna</a>
             </nav>
             <div class="nav-actions">
@@ -48,9 +45,8 @@
         </div>
         <div class="mobile-menu" id="mobileMenu">
             <a href="#home">Trang chủ</a>
-            <a href="#opening-promo">Ưu đãi khai trương</a>
-            <a href="#products">Menu 10k</a>
-            <a href="#mix-box">Set 5 hộp (45k)</a>
+            <a href="#products">Thực đơn</a>
+            <a href="#mix-box">Tự phối hộp</a>
             <a href="#about">Về La Panna</a>
             <a href="tel:0888231700" class="text-primary font-bold"><i class="fa-solid fa-phone"></i> Hotline:
                 0888231700</a>
@@ -62,123 +58,55 @@
         <div class="hero-bg-accent"></div>
         <div class="container hero-container">
             <div class="hero-content reveal fade-up">
-                <div class="hero-badge-opening">
-                    <span class="sparkle">✨</span> MENU KHAI TRƯƠNG • 11/10 ĐẾN 15/10
-                </div>
-                <h1>Thưởng Thức Panna Cotta Chuẩn Vị Ý Chỉ <span class="highlight-price">10K</span></h1>
-                <p class="hero-lead">
-                    Ngọt thanh tự nhiên từ sữa tươi nguyên kem và hoa quả tươi sên tay mỗi sáng. Khai trương rộn ràng
-                    với chương trình
-                    <strong>"Mua 5 tặng 1, mua 10 tặng 2"</strong> cùng <strong>Set 5 hộp chỉ 45k</strong>!
-                </p>
-
-                <!-- Quick Promo Box -->
-                <div class="opening-summary-card">
-                    <div class="promo-pill">
-                        <i class="fa-solid fa-tag"></i> Giá mua lẻ: <strong>10.000đ/hộp</strong>
-                    </div>
-                    <div class="promo-pill highlight">
-                        <i class="fa-solid fa-boxes-stacked"></i> Set 5 hộp mix vị: <strong>45.000đ</strong>
-                    </div>
-                    <div class="promo-pill gift">
-                        <i class="fa-solid fa-gift"></i> <strong>Mua 5 tặng 1 • Mua 10 tặng 2</strong>
-                    </div>
-                    <div class="promo-pill freeship">
-                        <i class="fa-solid fa-truck-fast"></i> <strong>FREESHIP KHU VỰC BKX</strong>
-                    </div>
-                </div>
+                <div class="hero-subtitle"><i class="fa-solid fa-crown"></i> lapanna.store</div>
+                <h1>Panna Cotta Thủ Công Mềm Tan —<br><span class="text-primary italic-serif">Chuẩn Vị Ý,</span> Tươi
+                    Mới Mỗi Ngày</h1>
+                <p>Trải nghiệm lớp kem mềm mịn, bồng bềnh với 100% sữa tươi nguyên kem và whipping cream hảo hạng, hòa
+                    quyện sốt trái cây nhiệt đới nấu chậm giữ trọn vị thanh mát tự nhiên.</p>
 
                 <div class="hero-actions">
-                    <a href="#mix-box" class="btn-primary btn-lg"><i class="fa-solid fa-basket-shopping"></i> Đặt Set 5
-                        Hộp (45K)</a>
-                    <a href="#products" class="btn-outline btn-lg"><i class="fa-solid fa-eye"></i> Xem 5 Vị Menu</a>
+                    <a href="#products" class="btn-primary btn-lg">Khám Phá Thực Đơn <i
+                            class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#mix-box" class="btn-outline btn-lg"><i class="fa-solid fa-gift"></i> Tự Phối Hộp Mix
+                        Vị</a>
                 </div>
 
                 <div class="hero-trust">
                     <div class="trust-item">
                         <div class="trust-icon"><i class="fa-solid fa-leaf"></i></div>
-                        <span>100% Nguyên liệu tươi<br><small>Không chất bảo quản</small></span>
+                        <span>100% Sữa tươi &amp; Cream xịn<br><small>Béo nhẹ, không ngấy</small></span>
                     </div>
                     <div class="trust-item">
-                        <div class="trust-icon"><i class="fa-solid fa-motorcycle"></i></div>
-                        <span>Freeship BKX<br><small>Giao nhanh tận tay</small></span>
+                        <div class="trust-icon"><i class="fa-solid fa-calendar-day"></i></div>
+                        <span>0% Chất bảo quản<br><small>Làm mới mỗi ngày</small></span>
                     </div>
                 </div>
             </div>
 
             <div class="hero-image-wrapper reveal fade-left delay-1">
-                <div class="hero-flyer-card">
-                    <div class="flyer-header">
-                        <div class="flyer-brand">LA PANNA</div>
-                        <div class="flyer-tag">menu Khai trương</div>
+                <div class="hero-image-card">
+                    <img src="assets/strawberry_panna_cotta_1790435271258.png" alt="Panna Cotta Dâu Tây"
+                        class="hero-img">
+                    <div class="floating-badge badge-top-right">
+                        <i class="fa-solid fa-star text-yellow"></i> 4.9 (1.2k+ Đánh giá)
                     </div>
-                    <div class="flyer-body">
-                        <div class="flyer-price-badge single">
-                            <span class="badge-label">MUA LẺ</span>
-                            <span class="badge-val">10K<small>/hộp</small></span>
-                        </div>
-                        <div class="flyer-price-badge combo">
-                            <span class="badge-label">SET 5 HỘP MIX VỊ</span>
-                            <span class="badge-val">45K</span>
-                            <span class="badge-sub">Tùy chọn vị yêu thích</span>
-                        </div>
-                        <div class="flyer-gift-banner">
-                            <i class="fa-solid fa-star"></i> Mua 5 tặng 1, mua 10 tặng 2 <i
-                                class="fa-solid fa-star"></i>
-                        </div>
-                        <div class="flyer-date-pill">
-                            ƯU ĐÃI TỪ 11/10 ĐẾN HẾT 15/10
-                        </div>
-                        <div class="flyer-freeship">
-                            <i class="fa-solid fa-truck"></i> FREESHIP KHU VỰC BKX
-                        </div>
-                    </div>
-                    <div class="flyer-footer">
-                        <span><i class="fa-brands fa-facebook"></i> LaPanna</span>
-                        <span><i class="fa-solid fa-phone"></i> 0888231700</span>
-                        <span><i class="fa-solid fa-globe"></i> lapanna.store</span>
+                    <div class="floating-badge badge-bottom-left">
+                        <span class="badge-tag">Ngọt thanh, Trái cây tươi</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Grand Opening Promo Banner Section -->
-    <section class="opening-banner-section" id="opening-promo">
-        <div class="container">
-            <div class="opening-banner-box reveal fade-up">
-                <div class="banner-badge">SỰ KIỆN KHAI TRƯƠNG</div>
-                <h2>Ưu Đãi Đặc Biệt Tuần Lễ Mở Bán</h2>
-                <p class="banner-subtitle">Áp dụng từ ngày <strong>11/10 đến hết ngày 15/10</strong> cho toàn bộ khách
-                    hàng</p>
-                <div class="promo-features-grid">
-                    <div class="p-feature">
-                        <div class="p-icon"><i class="fa-solid fa-gift"></i></div>
-                        <h3>Mua 5 Tặng 1</h3>
-                        <p>Cứ mỗi 5 hộp panna cotta, bạn được tặng thêm 1 hộp vị tùy chọn (Mua 10 tặng 2).</p>
-                    </div>
-                    <div class="p-feature highlight">
-                        <div class="p-icon"><i class="fa-solid fa-box-open"></i></div>
-                        <h3>Combo 5 Hộp Chỉ 45K</h3>
-                        <p>Mix 5 vị tùy thích chỉ với 45.000đ (tiết kiệm ngay so với giá lẻ 10k/hộp).</p>
-                    </div>
-                    <div class="p-feature">
-                        <div class="p-icon"><i class="fa-solid fa-truck-fast"></i></div>
-                        <h3>Freeship Khu Vực BKX</h3>
-                        <p>Miễn phí giao hàng toàn bộ khu vực Bách Khoa - Kinh Tế - Xây Dựng và lân cận.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Product Section (5 Vị Theo Menu) -->
+
+    <!-- Product Section -->
     <section class="products-section container" id="products">
         <div class="section-header reveal fade-up">
-            <span class="section-subtitle">THỰC ĐƠN KHAI TRƯƠNG</span>
-            <h2>5 Hương Vị Panna Cotta Tươi Mát</h2>
-            <p>Đồng giá <strong>10.000đ / hộp</strong> mua lẻ. Chế biến thủ công hàng ngày từ kem tươi và sốt quả tự
-                nhiên.</p>
+            <span class="section-subtitle">THỰC ĐƠN THỦ CÔNG</span>
+            <h2>Các Vị Panna Cotta Được Yêu Thích Nhất</h2>
+            <p>Mỗi hũ panna cotta là sự chăm chút tỉ mỉ từ khâu chọn nguyên liệu đến khi nấu. Bảo quản lạnh tuyệt đối
+                2–6°C.</p>
         </div>
 
         <div class="product-grid" id="productGrid">
@@ -186,42 +114,31 @@
         </div>
     </section>
 
-    <!-- Mix Box Section (Set 5 Hộp 45k) -->
+    <!-- Mix Box Section (Set 5 Hộp) -->
     <section class="mix-box-section" id="mix-box">
         <div class="container">
             <div class="mix-box-wrapper reveal fade-up">
                 <div class="mix-box-info">
-                    <span class="section-subtitle">TIẾT KIỆM & THỎA THÍCH TRẢI NGHIỆM</span>
-                    <h2>Set 5 Hộp Mix Vị Tùy Chọn <br><span class="italic-serif text-primary">Chỉ 45.000đ (Giá Khai
-                            Trương)</span></h2>
-                    <p>
-                        Tự tay phối 5 hương vị yêu thích trong cùng một hộp quà.
-                        Đặc biệt: <strong>Khi mua Set 5 hộp bạn được áp dụng ngay chương trình TẶNG THÊM 1 HỘP miễn
-                            phí!</strong>
-                    </p>
+                    <span class="section-subtitle">CÁ NHÂN HÓA TRẢI NGHIỆM</span>
+                    <h2>Tự Phối Hộp Mix Vị <br><span class="italic-serif text-primary">Theo Sở Thích &amp; Khẩu Vị Của
+                            Riêng Bạn</span></h2>
+                    <p>Lựa chọn những hương vị đang bán chạy nhất để tạo nên món quà ngọt ngào dành tặng người thân, bạn
+                        bè hoặc đãi tiệc, trà tại nhà.</p>
 
                     <div class="combo-info-card">
                         <div class="combo-card-header">
                             <span class="combo-title"><i class="fa-solid fa-boxes-packing"></i> Hộp 5 Hũ Mix Tùy
                                 Chọn</span>
                             <div class="combo-prices">
-                                <span class="old-price">50.000đ</span>
-                                <span class="new-price">45.000đ</span>
+                                <span class="new-price">50.000đ</span>
                             </div>
                         </div>
                         <ul class="combo-perks">
-                            <li><i class="fa-solid fa-check text-green"></i> Tùy chọn phối bất kỳ 5 vị trong menu khai
-                                trương</li>
-                            <li><i class="fa-solid fa-check text-green"></i> Kích hoạt ưu đãi <strong>Mua 5 tặng
-                                    1</strong></li>
+                            <li><i class="fa-solid fa-check text-green"></i> Tự phối bất kỳ 5 vị trong thực đơn</li>
+                            <li><i class="fa-solid fa-check text-green"></i> Gợi ý tuyệt vời cho buổi trà chiều hoặc làm
+                                quà</li>
                             <li><i class="fa-solid fa-check text-green"></i> Miễn phí giao hàng khu vực BKX</li>
                         </ul>
-                    </div>
-
-                    <div class="mix-box-action">
-                        <button class="btn-primary btn-block btn-lg" id="addMixBoxToCartBtn" disabled>
-                            <i class="fa-solid fa-basket-shopping"></i> Chọn đủ 5 vị để hoàn tất Set (0/5)
-                        </button>
                     </div>
                 </div>
 
@@ -236,6 +153,12 @@
 
                     <div class="mix-flavors-grid" id="mixFlavorsGrid">
                         <!-- JS rendered: 5 flavors -->
+                    </div>
+
+                    <div class="mix-box-action">
+                        <button class="btn-primary btn-block btn-lg" id="addMixBoxToCartBtn" disabled>
+                            <i class="fa-solid fa-basket-shopping"></i> Chọn đủ 5 vị để hoàn tất Set (0/5)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -295,11 +218,12 @@
                 </div>
             </div>
             <div class="footer-col">
-                <h4>Chương Trình Khai Trương</h4>
-                <p>• Giá lẻ: 10.000đ/hộp</p>
-                <p>• Set 5 hộp mix vị: 45.000đ</p>
-                <p>• Mua 5 tặng 1, mua 10 tặng 2</p>
-                <p>• Thời gian: 11/10 đến hết 15/10</p>
+                <h4>Thực Đơn La Panna</h4>
+                <p>• Chanh Leo Panna Cotta</p>
+                <p>• Dâu Tây Panna Cotta</p>
+                <p>• Việt Quất Panna Cotta</p>
+                <p>• Kiwi Panna Cotta</p>
+                <p>• Đào Panna Cotta</p>
             </div>
             <div class="footer-col">
                 <h4>Đặt Bánh Nhanh</h4>
@@ -347,6 +271,7 @@
     <!-- Order Modal (for contact info & promotion summary) -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-content">
+            <div class="sheet-handle-bar"></div>
             <div class="modal-header">
                 <h3>Xác Nhận Đơn Hàng & Giao Bánh</h3>
                 <button class="close-modal" id="closeModalBtn" aria-label="Đóng"><i
@@ -395,8 +320,27 @@
         </div>
     </div>
 
+    <!-- Mobile Floating Sticky Cart Bar (Hiển thị cố định trên mobile khi có sản phẩm trong giỏ) -->
+    <div class="mobile-sticky-cart" id="mobileStickyCart">
+        <div class="mobile-sticky-cart-content" id="mobileStickyCartTrigger">
+            <div class="mobile-sticky-cart-left">
+                <div class="mobile-sticky-cart-icon">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span class="mobile-sticky-cart-badge" id="mobileStickyCount">0</span>
+                </div>
+                <div class="mobile-sticky-cart-info">
+                    <div class="mobile-sticky-cart-price" id="mobileStickyPrice">0đ</div>
+                    <div class="mobile-sticky-cart-sub" id="mobileStickySub">Freeship khu vực BKX</div>
+                </div>
+            </div>
+            <button type="button" class="btn-primary mobile-sticky-checkout-btn" id="mobileStickyCheckoutBtn">
+                Đặt Hàng <i class="fa-solid fa-arrow-right ml-1"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- Script -->
-    <script src="app.js?v=2.0"></script>
+    <script src="app.js?v=3.0"></script>
 </body>
 
 </html>

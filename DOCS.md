@@ -1,7 +1,7 @@
 # HƯỚNG DẪN KỸ THUẬT & VẬN HÀNH HỆ THỐNG LA PANNA WEB
 > **Tài liệu bàn giao & vận hành hệ thống website bán hàng La Panna Handcrafted Panna Cotta**  
-> *Phiên bản:* 2.0 (Cập nhật Menu Khai Trương 10K & Promotion Engine Module Hóa)  
-> *Ngày cập nhật:* 11/10/2026
+> *Phiên bản:* 3.0 (Chỉnh về Trạng Thái Bình Thường — Hết Chương Trình Khai Trương)  
+> *Ngày cập nhật:* 16/10/2026
 
 ---
 
@@ -102,7 +102,14 @@ const SYSTEM_CONFIG = {
 ```
 
 ### 3.1. Hướng dẫn BẬT / TẮT Khuyến Mãi
-- **Khi kết thúc thời gian khai trương (sau 15/10) muốn TẮT khuyến mãi:**
+
+> **✅ TRẠNG THÁI HIỆN TẠI (16/10/2026): `enabled: false` — Không có chương trình khuyến mãi nào đang chạy.**
+
+- **Khi muốn BẬT (chạy chương trình mới):**
+  1. Mở file [app.js](file:///d:/Học Tập/2026.1/Thương mại điện tử/lapanna-web/app.js).
+  2. Tại dòng 27: Đổi `enabled: false` thành `enabled: true`.
+  3. Cập nhật lại `dateRange`, `announcement`, `giftRule` và `combo5.price` theo ý đích khuyến mãi mới.
+- **Khi muốn TẮT (hết chương trình):**
   1. Mở file [app.js](file:///d:/Học Tập/2026.1/Thương mại điện tử/lapanna-web/app.js).
   2. Tại dòng 27: Đổi `enabled: true` thành `enabled: false`.
   3. **Kết quả tự động của hệ thống:**
@@ -110,9 +117,6 @@ const SYSTEM_CONFIG = {
      - Quy tắc tặng quà (mua 5 tặng 1) tự động ngưng áp dụng.
      - Giỏ hàng và Modal thanh toán không còn sinh dòng quà tặng hay dropdown chọn vị quà.
      - Giá Set 5 hộp tự động điều chỉnh về 50.000đ.
-- **Khi muốn BẬT lại (hoặc chạy sự kiện mới):**
-  1. Đổi `enabled: true`.
-  2. Cập nhật lại ngày `dateRange` hoặc câu thông báo `announcement` nếu cần.
 
 ### 3.2. Hướng dẫn sửa đổi mốc tặng quà (Mua X tặng Y)
 Nếu muốn đổi chương trình từ "Mua 5 tặng 1" sang "Mua 4 tặng 1" hoặc "Mua 10 tặng 3":
@@ -186,21 +190,40 @@ Khi khách hàng bấm **"Xác Nhận Đặt Hàng"** trên website, hàm `handl
 > **Ghi chú kỹ thuật về CORS:** Client gửi `Content-Type: text/plain;charset=utf-8` để trình duyệt không kích hoạt CORS Preflight (OPTIONS request), giúp Google Apps Script xử lý mượt mà 100% không bị chặn.
 
 ### 5.2. Mã nguồn Google Apps Script mẫu (Code.gs)
-Chủ tiệm hoặc lập trình viên mở Google Sheet -> chọn **Tiện ích mở rộng (Extensions)** -> **Apps Script** và dán đoạn mã sau:
+Chủ tiệm hoặc lập trình viên mở Google Sheet cũ -> chọn **Tiện ích mở rộng (Extensions)** -> **Apps Script** và thay thế toàn bộ mã nguồn trong `Code.gs` bằng đoạn script sau:
 
 ```javascript
 /**
- * GOOGLE APPS SCRIPT - BỘ TIẾP NHẬN ĐƠN HÀNG LA PANNA
- * Nhận dữ liệu POST từ website và ghi trực tiếp vào Google Sheet
+ * =============================================================================
+ * GOOGLE APPS SCRIPT - BỘ TIẾP NHẬN ĐƠN HÀNG LA PANNA (MULTI-SHEET VERSION)
+ * =============================================================================
+ * Tự động ghi đơn hàng vào đúng Sheet (Tab) được chỉ định trong cùng một Spreadsheet.
+ * Nếu Sheet chưa tồn tại, script sẽ tự động tạo Sheet mới và định dạng tiêu đề đẹp mắt.
  */
+
+// 1. CẤU HÌNH TÊN SHEET (TAB) LƯU ĐƠN HÀNG
+// Đặt đúng tên tab trong file Google Sheet của bạn (Mặc định: "Đơn Hàng")
+var TARGET_SHEET_NAME = "Đơn Hàng";
+
 function doPost(e) {
+  // Sử dụng LockService để tránh xung đột khi nhiều khách bấm đặt hàng cùng lúc
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+
   try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = spreadsheet.getSheetByName(TARGET_SHEET_NAME);
+    
+    // Nếu sheet với tên trên chưa tồn tại, tự động tạo mới
+    if (!sheet) {
+      sheet = spreadsheet.insertSheet(TARGET_SHEET_NAME);
+    }
+    
     var data = JSON.parse(e.postData.contents);
     
-    // Nếu sheet còn trống, tự động tạo hàng tiêu đề (Headers)
+    // Nếu sheet còn trống (chưa có dòng nào), tự động tạo hàng tiêu đề (Headers)
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow([
+      var headers = [
         "Thời Gian Đặt",
         "Họ Tên Khách",
         "Số Điện Thoại",
@@ -211,34 +234,46 @@ function doPost(e) {
         "Chi Tiết Đơn Hàng",
         "Tổng Tiền",
         "Khu Vực Giao Hàng",
-        "Ghi Chú Của Khách"
-      ]);
+        "Ghi Chú Của Khách",
+        "Trạng Thái Đơn"
+      ];
+      sheet.appendRow(headers);
       
-      // Định dạng dòng tiêu đề
-      var headerRange = sheet.getRange(1, 1, 1, 11);
+      // Định dạng dòng tiêu đề (Tone đỏ thương hiệu La Panna)
+      var headerRange = sheet.getRange(1, 1, 1, headers.length);
       headerRange.setBackground("#C91C3E");
       headerRange.setFontColor("#FFFFFF");
       headerRange.setFontWeight("bold");
+      headerRange.setFontSize(11);
+      headerRange.setHorizontalAlignment("center");
+      headerRange.setVerticalAlignment("middle");
+      sheet.setRowHeight(1, 38);
+      sheet.setFrozenRows(1); // Cố định dòng tiêu đề khi cuộn chuột
     }
     
     // Thêm dòng dữ liệu đơn hàng mới
     sheet.appendRow([
-      data.orderDate || new Date().toLocaleString("vi-VN"),
-      data.name,
-      "'" + data.phone, // Dấu nháy đơn để giữ số 0 đầu số điện thoại
-      data.address,
-      data.totalCups,
-      data.freeGifts,
-      data.promotionApplied,
-      data.cartDetails,
-      data.totalPrice,
-      data.shippingArea,
-      data.notes
+      data.orderDate || new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" }),
+      data.name || "",
+      "'" + (data.phone || ""), // Dấu nháy đơn để giữ số 0 ở đầu số điện thoại
+      data.address || "",
+      data.totalCups || 0,
+      data.freeGifts || "0",
+      data.promotionApplied || "Không áp dụng",
+      data.cartDetails || "",
+      data.totalPrice || "0đ",
+      data.shippingArea || "",
+      data.notes || "",
+      "Mới (Chờ xác nhận)"
     ]);
+
+    var lastRow = sheet.getLastRow();
+    sheet.getRange(lastRow, 1, 1, 12).setVerticalAlignment("middle");
     
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
-      message: "Đơn hàng đã được lưu thành công!"
+      sheetName: TARGET_SHEET_NAME,
+      message: "Đơn hàng đã được lưu thành công vào sheet: " + TARGET_SHEET_NAME
     })).setMimeType(ContentService.MimeType.JSON);
     
   } catch (error) {
@@ -246,17 +281,88 @@ function doPost(e) {
       status: "error",
       message: error.toString()
     })).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
   }
+}
+
+/**
+ * Hỗ trợ kiểm tra sức khỏe Web App qua trình duyệt
+ */
+function doGet(e) {
+  return ContentService.createTextOutput(JSON.stringify({
+    status: "success",
+    targetSheet: TARGET_SHEET_NAME,
+    message: "Hệ thống tiếp nhận đơn hàng La Panna đang hoạt động ổn định!"
+  })).setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * Hàm kiểm tra thử nghiệm (Bấm 'Run' trực tiếp trong Apps Script để kiểm tra)
+ */
+function testAddOrder() {
+  var testEvent = {
+    postData: {
+      contents: JSON.stringify({
+        name: "Khách Mẫu Test",
+        phone: "0888231700",
+        address: "KTX Bách Khoa",
+        notes: "Đơn thử nghiệm hệ thống sheet mới",
+        totalCups: 5,
+        freeGifts: "0",
+        promotionApplied: "Không áp dụng khuyến mãi",
+        cartDetails: "• Set 5 Hộp Mix Vị Tùy Chọn x1 (50.000đ)",
+        totalPrice: "50.000đ",
+        shippingArea: "FREESHIP KHU VỰC BKX",
+        orderDate: new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })
+      })
+    }
+  };
+  var res = doPost(testEvent);
+  Logger.log(res.getContent());
 }
 ```
 
-### 5.3. Các bước cấu hình Web App Google Sheet
-1. Bấm nút **Deploy (Triển khai)** -> **New deployment (Triển khai mới)**.
-2. Chọn loại: **Web app**.
-3. **Execute as (Thực thi dưới tên):** *Me (Tôi)*.
-4. **Who has access (Ai có quyền truy cập):** **Anyone (Bất kỳ ai)** *(bắt buộc để website có thể gửi dữ liệu không cần đăng nhập)*.
-5. Sao chép URL Web App vừa tạo (có dạng `https://script.google.com/macros/s/.../exec`).
-6. Dán URL vào biến `GOOGLE_SHEET_URL` ở dòng 398 trong file [app.js](file:///d:/Học Tập/2026.1/Thương mại điện tử/lapanna-web/app.js).
+### 5.3. Hướng dẫn chi tiết triển khai Web App vào Sheet mới trong file cũ
+
+Bạn thực hiện theo 4 bước sau:
+
+#### Bước 1: Tạo Tab (Sheet) mới trong cùng file Google Spreadsheet
+1. Mở file Google Sheet bạn đang dùng để nhận đơn.
+2. Ở thanh dưới cùng, bấm dấu **`+` (Thêm trang tính)** để tạo một tab mới.
+3. Đổi tên tab mới thành: `Đơn Hàng` (hoặc tên bất kỳ bạn thích).
+   *(Lưu ý: Nếu bạn không tạo trước, mã Script trên cũng sẽ tự động tạo giúp bạn khi có đơn đầu tiên).*
+
+#### Bước 2: Cập nhật mã nguồn trong Apps Script
+1. Trên menu Google Sheet, chọn **Tiện ích mở rộng (Extensions)** -> **Apps Script**.
+2. Xóa toàn bộ code cũ trong tệp `Code.gs` và dán toàn bộ đoạn mã ở mục 5.2 phía trên vào.
+3. Kiểm tra biến `var TARGET_SHEET_NAME = "Đơn Hàng";` xem đã đúng tên tab bạn muốn lưu chưa.
+4. Bấm **Lưu dự án (Ctrl + S)** hoặc biểu tượng đĩa mềm.
+
+#### Bước 3: Triển khai phiên bản mới (Cập nhật Web App)
+Có 2 cách để triển khai:
+
+* **Cách A (Khuyên dùng - Nhanh nhất & Giữ nguyên URL cũ):**
+  1. Ở góc trên bên phải, bấm nút **Triển khai (Deploy)** -> Chọn **Quản lý bản triển khai (Manage deployments)**.
+  2. Chọn bản triển khai Web App hiện tại, bấm vào biểu tượng **Chiếc bút chì (Chỉnh sửa / Edit)** ở góc trên.
+  3. Tại mục **Phiên bản (Version)**: Nhấp vào menu thả xuống và chọn **Phiên bản mới (New version)**.
+  4. Bấm **Triển khai (Deploy)**.
+  5. *Kết quả:* URL Web App giữ nguyên 100%, website tiếp tục chạy mà không cần sửa lại mã frontend!
+
+* **Cách B (Tạo một bản triển khai mới độc lập):**
+  1. Bấm **Triển khai (Deploy)** -> Chọn **Triển khai mới (New deployment)**.
+  2. Bấm biểu tượng bánh răng bên cạnh "Chọn loại" -> Chọn **Ứng dụng web (Web app)**.
+  3. Điền mô tả: `Tiếp nhận đơn - Sheet mới`.
+  4. **Thực thi dưới tên (Execute as):** `Tôi (Me)`.
+  5. **Ai có quyền truy cập (Who has access):** `Bất kỳ ai (Anyone)`.
+  6. Bấm **Triển khai (Deploy)**.
+  7. Sao chép **URL ứng dụng web** mới tạo (có đuôi `/exec`).
+  8. Mở file [app.js](file:///d:/Học Tập/2026.1/Thương mại điện tử/lapanna-web/app.js) tại dòng 698, dán URL mới vào biến `GOOGLE_SHEET_URL`.
+
+#### Bước 4: Kiểm thử và hoàn tất
+1. Bạn có thể test nhanh bằng cách chọn hàm `testAddOrder` trên thanh công cụ Apps Script rồi bấm **Chạy (Run)**.
+2. Quay lại Google Sheet, bạn sẽ thấy tab mới xuất hiện với tiêu đề màu đỏ thương hiệu La Panna và 1 dòng đơn hàng mẫu!
+3. Vào website [lapanna.store](https://lapanna.store) thử đặt một đơn hàng thực tế để kiểm tra dòng dữ liệu ghi vào.
 
 ---
 
@@ -284,4 +390,37 @@ function doPost(e) {
    - *Khắc phục:* Trình duyệt có thể lưu cache tệp `style.css` hoặc `app.js`. Nhấn tổ hợp phím `Ctrl + F5` (hoặc mở cửa sổ ẩn danh) để tải lại toàn bộ tài nguyên mới nhất.
 
 ---
-*Tài liệu được soạn thảo hoàn chỉnh phục vụ bảo trì hệ thống website thương mại điện tử LA PANNA.*
+
+## 7. KIẾN TRÚC TỐI ƯU MOBILE & TRẢI NGHIỆM VUỐT CHẠM (MOBILE UX ENGINE)
+
+### 7.1. Các vấn đề cốt lõi đã được giải quyết
+1. **Modal Đặt Hàng Chuyển Thành Native Bottom Sheet (Dạng Ngăn Kéo Kéo Từ Dưới Lên):**
+   - *Vấn đề cũ:* Modal căn giữa (`top: 50%`) khiến nội dung dài bị thụt mất phần đầu (nút đóng, tiêu đề) và phần chân (nút đặt hàng) trên màn hình điện thoại, đồng thời không vuốt được.
+   - *Xử lý:* Trên mobile (<=768px), modal tự động chuyển sang cơ chế **Bottom Sheet**:
+     - Bắt đầu từ đáy màn hình (`align-items: flex-end`) trượt lên êm ái (`transform: translateY(100% -> 0)`).
+     - Chiều cao khống chế `max-height: 90dvh` (Dynamic Viewport Height - tự co giãn theo thanh địa chỉ Safari/Chrome).
+     - Tiêu đề và nút Đóng `[X]` được gắn cố định (`position: sticky`), kèm thanh gạt vuốt (`sheet-handle-bar`).
+     - Nội dung bên trong tự động cuộn mượt bằng `-webkit-overflow-scrolling: touch` và `overscroll-behavior: contain`.
+     - Cho phép chạm ra vùng nền tối (`modal-overlay`) hoặc phím `Esc` để đóng nhanh.
+
+2. **Chống Hiện Tượng Tự Động Phóng To (Auto-Zoom) Trên iOS Safari:**
+   - Khi người dùng chạm vào ô nhập liệu (`input`, `select`, `textarea`) có cỡ chữ nhỏ hơn 16px, iOS Safari sẽ tự phóng to màn hình làm lệch giao diện.
+   - *Xử lý:* Cố định `font-size: 16px !important` cho toàn bộ form trên mobile và cấu hình viewport chuẩn.
+
+3. **Khóa Cuộn Trang Nền (Body Scroll Lock):**
+   - Khi mở Giỏ hàng hoặc Modal đặt hàng, trang nền đằng sau được tự động khóa cuộn (`html.modal-open, body.modal-open { overflow: hidden !important; touch-action: none; }`), triệt tiêu 100% hiện tượng giật rung/tranh chấp cuộn nền khi khách hàng đang điền thông tin.
+
+4. **Loại Bỏ Bẫy Cuộn (Scroll Trap) Ở Mục Tự Mix Set 5 Hộp:**
+   - *Vấn đề cũ:* Khung chọn vị panna cotta bị bọc trong `max-height: 400px; overflow-y: auto`, khi người dùng vuốt ngón cái qua khu vực này sẽ bị kẹt cuộn bên trong thay vì cuộn tiếp trang web.
+   - *Xử lý:* Chuyển sang bố cục lưới 3 cột trực quan không giới hạn chiều cao con, các thẻ vị có phản hồi xúc giác rung nhẹ (`navigator.vibrate`) và nút "Thêm Set 5 Hộp" được di chuyển ngay dưới danh sách chọn vị, giúp khách hàng chọn xong là bấm thêm giỏ được ngay mà không cần cuộn ngược lên.
+
+5. **Lưới Menu 10K Tối Ưu 2 Cột (2-Column Grid):**
+   - Thay vì hiển thị từng thẻ đơn lẻ chiếm trọn cả màn hình, danh mục 5 vị hiển thị dạng lưới 2 cột cân đối. Khách hàng xem trọn vẹn thực đơn chỉ với 1-2 lần lướt ngón tay.
+
+6. **Thanh Đặt Hàng Nổi Thông Minh (Mobile Floating Quick Cart Bar):**
+   - Khi giỏ hàng có bánh, một thanh nổi (`#mobileStickyCart`) với hiệu ứng làm mờ kính (`backdrop-filter`) sẽ xuất hiện ở đáy màn hình hiển thị: Tổng tiền, số hộp, tag ưu đãi ("+1 Hộp Tặng • Freeship BKX") và nút "Đặt Hàng". Khách có thể chạm để mở thanh toán ngay ở bất kỳ vị trí nào trên trang.
+
+---
+---
+*Tài liệu được cập nhật phiên bản 3.0 — Hết chương trình khai trương, chuyển về vận hành bình thường (16/10/2026).*
+
