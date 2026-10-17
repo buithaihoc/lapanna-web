@@ -40,11 +40,11 @@ const SYSTEM_CONFIG = {
             tagText: 'Mua 5 tặng 1, mua 10 tặng 2'
         },
 
-        // Combo 5 hộp mix vị (Giá về 50.000đ khi không khuyến mãi)
+        // Combo 5 hộp mix vị (Giá 45.000đ)
         combo5: {
-            enabled: false,
+            enabled: true,
             size: 5,
-            price: 50000,
+            price: 45000,
             regularPrice: 50000,
             name: 'Set 5 Hộp Mix Vị Tùy Chọn'
         },
@@ -118,7 +118,7 @@ const state = {
     cart: JSON.parse(sessionStorage.getItem('lapanna_cart')) || [],
     mixBox: {
         size: SYSTEM_CONFIG.promotion.combo5.size,
-        price: SYSTEM_CONFIG.promotion.enabled ? SYSTEM_CONFIG.promotion.combo5.price : 50000,
+        price: SYSTEM_CONFIG.promotion.combo5.price,
         flavors: []
     }
 };
@@ -316,7 +316,7 @@ function renderProducts() {
 function initMixBox() {
     const boxSize = SYSTEM_CONFIG.promotion.combo5.size;
     state.mixBox.size = boxSize;
-    state.mixBox.price = SYSTEM_CONFIG.promotion.enabled ? SYSTEM_CONFIG.promotion.combo5.price : 50000;
+    state.mixBox.price = SYSTEM_CONFIG.promotion.combo5.price;
 
     renderMixBoxGrid();
     renderMixBox();
@@ -429,6 +429,8 @@ function addMixBoxToCart() {
         id: mixId,
         name: boxName,
         desc: desc,
+        flavorCounts: { ...flavorCounts },
+        flavors: [...flavors],
         price: price,
         size: size,
         img: 'assets/mango_panna_cotta_1790435259241.png'
@@ -652,6 +654,56 @@ function closeCheckoutModal() {
 }
 
 /**
+ * Hàm phân tách và đếm số lượng 5 hương vị trong giỏ hàng
+ * (để gửi sang Google Sheet tính tổng số lượng theo từng vị)
+ */
+function getFlavorBreakdown(cart) {
+    const counts = {
+        'Chanh leo': 0,
+        'Dâu': 0,
+        'Việt quất': 0,
+        'Kiwi': 0,
+        'Đào': 0
+    };
+
+    cart.forEach(item => {
+        const qty = Number(item.quantity) || 1;
+        if (item.type === 'single') {
+            const flavor = item.flavor || (products.find(p => p.id === item.id) || {}).flavor;
+            if (flavor) {
+                const key = Object.keys(counts).find(k => k.toLowerCase() === flavor.toLowerCase());
+                if (key) counts[key] += qty;
+            }
+        } else if (item.type === 'mix') {
+            if (item.flavorCounts && typeof item.flavorCounts === 'object') {
+                Object.entries(item.flavorCounts).forEach(([flv, count]) => {
+                    const key = Object.keys(counts).find(k => k.toLowerCase() === flv.toLowerCase());
+                    if (key) counts[key] += (Number(count) || 0) * qty;
+                });
+            } else if (Array.isArray(item.flavors)) {
+                item.flavors.forEach(id => {
+                    const p = products.find(prod => prod.id === id);
+                    if (p && counts[p.flavor] !== undefined) {
+                        counts[p.flavor] += qty;
+                    }
+                });
+            } else if (typeof item.desc === 'string') {
+                // Phân tích chuỗi nếu dữ liệu cũ từ sessionStorage: "Dâu (x2), Chanh leo (x1), Kiwi (x2)"
+                const matches = item.desc.matchAll(/([^,(]+)\s*\(x(\d+)\)/g);
+                for (const match of matches) {
+                    const flvName = match[1].trim();
+                    const flvCount = parseInt(match[2], 10) || 1;
+                    const key = Object.keys(counts).find(k => k.toLowerCase() === flvName.toLowerCase());
+                    if (key) counts[key] += flvCount * qty;
+                }
+            }
+        }
+    });
+
+    return counts;
+}
+
+/**
  * =============================================================================
  * 4. XỬ LÝ ĐẶT HÀNG & BẮN DỮ LIỆU SANG GOOGLE SHEETS
  * =============================================================================
@@ -669,8 +721,9 @@ async function handleOrderSubmit(e) {
     submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang xử lý gửi đơn...';
 
     const promo = calculatePromotion(state.cart);
+    const flavorCounts = getFlavorBreakdown(state.cart);
 
-    // Chuẩn bị chi tiết đơn hàng dạng text đẹp
+    // Chuẩn bị chi tiết đơn hàng dạng text đẹp (1 cột tổng hợp như cũ)
     const orderDetails = state.cart.map(item => {
         let detail = `• ${item.name} x${item.quantity} (${formatMoney(item.price * item.quantity)})`;
         if (item.type === 'mix') detail += `\n  - Vị: ${item.desc}`;
@@ -679,23 +732,33 @@ async function handleOrderSubmit(e) {
 
     const giftFlavor = promo.freeGifts > 0 ? (formData.get('giftFlavor') || 'Shop tự mix') : 'Không có';
 
-    // Payload hoàn chỉnh gửi tới Google Sheet
+    // Payload hoàn chỉnh gửi tới Google Sheet:
+    // - Tách 5 vị thành 5 thuộc tính số (chanhLeo, dau, vietQuat, kiwi, dao) để tính SUM
+    // - Giữ 1 cột tổng hợp chi tiết cartDetails như cũ
+    // - Tổng tiền về dạng số nguyên (totalPrice: number, ví dụ 45000)
+    // - Thêm trường facebook (optional)
     const orderData = {
-        name: formData.get('name'),
-        phone: formData.get('phone'),
-        address: formData.get('address'),
-        notes: formData.get('notes') || '',
+        name: (formData.get('name') || '').trim(),
+        phone: (formData.get('phone') || '').trim(),
+        facebook: (formData.get('facebook') || '').trim(),
+        address: (formData.get('address') || '').trim(),
+        chanhLeo: flavorCounts['Chanh leo'] || 0,
+        dau: flavorCounts['Dâu'] || 0,
+        vietQuat: flavorCounts['Việt quất'] || 0,
+        kiwi: flavorCounts['Kiwi'] || 0,
+        dao: flavorCounts['Đào'] || 0,
         totalCups: promo.totalCups,
         freeGifts: promo.freeGifts > 0 ? `${promo.freeGifts} hộp (Vị: ${giftFlavor})` : '0',
         promotionApplied: promo.promoName,
         cartDetails: orderDetails,
-        totalPrice: formatMoney(promo.finalTotal),
+        totalPrice: promo.finalTotal, // DẠNG SỐ NGUYÊN (ví dụ: 45000)
         shippingArea: SYSTEM_CONFIG.store.freeShippingNote,
+        notes: (formData.get('notes') || '').trim(),
         orderDate: new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
     };
 
     // URL Web App Google Apps Script
-    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyvyFQ8xlVljOMXW0WhaN4KlLS5ommRvfamDoJV8m1_-FaghAt5X-FJB8p6AnEPTtRj/exec';
+    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyl-h0-UU0IPc9GE11Va_lXdb3RknriO5sN6E0lCR3dQ81lOig48DXgNrfaFWIRt6Qc/exec';
 
     try {
         if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL === 'YOUR_GOOGLE_WEB_APP_URL_HERE') {

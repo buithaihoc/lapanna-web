@@ -1,7 +1,7 @@
 # HƯỚNG DẪN KỸ THUẬT & VẬN HÀNH HỆ THỐNG LA PANNA WEB
 > **Tài liệu bàn giao & vận hành hệ thống website bán hàng La Panna Handcrafted Panna Cotta**  
-> *Phiên bản:* 3.0 (Chỉnh về Trạng Thái Bình Thường — Hết Chương Trình Khai Trương)  
-> *Ngày cập nhật:* 16/10/2026
+> *Phiên bản:* 3.1 (Tách 5 Cột Vị Panna Cotta, Tổng Tiền Dạng Số Chuẩn Tính SUM, Đơn Set 5 Hộp 45k, Thêm Link Facebook)  
+> *Ngày cập nhật:* 17/10/2026
 
 ---
 
@@ -169,36 +169,52 @@ const products = [
 ## 5. TÍCH HỢP ĐỒNG BỘ GOOGLE SHEET (GOOGLE APPS SCRIPT)
 
 ### 5.1. Luồng dữ liệu và Payload
-Khi khách hàng bấm **"Xác Nhận Đặt Hàng"** trên website, hàm `handleOrderSubmit` sẽ đóng gói toàn bộ dữ liệu thành một JSON payload và bắn tới endpoint Web App của Google Apps Script:
+Khi khách hàng bấm **"Xác Nhận Đặt Hàng"** trên website, hàm `handleOrderSubmit` sẽ tự động tách số lượng từng vị, chuyển tổng tiền sang dạng số nguyên và đóng gói toàn bộ dữ liệu thành một JSON payload gửi tới Web App Google Apps Script:
 
 ```json
 {
   "name": "Nguyễn Văn A",
   "phone": "0987654321",
+  "facebook": "https://facebook.com/nguyenvana",
   "address": "Phòng 302 KTX B10 Đại học Bách Khoa",
   "notes": "Giao sau 16h chiều, cho thêm thìa",
-  "totalCups": 6,
-  "freeGifts": "1 hộp (Vị: Dâu)",
-  "promotionApplied": "Menu Khai Trương La Panna",
-  "cartDetails": "• Set 5 Hộp Mix Vị Tùy Chọn x1 (45.000đ)\n  - Vị: Dâu (x2), Chanh leo (x1), Kiwi (x2)\n• Panna Cotta Đào x1 (10.000đ)",
-  "totalPrice": "55.000đ",
+  "chanhLeo": 1,
+  "dau": 2,
+  "vietQuat": 0,
+  "kiwi": 2,
+  "dao": 0,
+  "totalCups": 5,
+  "freeGifts": "0",
+  "promotionApplied": "Không áp dụng khuyến mãi",
+  "cartDetails": "• Set 5 Hộp Mix Vị Tùy Chọn x1 (45.000đ)\n  - Vị: Dâu (x2), Chanh leo (x1), Kiwi (x2)",
+  "totalPrice": 45000,
   "shippingArea": "FREESHIP KHU VỰC BKX (Bách Khoa - Kinh Tế - Xây Dựng)",
-  "orderDate": "11/10/2026, 17:30:00"
+  "orderDate": "17/10/2026, 17:30:00"
 }
 ```
+
+> **Các điểm cải tiến kỹ thuật nổi bật (Phiên bản v3.1):**
+> 1. **Tách thành 5 cột riêng biệt cho 5 vị bánh:** Các trường `chanhLeo`, `dau`, `vietQuat`, `kiwi`, `dao` đều được gửi dưới **dạng số nguyên (Number)**. Trong Google Sheets, bạn có thể áp dụng trực tiếp công thức `=SUM(F2:F1000)` để tính tổng số lượng từng vị cần nấu hoặc đã bán ra mà không cần tách chuỗi thủ công.
+> 2. **Giữ nguyên 1 cột tổng hợp chi tiết (`Chi Tiết Đơn Hàng`):** Liệt kê trọn vẹn từng combo, danh sách vị mix và giá tiền tương ứng giúp nhân viên đối soát đơn hàng trực quan và nhanh chóng.
+> 3. **Tổng tiền về dạng số nguyên (`totalPrice: 45000`):** Giá trị gửi sang là số thuần túy (Number), Google Sheet được định dạng hiển thị tiền tệ `#,##0`. Nhờ đó bạn có thể dùng ngay hàm tính tổng doanh thu `=SUM(O2:O1000)` hoàn toàn tự động!
+> 4. **Trường liên hệ Facebook (Không bắt buộc):** Form đặt hàng tích hợp thêm ô nhập Link Facebook / Tên cá nhân để shop tiện nhắn tin chăm sóc khách hàng hoặc gửi ảnh bánh trước khi giao.
+> 5. **Set 5 hộp giá 45.000đ:** Mặc định combo mix vị 5 hộp áp dụng giá ưu đãi 45.000đ (tiết kiệm 5k so với mua lẻ).
 
 > **Ghi chú kỹ thuật về CORS:** Client gửi `Content-Type: text/plain;charset=utf-8` để trình duyệt không kích hoạt CORS Preflight (OPTIONS request), giúp Google Apps Script xử lý mượt mà 100% không bị chặn.
 
 ### 5.2. Mã nguồn Google Apps Script mẫu (Code.gs)
-Chủ tiệm hoặc lập trình viên mở Google Sheet cũ -> chọn **Tiện ích mở rộng (Extensions)** -> **Apps Script** và thay thế toàn bộ mã nguồn trong `Code.gs` bằng đoạn script sau:
+Chủ tiệm hoặc lập trình viên mở Google Sheet -> chọn **Tiện ích mở rộng (Extensions)** -> **Apps Script** và thay thế toàn bộ mã nguồn trong `Code.gs` bằng đoạn script sau:
 
 ```javascript
 /**
  * =============================================================================
- * GOOGLE APPS SCRIPT - BỘ TIẾP NHẬN ĐƠN HÀNG LA PANNA (MULTI-SHEET VERSION)
+ * GOOGLE APPS SCRIPT - BỘ TIẾP NHẬN ĐƠN HÀNG LA PANNA (PHIÊN BẢN V3.1 - 18 CỘT)
  * =============================================================================
- * Tự động ghi đơn hàng vào đúng Sheet (Tab) được chỉ định trong cùng một Spreadsheet.
- * Nếu Sheet chưa tồn tại, script sẽ tự động tạo Sheet mới và định dạng tiêu đề đẹp mắt.
+ * - Tự động ghi đơn hàng vào đúng Sheet (Tab) được chỉ định trong Spreadsheet.
+ * - Tách riêng 5 cột số lượng theo từng vị (Chanh leo, Dâu, Việt quất, Kiwi, Đào) dạng số nguyên để tính SUM.
+ * - Giữ nguyên 1 cột Chi Tiết Đơn Hàng tổng hợp.
+ * - Tổng tiền lưu dạng số nguyên chuẩn để tính doanh thu bằng hàm =SUM().
+ * - Thêm cột Link Facebook (tùy chọn).
  */
 
 // 1. CẤU HÌNH TÊN SHEET (TAB) LƯU ĐƠN HÀNG
@@ -221,21 +237,27 @@ function doPost(e) {
     
     var data = JSON.parse(e.postData.contents);
     
-    // Nếu sheet còn trống (chưa có dòng nào), tự động tạo hàng tiêu đề (Headers)
+    // Nếu sheet còn trống (chưa có dòng nào), tự động tạo hàng tiêu đề (18 cột chuẩn)
     if (sheet.getLastRow() === 0) {
       var headers = [
-        "Thời Gian Đặt",
-        "Họ Tên Khách",
-        "Số Điện Thoại",
-        "Địa Chỉ Giao Hàng",
-        "Tổng Số Hộp",
-        "Quà Tặng Khuyến Mãi",
-        "Chương Trình KM",
-        "Chi Tiết Đơn Hàng",
-        "Tổng Tiền",
-        "Khu Vực Giao Hàng",
-        "Ghi Chú Của Khách",
-        "Trạng Thái Đơn"
+        "Thời Gian Đặt",        // Cột 1 (A)
+        "Họ Tên Khách",         // Cột 2 (B)
+        "Số Điện Thoại",        // Cột 3 (C)
+        "Link Facebook",        // Cột 4 (D) - MỚI
+        "Địa Chỉ Giao Hàng",    // Cột 5 (E)
+        "Chanh Leo",            // Cột 6 (F) - MỚI (Dạng số)
+        "Dâu",                  // Cột 7 (G) - MỚI (Dạng số)
+        "Việt Quất",            // Cột 8 (H) - MỚI (Dạng số)
+        "Kiwi",                 // Cột 9 (I) - MỚI (Dạng số)
+        "Đào",                  // Cột 10 (J) - MỚI (Dạng số)
+        "Tổng Số Hộp",          // Cột 11 (K) (Dạng số)
+        "Quà Tặng Khuyến Mãi",  // Cột 12 (L)
+        "Chương Trình KM",      // Cột 13 (M)
+        "Chi Tiết Đơn Hàng",    // Cột 14 (N) - Cột tổng hợp text như cũ
+        "Tổng Tiền",            // Cột 15 (O) - Dạng số: 45000, 90000...
+        "Khu Vực Giao Hàng",    // Cột 16 (P)
+        "Ghi Chú Của Khách",    // Cột 17 (Q)
+        "Trạng Thái Đơn"        // Cột 18 (R)
       ];
       sheet.appendRow(headers);
       
@@ -251,24 +273,52 @@ function doPost(e) {
       sheet.setFrozenRows(1); // Cố định dòng tiêu đề khi cuộn chuột
     }
     
-    // Thêm dòng dữ liệu đơn hàng mới
+    // 1. Chuyển đổi Tổng Tiền về kiểu số (Number) để Google Sheet / Excel tính hàm =SUM() được ngay
+    var rawPrice = data.totalPrice;
+    var numericPrice = 0;
+    if (typeof rawPrice === "number") {
+      numericPrice = rawPrice;
+    } else if (typeof rawPrice === "string") {
+      numericPrice = Number(rawPrice.replace(/[^\d]/g, "")) || 0;
+    }
+
+    // 2. Chuyển đổi số lượng 5 vị về kiểu số (Number) để tính toán SUM theo từng vị
+    var chanhLeo = Number(data.chanhLeo || data.flavor_chanh_leo || 0);
+    var dau = Number(data.dau || data.flavor_dau || 0);
+    var vietQuat = Number(data.vietQuat || data.flavor_viet_quat || 0);
+    var kiwi = Number(data.kiwi || data.flavor_kiwi || 0);
+    var dao = Number(data.dao || data.flavor_dao || 0);
+    var totalCups = Number(data.totalCups) || (chanhLeo + dau + vietQuat + kiwi + dao);
+
+    // 3. Thêm dòng dữ liệu đơn hàng mới (18 cột)
     sheet.appendRow([
       data.orderDate || new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" }),
       data.name || "",
       "'" + (data.phone || ""), // Dấu nháy đơn để giữ số 0 ở đầu số điện thoại
+      data.facebook || "",      // Link Facebook / Tên Facebook (Optional)
       data.address || "",
-      data.totalCups || 0,
+      chanhLeo,                 // Cột 6: Chanh Leo (dạng số)
+      dau,                      // Cột 7: Dâu (dạng số)
+      vietQuat,                 // Cột 8: Việt Quất (dạng số)
+      kiwi,                     // Cột 9: Kiwi (dạng số)
+      dao,                      // Cột 10: Đào (dạng số)
+      totalCups,                // Cột 11: Tổng số hộp (dạng số)
       data.freeGifts || "0",
       data.promotionApplied || "Không áp dụng",
-      data.cartDetails || "",
-      data.totalPrice || "0đ",
+      data.cartDetails || "",   // Cột 14: Cột tổng hợp chi tiết như cũ
+      numericPrice,             // Cột 15: Tổng tiền dạng số (ví dụ: 45000)
       data.shippingArea || "",
       data.notes || "",
       "Mới (Chờ xác nhận)"
     ]);
 
     var lastRow = sheet.getLastRow();
-    sheet.getRange(lastRow, 1, 1, 12).setVerticalAlignment("middle");
+    // Căn giữa dòng theo phương dọc
+    sheet.getRange(lastRow, 1, 1, 18).setVerticalAlignment("middle");
+    // Format các cột số lượng vị (Cột 6 đến 11) căn giữa và định dạng số nguyên
+    sheet.getRange(lastRow, 6, 1, 6).setHorizontalAlignment("center").setNumberFormat("0");
+    // Format cột Tổng Tiền (Cột 15) căn phải và định dạng phân tách hàng nghìn (#,##0)
+    sheet.getRange(lastRow, 15).setHorizontalAlignment("right").setNumberFormat("#,##0");
     
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
@@ -293,7 +343,7 @@ function doGet(e) {
   return ContentService.createTextOutput(JSON.stringify({
     status: "success",
     targetSheet: TARGET_SHEET_NAME,
-    message: "Hệ thống tiếp nhận đơn hàng La Panna đang hoạt động ổn định!"
+    message: "Hệ thống tiếp nhận đơn hàng La Panna v3.1 đang hoạt động ổn định!"
   })).setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -306,13 +356,19 @@ function testAddOrder() {
       contents: JSON.stringify({
         name: "Khách Mẫu Test",
         phone: "0888231700",
+        facebook: "https://facebook.com/lapanna.test",
         address: "KTX Bách Khoa",
-        notes: "Đơn thử nghiệm hệ thống sheet mới",
+        notes: "Đơn thử nghiệm hệ thống sheet 18 cột mới (Set 5 hộp 45k)",
+        chanhLeo: 1,
+        dau: 2,
+        vietQuat: 0,
+        kiwi: 2,
+        dao: 0,
         totalCups: 5,
         freeGifts: "0",
         promotionApplied: "Không áp dụng khuyến mãi",
-        cartDetails: "• Set 5 Hộp Mix Vị Tùy Chọn x1 (50.000đ)",
-        totalPrice: "50.000đ",
+        cartDetails: "• Set 5 Hộp Mix Vị Tùy Chọn x1 (45.000đ)\n  - Vị: Dâu (x2), Chanh leo (x1), Kiwi (x2)",
+        totalPrice: 45000,
         shippingArea: "FREESHIP KHU VỰC BKX",
         orderDate: new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })
       })
@@ -422,5 +478,5 @@ Có 2 cách để triển khai:
 
 ---
 ---
-*Tài liệu được cập nhật phiên bản 3.0 — Hết chương trình khai trương, chuyển về vận hành bình thường (16/10/2026).*
+*Tài liệu được cập nhật phiên bản 3.1 — Tách 5 cột vị bánh tính SUM, tổng tiền số nguyên, Set 5 hộp 45k, thêm liên hệ Facebook (17/10/2026).*
 
