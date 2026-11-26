@@ -1,46 +1,39 @@
 // =============================================================================
-// LA PANNA - HANDCRAFTED PANNA COTTA
-// Core Application & Promotion Engine
+// LA PANNA (lapanna.store) - HANDCRAFTED PANNA COTTA
+// Core Application, 7C E-Commerce Engine & Promotion System (v4.0)
 // =============================================================================
 
 /**
  * =============================================================================
  * 1. CẤU HÌNH HỆ THỐNG & CHƯƠNG TRÌNH KHUYẾN MÃI (PROMOTION CONFIGURATION)
  * =============================================================================
- * Lưu ý dành cho quản trị viên / lập trình viên:
- * - Muốn BẬT hoặc TẮT khuyến mãi khai trương: Chỉnh `enabled: true` hoặc `false`.
- * - Tỷ lệ tặng quà: Thay đổi `buyStep` (số hộp mua) và `freeGiftCount` (số hộp tặng).
- * - Giá lẻ / Giá combo: Đổi trong `combo5` và mảng `products`.
  */
 const SYSTEM_CONFIG = {
-    // Thông tin cửa hàng
     store: {
         name: 'LA PANNA',
+        domain: 'lapanna.store',
         phone: '0888231700',
-        website: 'lapanna.store',
+        email: 'lienhe@lapanna.store',
+        address: 'Số 48 Ngõ Tự Do (Khu vực BKX), Phường Đồng Tâm, Quận Hai Bà Trưng, Hà Nội',
+        website: 'https://lapanna.store',
         facebook: 'LaPanna',
         freeShippingNote: 'FREESHIP KHU VỰC BKX (Bách Khoa - Kinh Tế - Xây Dựng)'
     },
 
-    // Cấu hình Khuyến Mãi (Config-Driven Promotion)
     promotion: {
-        // CỜ BẬT / TẮT CHÍNH (true = Đang diễn ra khuyến mãi, false = Đã tắt khuyến mãi / Bán bình thường)
         enabled: false,
-
         id: 'KHAI_TRUONG_2026',
         title: 'Menu Khai Trương La Panna',
         dateRange: '11/10 ĐẾN HẾT 15/10',
-        announcement: '🎉 MỪNG KHAI TRƯƠNG LA PANNA (11/10 - 15/10) • MUA 5 TẶNG 1, MUA 10 TẶNG 2 • FREESHIP KHU VỰC BKX',
+        announcement: '🎉 MỪNG KHAI TRƯƠNG LA PANNA • MUA 5 TẶNG 1, MUA 10 TẶNG 2 • FREESHIP KHU VỰC BKX',
 
-        // Quy tắc tặng quà (Tắt khi hết khuyến mãi)
         giftRule: {
             active: false,
-            buyStep: 5,        // Cứ đủ 5 hộp
-            freeGiftCount: 1,  // Tặng 1 hộp (10 hộp tặng 2, 15 hộp tặng 3,...)
+            buyStep: 5,
+            freeGiftCount: 1,
             tagText: 'Mua 5 tặng 1, mua 10 tặng 2'
         },
 
-        // Combo 5 hộp mix vị (Giá 45.000đ)
         combo5: {
             enabled: true,
             size: 5,
@@ -49,16 +42,14 @@ const SYSTEM_CONFIG = {
             name: 'Set 5 Hộp Mix Vị Tùy Chọn'
         },
 
-        // Khu vực miễn phí giao hàng
-        freeShippingAreas: ['BKX', 'Bách Khoa', 'Kinh Tế', 'Xây Dựng', 'Đại Cồ Việt', 'Giải Phóng']
+        freeShippingAreas: ['BKX', 'Bách Khoa', 'Kinh Tế', 'Xây Dựng', 'Đại Cồ Việt', 'Giải Phóng', 'Tự Do']
     }
 };
 
 /**
  * =============================================================================
- * 2. DANH MỤC SẢN PHẨM (MENU 5 VỊ KHAI TRƯƠNG)
+ * 2. DANH MỤC SẢN PHẨM PHONG PHÚ (CONTENT + CUSTOMIZATION)
  * =============================================================================
- * Đồng giá: 10.000đ / hộp mua lẻ
  */
 const products = [
     {
@@ -69,7 +60,11 @@ const products = [
         img: 'assets/mango_panna_cotta_1790435259241.png',
         tag: 'Best Choice',
         tagType: 'danger',
-        desc: 'Sốt chanh leo vàng ươm thanh mát, chua dịu hòa quyện lớp kem sữa dẻo mịn'
+        category: 'chua-diu',
+        isBestSeller: true,
+        calories: '125 kcal',
+        sweetness: 'Chua dịu • Ít ngọt',
+        desc: 'Sốt chanh leo tươi vàng ươm nấu chậm giữ trọn hạt giòn thơm, vị chua thanh mát hòa quyện cốt kem sữa tươi béo mịn.'
     },
     {
         id: 2,
@@ -79,7 +74,11 @@ const products = [
         img: 'assets/strawberry_panna_cotta_1790435271258.png',
         tag: 'Best Seller',
         tagType: 'danger',
-        desc: 'Sốt dâu tây chín mọng nấu chậm, vị chua ngọt ngào thanh tao cuốn hút'
+        category: 'ngot-thanh',
+        isBestSeller: true,
+        calories: '135 kcal',
+        sweetness: 'Chua ngọt hài hòa',
+        desc: 'Sốt dâu tây Đà Lạt chín mọng sên thủ công mỗi sáng, vị chua ngọt dịu dàng cuốn hút ngay từ thìa đầu tiên.'
     },
     {
         id: 3,
@@ -89,7 +88,11 @@ const products = [
         img: 'assets/vanilla_panna_cotta_1790435249043.png',
         tag: 'Mới Lạ',
         tagType: 'new',
-        desc: 'Trái việt quất đậm vị, hương thơm ngọt mát cùng cốt panna cotta truyền thống'
+        category: 'ngot-thanh',
+        isBestSeller: false,
+        calories: '140 kcal',
+        sweetness: 'Ngọt dịu • Thơm nồng',
+        desc: 'Sốt việt quất tím biếc giàu chất chống oxy hóa, hương thơm sang trọng quyện cùng lớp kem whipping chuẩn Ý.'
     },
     {
         id: 4,
@@ -99,7 +102,11 @@ const products = [
         img: 'assets/matcha_panna_cotta_1790435285155.png',
         tag: 'Tươi Mát',
         tagType: 'new',
-        desc: 'Sốt kiwi xanh mát tự nhiên, ngọt nhẹ dịu mát mang lại cảm giác sảng khoái'
+        category: 'chua-diu',
+        isBestSeller: false,
+        calories: '120 kcal',
+        sweetness: 'Thanh mát sảng khoái',
+        desc: 'Sốt kiwi xanh giàu vitamin C với vị chua nhẹ tự nhiên, giải ngấy hoàn hảo sau bữa ăn hoặc giờ học căng thẳng.'
     },
     {
         id: 5,
@@ -109,18 +116,62 @@ const products = [
         img: 'assets/caramel_panna_cotta_1790435294553.png',
         tag: 'Thơm Dịu',
         tagType: 'warning',
-        desc: 'Hương đào giòn ngọt thanh nhã, kết cấu mềm tan như mây trên đầu lưỡi'
+        category: 'ngot-thanh',
+        isBestSeller: true,
+        calories: '130 kcal',
+        sweetness: 'Ngọt thanh • Thơm dịu',
+        desc: 'Hương đào hồng thanh nhã cùng thịt quả mềm mọng, kết hợp lớp kem sữa núng nính tan ngay trên đầu lưỡi.'
+    }
+];
+
+// Dữ liệu mặc định cho mục Cộng đồng (#LaPannaLovers)
+const defaultCommunityReviews = [
+    {
+        id: 'rev_1',
+        name: 'Nguyễn Minh Anh (K68 ĐH Bách Khoa)',
+        flavor: 'Set 5 Hộp Mix Vị',
+        rating: 5,
+        date: 'Hôm nay',
+        comment: 'Mình đặt 1 set 5 vị giao về KTX B10 chỉ mất 15 phút! Bánh đóng kèm đá gel nên vẫn mát lạnh, cốt kem béo mịn mà không bị ngọt gắt. Mê nhất vị Chanh leo và Dâu tây!',
+        likes: 28,
+        liked: false
+    },
+    {
+        id: 'rev_2',
+        name: 'Trần Hoàng Nam (ĐH Kinh Tế Quốc Dân)',
+        flavor: 'Panna Cotta Dâu',
+        rating: 5,
+        date: 'Hôm qua',
+        comment: 'Giá 10k/hũ thực sự quá hời so với chất lượng. Sốt dâu nấu từ quả tươi nên thơm tự nhiên chứ không bị mùi siro công nghiệp. Mua combo 5 hộp 45k lại còn được freeship tận giảng đường!',
+        likes: 19,
+        liked: false
+    },
+    {
+        id: 'rev_3',
+        name: 'Lê Thu Hà (ĐH Xây Dựng)',
+        flavor: 'Panna Cotta Chanh Leo',
+        rating: 5,
+        date: '2 ngày trước',
+        comment: 'Mẹo nhỏ cho các bạn lần đầu đặt: Hãy chọn công thức 2 Chanh leo + 2 Dâu + 1 Việt quất trong mục Tự phối hộp nhé, vị chua thanh ăn cuốn cực kỳ, lại được shop viết thiệp xinh xắn nữa!',
+        likes: 34,
+        liked: false
     }
 ];
 
 // --- State ---
 const state = {
     cart: JSON.parse(sessionStorage.getItem('lapanna_cart')) || [],
+    wishlist: JSON.parse(localStorage.getItem('lapanna_wishlist')) || [],
+    activeFilter: 'all',
+    searchQuery: '',
+    voucherCode: '',
+    voucherDiscount: 0,
     mixBox: {
         size: SYSTEM_CONFIG.promotion.combo5.size,
         price: SYSTEM_CONFIG.promotion.combo5.price,
         flavors: []
-    }
+    },
+    reviews: JSON.parse(localStorage.getItem('lapanna_community_reviews')) || defaultCommunityReviews
 };
 
 // --- Utilities ---
@@ -128,9 +179,8 @@ const formatMoney = (amount) => amount.toLocaleString('vi-VN') + 'đ';
 
 /**
  * =============================================================================
- * 3. PROMOTION ENGINE (BỘ XỬ LÝ KHUYẾN MÃI)
+ * 3. PROMOTION & COST ESTIMATOR ENGINE (COMMERCE)
  * =============================================================================
- * Hàm tính toán tổng số hộp, số quà tặng và giá trị hóa đơn
  */
 function calculatePromotion(cart) {
     let totalCups = 0;
@@ -142,7 +192,6 @@ function calculatePromotion(cart) {
             const count = (item.size || 5) * item.quantity;
             totalCups += count;
             rawTotal += item.price * item.quantity;
-            // Nếu có combo giảm giá so với giá gốc
             const originalVal = (item.size || 5) * 10000 * item.quantity;
             if (originalVal > item.price * item.quantity) {
                 comboDiscount += (originalVal - (item.price * item.quantity));
@@ -162,15 +211,87 @@ function calculatePromotion(cart) {
         freeGifts = Math.floor(totalCups / step) * giftPerStep;
     }
 
+    // Ước tính phí vận chuyển theo khu vực đã chọn
+    const zoneSelect = document.getElementById('shippingZoneSelect');
+    const selectedZone = zoneSelect ? zoneSelect.value : 'bkx';
+    let shippingFee = 0;
+    let shippingLabel = '0đ (Freeship BKX)';
+
+    if (rawTotal > 0) {
+        if (selectedZone === 'bkx') {
+            shippingFee = 0;
+            shippingLabel = '0đ (Freeship khu vực BKX)';
+        } else if (selectedZone === 'pickup') {
+            shippingFee = 0;
+            shippingLabel = '0đ (Nhận tại tiệm)';
+        } else if (selectedZone === 'inner') {
+            if (rawTotal >= 100000) {
+                shippingFee = 0;
+                shippingLabel = '0đ (Freeship đơn ≥ 100k)';
+            } else {
+                shippingFee = 15000;
+                shippingLabel = '15.000đ (Nội thành <5km)';
+            }
+        }
+    }
+
+    // Tính giảm giá Voucher
+    let discountAmount = 0;
+    if (state.voucherCode && rawTotal >= 45000) {
+        discountAmount = state.voucherDiscount;
+    }
+
+    const finalTotal = Math.max(0, rawTotal - discountAmount + shippingFee);
+
     return {
         isPromoActive: promoActive,
-        promoName: promoActive ? SYSTEM_CONFIG.promotion.title : 'Không áp dụng khuyến mãi',
-        totalCups: totalCups,
-        freeGifts: freeGifts,
-        comboDiscount: comboDiscount,
-        finalTotal: rawTotal,
+        promoName: promoActive ? SYSTEM_CONFIG.promotion.title : (state.voucherCode ? `Mã ${state.voucherCode}` : 'Giá ưu đãi trực tiếp'),
+        totalCups,
+        freeGifts,
+        comboDiscount,
+        rawTotal,
+        shippingFee,
+        shippingLabel,
+        selectedZone,
+        discountAmount,
+        finalTotal,
         promoNote: freeGifts > 0 ? `Được tặng ${freeGifts} hộp Panna Cotta miễn phí!` : ''
     };
+}
+
+// Áp dụng mã ưu đãi trong bộ ước tính chi phí
+function applyVoucherCode() {
+    const input = document.getElementById('promoCodeInput');
+    const feedback = document.getElementById('voucherFeedback');
+    if (!input || !feedback) return;
+
+    const code = input.value.trim().toUpperCase();
+    const promo = calculatePromotion(state.cart);
+
+    if (!code) {
+        state.voucherCode = '';
+        state.voucherDiscount = 0;
+        feedback.innerHTML = '<span class="text-muted">Đã xóa mã ưu đãi.</span>';
+        updateCartUI();
+        return;
+    }
+
+    if (promo.rawTotal < 45000) {
+        feedback.innerHTML = '<span class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> Đơn hàng cần tối thiểu 45.000đ để áp dụng mã!</span>';
+        return;
+    }
+
+    if (['LAPANNA', 'BKXFREE', 'SINHVIEN', 'PANNA5K'].includes(code)) {
+        state.voucherCode = code;
+        state.voucherDiscount = 5000;
+        feedback.innerHTML = `<span class="success-msg"><i class="fa-solid fa-circle-check"></i> Áp dụng mã <b>${code}</b> thành công: Giảm 5.000đ!</span>`;
+    } else {
+        state.voucherCode = '';
+        state.voucherDiscount = 0;
+        feedback.innerHTML = '<span class="error-msg"><i class="fa-solid fa-circle-xmark"></i> Mã không hợp lệ! Thử nhập mã: <b>LAPANNA</b></span>';
+    }
+
+    updateCartUI();
 }
 
 // --- Initialization ---
@@ -178,12 +299,20 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
     initNavbar();
     initMobileMenu();
+    initBreadcrumbAndSectionSpy();
+    initCustomizationControls();
     renderAnnouncementBar();
     renderProducts();
+    initStoreFilters();
     initMixBox();
+    renderCommunityReviews();
+    initCommunityForm();
+    initContactForm();
+    initLiveChat();
+    updateWishlistBadge();
     updateCartUI();
 
-    // Global Events
+    // Global Cart & Modal Events
     document.getElementById('cartBtn').addEventListener('click', toggleCart);
     document.getElementById('closeCartBtn').addEventListener('click', toggleCart);
     document.getElementById('cartOverlay').addEventListener('click', toggleCart);
@@ -224,7 +353,82 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// --- Banner Thông Báo Khai Trương ---
+// --- Connection 1: Dynamic Breadcrumb & Active Section Spy ---
+function initBreadcrumbAndSectionSpy() {
+    const sections = document.querySelectorAll('section[data-breadcrumb]');
+    const breadcrumbCurr = document.getElementById('currentBreadcrumb');
+    const navLinks = document.querySelectorAll('#mainNavLinks a');
+
+    if (!sections.length || !breadcrumbCurr) return;
+
+    const spyObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const sectionId = entry.target.getAttribute('id');
+                const breadcrumbText = entry.target.getAttribute('data-breadcrumb');
+                if (breadcrumbText) {
+                    breadcrumbCurr.textContent = breadcrumbText;
+                }
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            }
+        });
+    }, { threshold: 0.25, rootMargin: "-100px 0px -45% 0px" });
+
+    sections.forEach(sec => spyObserver.observe(sec));
+}
+
+// --- Customization: Giao diện Sáng/Tối, Cỡ chữ & Mục Yêu thích ---
+function initCustomizationControls() {
+    const themeBtn = document.getElementById('themeToggleBtn');
+    const themeText = document.getElementById('themeToggleText');
+    const fontBtn = document.getElementById('fontSizeToggleBtn');
+    const fontText = document.getElementById('fontSizeText');
+    const wishlistQuickBtn = document.getElementById('wishlistQuickBtn');
+
+    // Khôi phục theme đã lưu
+    const savedTheme = localStorage.getItem('lapanna_theme') || 'light';
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeText) themeText.textContent = 'Giao diện Sáng';
+        if (themeBtn) themeBtn.querySelector('i').className = 'fa-solid fa-sun text-yellow';
+    }
+
+    if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('lapanna_theme', next);
+            if (themeText) themeText.textContent = next === 'dark' ? 'Giao diện Sáng' : 'Giao diện Tối';
+            themeBtn.querySelector('i').className = next === 'dark' ? 'fa-solid fa-sun text-yellow' : 'fa-solid fa-moon';
+        });
+    }
+
+    if (fontBtn) {
+        fontBtn.addEventListener('click', () => {
+            const isLarge = document.documentElement.classList.toggle('font-large');
+            if (fontText) fontText.textContent = isLarge ? 'Cỡ chữ: Lớn' : 'Cỡ chữ: Chuẩn';
+        });
+    }
+
+    if (wishlistQuickBtn) {
+        wishlistQuickBtn.addEventListener('click', () => {
+            const filterBtns = document.querySelectorAll('#flavorCategoryFilter .filter-btn');
+            filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === 'wishlist'));
+            state.activeFilter = 'wishlist';
+            renderProducts();
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+}
+
+// --- Banner Thông Báo ---
 function renderAnnouncementBar() {
     const banner = document.getElementById('announcementBar');
     if (!banner) return;
@@ -243,7 +447,7 @@ function renderAnnouncementBar() {
     }
 }
 
-// --- Scroll Reveal & Interactions ---
+// --- Scroll Reveal & Navbar ---
 function initScrollReveal() {
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -268,6 +472,8 @@ function initNavbar() {
 function initMobileMenu() {
     const btn = document.getElementById('mobileMenuBtn');
     const menu = document.getElementById('mobileMenu');
+    if (!btn || !menu) return;
+
     btn.addEventListener('click', () => {
         menu.classList.toggle('open');
         const icon = btn.querySelector('i');
@@ -283,36 +489,172 @@ function initMobileMenu() {
     });
 }
 
-// --- Render 5 Vị Panna Cotta Khai Trương ---
+// --- Render Thực Đơn & Bộ Lọc Khẩu Vị (Content + Customization) ---
+function initStoreFilters() {
+    const searchInput = document.getElementById('productSearchInput');
+    const filterBtns = document.querySelectorAll('#flavorCategoryFilter .filter-btn');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            state.searchQuery = e.target.value.trim().toLowerCase();
+            renderProducts();
+        });
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.activeFilter = btn.dataset.filter;
+            renderProducts();
+        });
+    });
+}
+
+function toggleWishlist(productId) {
+    const idx = state.wishlist.indexOf(productId);
+    if (idx > -1) {
+        state.wishlist.splice(idx, 1);
+    } else {
+        state.wishlist.push(productId);
+    }
+    localStorage.setItem('lapanna_wishlist', JSON.stringify(state.wishlist));
+    updateWishlistBadge();
+    renderProducts();
+}
+
+function updateWishlistBadge() {
+    const el = document.getElementById('wishlistCount');
+    if (el) el.textContent = state.wishlist.length;
+}
+
 function renderProducts() {
     const grid = document.getElementById('productGrid');
     if (!grid) return;
 
-    grid.innerHTML = products.map(product => `
-        <div class="product-card">
+    const filtered = products.filter(p => {
+        const matchSearch = !state.searchQuery ||
+            p.name.toLowerCase().includes(state.searchQuery) ||
+            p.flavor.toLowerCase().includes(state.searchQuery) ||
+            p.desc.toLowerCase().includes(state.searchQuery);
+
+        let matchCat = true;
+        if (state.activeFilter === 'chua-diu') matchCat = p.category === 'chua-diu';
+        else if (state.activeFilter === 'ngot-thanh') matchCat = p.category === 'ngot-thanh';
+        else if (state.activeFilter === 'best-seller') matchCat = p.isBestSeller;
+        else if (state.activeFilter === 'wishlist') matchCat = state.wishlist.includes(p.id);
+
+        return matchSearch && matchCat;
+    });
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-filter-box">
+                <i class="fa-solid fa-cookie-bite"></i>
+                <p>Không tìm thấy vị bánh phù hợp với bộ lọc hiện tại.</p>
+                <button type="button" class="btn-outline btn-sm" onclick="resetStoreFilter()">Xem toàn bộ 5 vị</button>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = filtered.map(product => {
+        const isLiked = state.wishlist.includes(product.id);
+        return `
+        <div class="product-card" id="product-card-${product.id}">
             ${product.tag ? `<span class="product-tag tag-${product.tagType}">${product.tag}</span>` : ''}
+            <button type="button" class="wishlist-heart-btn ${isLiked ? 'active' : ''}" onclick="toggleWishlist(${product.id})" aria-label="Lưu vào yêu thích" title="Lưu vị yêu thích">
+                <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+            </button>
             <div class="product-image-wrap">
                 <img src="${product.img}" alt="${product.name}" class="product-img" loading="lazy">
             </div>
             <div class="product-info">
-                <div class="product-flavor-badge"><i class="fa-solid fa-lemon"></i> Vị ${product.flavor}</div>
+                <div class="product-meta-row">
+                    <span class="product-flavor-badge"><i class="fa-solid fa-lemon"></i> Vị ${product.flavor}</span>
+                    <span class="product-cal-badge"><i class="fa-solid fa-fire-flame-simple"></i> ${product.calories}</span>
+                </div>
                 <h3 class="product-title">${product.name}</h3>
                 <p class="product-desc">${product.desc}</p>
+                <div class="product-taste-note"><i class="fa-solid fa-wand-magic-sparkles"></i> Khẩu vị: <strong>${product.sweetness}</strong></div>
                 <div class="product-footer">
                     <div class="price-wrapper">
                         <span class="product-price">${formatMoney(product.price)}</span>
-                        <span class="unit-text">/hộp</span>
+                        <span class="unit-text">/hũ</span>
                     </div>
-                    <button class="btn-add-cart" onclick="addToCart(${product.id}, 'single')" aria-label="Thêm vào giỏ">
+                    <button class="btn-add-cart" onclick="addToCart(${product.id}, 'single')" aria-label="Thêm vào giỏ" title="Thêm vào giỏ hàng">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
-// --- Mix Box 5 Hộp Khai Trương ---
+function resetStoreFilter() {
+    state.activeFilter = 'all';
+    state.searchQuery = '';
+    const searchInput = document.getElementById('productSearchInput');
+    if (searchInput) searchInput.value = '';
+    document.querySelectorAll('#flavorCategoryFilter .filter-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.filter === 'all');
+    });
+    renderProducts();
+}
+
+// Công cụ Gợi ý vị bánh theo gu (Customization)
+function recommendByTaste(tasteType) {
+    const resBox = document.getElementById('tasteRecommendationResult');
+    if (!resBox) return;
+
+    resBox.style.display = 'flex';
+    if (tasteType === 'refreshing') {
+        resBox.innerHTML = `
+            <div>
+                <strong>🎯 Gợi ý cho gu Chua Mát, Giải Ngấy:</strong> Bạn chắc chắn sẽ mê <b>Panna Cotta Chanh Leo</b> &amp; <b>Panna Cotta Kiwi</b>!
+            </div>
+            <div class="quiz-res-actions">
+                <button type="button" class="btn-primary btn-sm" onclick="addToCart(1, 'single'); addToCart(4, 'single'); toggleCart();">
+                    + Thêm ngay cặp Chanh Leo &amp; Kiwi (20K)
+                </button>
+            </div>
+        `;
+    } else if (tasteType === 'sweet') {
+        resBox.innerHTML = `
+            <div>
+                <strong>🎯 Gợi ý cho gu Ngọt Dịu, Thơm Lừng:</strong> Bộ đôi Best Seller <b>Panna Cotta Dâu Tây</b> &amp; <b>Panna Cotta Đào</b> sinh ra là dành cho bạn!
+            </div>
+            <div class="quiz-res-actions">
+                <button type="button" class="btn-primary btn-sm" onclick="addToCart(2, 'single'); addToCart(5, 'single'); toggleCart();">
+                    + Thêm ngay cặp Dâu &amp; Đào (20K)
+                </button>
+            </div>
+        `;
+    } else if (tasteType === 'novel') {
+        resBox.innerHTML = `
+            <div>
+                <strong>🎯 Gợi ý cho gu Mới Lạ, Độc Đáo:</strong> Thử ngay <b>Panna Cotta Việt Quất</b> kết hợp <b>Kiwi xanh mát</b> giàu vitamin!
+            </div>
+            <div class="quiz-res-actions">
+                <button type="button" class="btn-primary btn-sm" onclick="addToCart(3, 'single'); addToCart(4, 'single'); toggleCart();">
+                    + Thêm ngay Việt Quất &amp; Kiwi (20K)
+                </button>
+            </div>
+        `;
+    } else if (tasteType === 'party') {
+        quickFillMixBox();
+        resBox.innerHTML = `
+            <div>
+                <strong>🎁 Đã phối sẵn Set 5 Vị Đủ Màu (Chanh leo, Dâu, Việt quất, Kiwi, Đào) chỉ 45.000đ!</strong>
+            </div>
+            <div class="quiz-res-actions">
+                <a href="#mix-box" class="btn-primary btn-sm">Xem hộp Mix 5 vị vừa phối <i class="fa-solid fa-arrow-down"></i></a>
+            </div>
+        `;
+    }
+}
+
+// --- Mix Box 5 Hộp (Commerce + Customization) ---
 function initMixBox() {
     const boxSize = SYSTEM_CONFIG.promotion.combo5.size;
     state.mixBox.size = boxSize;
@@ -322,6 +664,11 @@ function initMixBox() {
     renderMixBox();
 
     document.getElementById('addMixBoxToCartBtn').addEventListener('click', addMixBoxToCart);
+}
+
+function quickFillMixBox() {
+    state.mixBox.flavors = [1, 2, 3, 4, 5];
+    renderMixBox();
 }
 
 function renderMixBoxGrid() {
@@ -377,19 +724,17 @@ function renderMixBox() {
         btn.innerHTML = `<i class="fa-solid fa-basket-shopping"></i> Chọn thêm ${size - flavors.length} vị để hoàn tất Set 5 Hộp`;
     }
 
-    // Render Slots
     let slotsHTML = '';
     for (let i = 0; i < size; i++) {
         if (i < flavors.length) {
             const product = products.find(p => p.id === flavors[i]);
-            slotsHTML += `<div class="slot filled" style="background-image: url('${product.img}')" onclick="removeFlavorAt(${i})" title="Bấm để xóa"></div>`;
+            slotsHTML += `<div class="slot filled" style="background-image: url('${product.img}')" onclick="removeFlavorAt(${i})" title="Bấm để xóa ${product.flavor}"></div>`;
         } else {
             slotsHTML += `<div class="slot" title="Vị còn trống">+</div>`;
         }
     }
     document.getElementById('selectionSlots').innerHTML = slotsHTML;
 
-    // Cập nhật số lượng đếm trên từng ô
     products.forEach(p => {
         const count = flavors.filter(id => id === p.id).length;
         const countBadge = document.getElementById(`mix-count-${p.id}`);
@@ -419,11 +764,20 @@ function addMixBoxToCart() {
         flavorCounts[p.flavor] = (flavorCounts[p.flavor] || 0) + 1;
     });
 
-    const desc = Object.entries(flavorCounts).map(([name, count]) => `${name} (x${count})`).join(', ');
-    const boxName = `Set 5 Hộp Mix Vị Tùy Chọn`;
+    const spoonOpt = document.getElementById('mixCustomSpoon')?.value || '';
+    const msgInput = document.getElementById('mixCustomMessage');
+    const customMsg = msgInput ? msgInput.value.trim() : '';
 
-    // Tạo ID độc nhất theo tổ hợp vị
-    const mixId = 'combo5_' + flavors.slice().sort().join('_');
+    let desc = Object.entries(flavorCounts).map(([name, count]) => `${name} (x${count})`).join(', ');
+    if (customMsg) {
+        desc += ` | Thiệp: "${customMsg}"`;
+    }
+    if (spoonOpt && spoonOpt.includes('Không lấy thìa')) {
+        desc += ` | Không lấy thìa`;
+    }
+
+    const boxName = `Set 5 Hộp Mix Vị Tùy Chọn`;
+    const mixId = 'combo5_' + flavors.slice().sort().join('_') + (customMsg ? '_' + customMsg.slice(0, 10) : '');
 
     addToCart(mixId, 'mix', {
         id: mixId,
@@ -436,12 +790,12 @@ function addMixBoxToCart() {
         img: 'assets/mango_panna_cotta_1790435259241.png'
     });
 
-    // Reset lựa chọn
     state.mixBox.flavors = [];
+    if (msgInput) msgInput.value = '';
     renderMixBox();
 }
 
-// --- Cart System ---
+// --- Cart System & Cost Estimator ---
 function toggleCart() {
     const isOpen = document.body.classList.toggle('cart-open');
     document.documentElement.classList.toggle('cart-open', isOpen);
@@ -473,10 +827,11 @@ function addToCart(itemId, type = 'single', customData = null) {
     saveCart();
     updateCartUI();
 
-    // Hiệu ứng phản hồi giỏ hàng
     const cartBtn = document.getElementById('cartBtn');
-    cartBtn.style.transform = 'scale(1.25)';
-    setTimeout(() => cartBtn.style.transform = 'scale(1)', 200);
+    if (cartBtn) {
+        cartBtn.style.transform = 'scale(1.25)';
+        setTimeout(() => cartBtn.style.transform = 'scale(1)', 200);
+    }
 }
 
 function removeFromCart(itemId) {
@@ -536,7 +891,6 @@ function updateCartUI() {
         `).join('');
     }
 
-    // Hiển thị Banner Khuyến Mãi trong giỏ hàng
     let promoBadgeHTML = '';
     if (promo.isPromoActive && state.cart.length > 0) {
         if (promo.freeGifts > 0) {
@@ -561,8 +915,23 @@ function updateCartUI() {
     }
 
     const promoContainer = document.getElementById('cartPromoArea');
-    if (promoContainer) {
-        promoContainer.innerHTML = promoBadgeHTML;
+    if (promoContainer) promoContainer.innerHTML = promoBadgeHTML;
+
+    // Cập nhật bộ Ước tính chi phí trong giỏ hàng
+    const subElem = document.getElementById('cartSubtotalPrice');
+    const shipElem = document.getElementById('cartShippingFee');
+    const discRow = document.getElementById('cartDiscountRow');
+    const discElem = document.getElementById('cartDiscountAmount');
+
+    if (subElem) subElem.innerText = formatMoney(promo.rawTotal);
+    if (shipElem) shipElem.innerText = promo.shippingLabel;
+    if (discRow && discElem) {
+        if (promo.discountAmount > 0) {
+            discRow.style.display = 'flex';
+            discElem.innerText = `-${formatMoney(promo.discountAmount)}`;
+        } else {
+            discRow.style.display = 'none';
+        }
     }
 
     document.getElementById('cartTotalPrice').innerText = formatMoney(promo.finalTotal);
@@ -581,7 +950,7 @@ function updateCartUI() {
             if (promo.freeGifts > 0) {
                 mobileStickySub.innerHTML = `<span class="text-primary font-bold">+${promo.freeGifts} Hộp Tặng</span> • Freeship BKX`;
             } else {
-                mobileStickySub.innerText = 'Freeship khu vực BKX';
+                mobileStickySub.innerText = promo.shippingLabel;
             }
         } else {
             mobileSticky.classList.remove('visible');
@@ -589,12 +958,208 @@ function updateCartUI() {
     }
 }
 
+// --- Community: Đánh Giá & Giao Lưu Cộng Đồng (#LaPannaLovers) ---
+function renderCommunityReviews() {
+    const grid = document.getElementById('communityReviewsGrid');
+    const countEl = document.getElementById('totalReviewsCount');
+    if (!grid) return;
+
+    if (countEl) {
+        countEl.textContent = (1251 + state.reviews.length).toLocaleString('vi-VN');
+    }
+
+    grid.innerHTML = state.reviews.map(rev => {
+        const initials = rev.name.trim().split(' ').pop().charAt(0).toUpperCase();
+        const starsHTML = '<i class="fa-solid fa-star"></i>'.repeat(rev.rating || 5);
+        return `
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-avatar">${initials}</div>
+                    <div class="reviewer-info">
+                        <h4>${rev.name}</h4>
+                        <span class="review-date"><i class="fa-regular fa-clock"></i> ${rev.date} • Đã mua tại lapanna.store</span>
+                    </div>
+                </div>
+                <div class="stars" style="margin-bottom: 8px;">${starsHTML}</div>
+                <p class="review-text">"${rev.comment}"</p>
+                <div class="review-footer-bar">
+                    <span class="review-product"><i class="fa-solid fa-tag text-primary"></i> ${rev.flavor}</span>
+                    <button type="button" class="btn-like-review ${rev.liked ? 'liked' : ''}" onclick="likeCommunityReview('${rev.id}')">
+                        <i class="${rev.liked ? 'fa-solid' : 'fa-regular'} fa-thumbs-up"></i> Hữu ích (${rev.likes})
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function likeCommunityReview(revId) {
+    const rev = state.reviews.find(r => r.id === revId);
+    if (!rev) return;
+    if (rev.liked) {
+        rev.likes = Math.max(0, rev.likes - 1);
+        rev.liked = false;
+    } else {
+        rev.likes += 1;
+        rev.liked = true;
+    }
+    localStorage.setItem('lapanna_community_reviews', JSON.stringify(state.reviews));
+    renderCommunityReviews();
+}
+
+function initCommunityForm() {
+    const form = document.getElementById('communityReviewForm');
+    const status = document.getElementById('communityFormStatus');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('revName').value.trim();
+        const flavor = document.getElementById('revFlavor').value;
+        const rating = parseInt(document.getElementById('revRating').value, 10) || 5;
+        const comment = document.getElementById('revComment').value.trim();
+
+        if (!name || !comment) return;
+
+        const newReview = {
+            id: 'rev_' + Date.now(),
+            name,
+            flavor,
+            rating,
+            date: 'Vừa xong',
+            comment,
+            likes: 1,
+            liked: true
+        };
+
+        state.reviews.unshift(newReview);
+        localStorage.setItem('lapanna_community_reviews', JSON.stringify(state.reviews));
+        renderCommunityReviews();
+        form.reset();
+
+        if (status) {
+            status.innerHTML = '<span class="success-msg"><i class="fa-solid fa-circle-check"></i> Cảm ơn bạn đã chia sẻ cùng cộng đồng La Panna!</span>';
+            setTimeout(() => { status.innerHTML = ''; }, 4000);
+        }
+    });
+}
+
+// --- Chính Sách (Tabs) & FAQ (Accordion) ---
+function switchPolicyTab(tabId, btnElem) {
+    document.querySelectorAll('.policy-tab-btn').forEach(b => b.classList.remove('active'));
+    if (btnElem) btnElem.classList.add('active');
+
+    document.querySelectorAll('.policy-pane').forEach(pane => {
+        pane.classList.toggle('active', pane.id === `policy-${tabId}`);
+    });
+}
+
+function switchPolicyTabByName(tabId) {
+    const btns = document.querySelectorAll('.policy-tab-btn');
+    const mapIdx = { 'mua-hang': 0, 'thanh-toan': 1, 'van-chuyen': 2, 'doi-tra': 3 };
+    const targetBtn = btns[mapIdx[tabId] || 0];
+    switchPolicyTab(tabId, targetBtn);
+}
+
+function toggleFaq(btnElem) {
+    const item = btnElem.closest('.faq-item');
+    if (!item) return;
+    item.classList.toggle('active');
+}
+
+// --- Communication: Form Liên Hệ & Live Chat 2 Chiều ---
+function initContactForm() {
+    const form = document.getElementById('quickContactForm');
+    const status = document.getElementById('contactFormStatus');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('contactName').value.trim();
+        if (status) {
+            status.innerHTML = `<div class="success-msg"><i class="fa-solid fa-circle-check"></i> Cảm ơn <b>${name}</b>! La Panna đã nhận được tin nhắn và sẽ phản hồi bạn trong ít phút.</div>`;
+        }
+        form.reset();
+        setTimeout(() => { if (status) status.innerHTML = ''; }, 5000);
+    });
+}
+
+function initLiveChat() {
+    const toggleBtn = document.getElementById('chatToggleBtn');
+    const closeBtn = document.getElementById('closeChatBtn');
+    const popup = document.getElementById('chatPopup');
+    const form = document.getElementById('liveChatForm');
+    const input = document.getElementById('liveChatInput');
+
+    if (!toggleBtn || !popup) return;
+
+    toggleBtn.addEventListener('click', () => {
+        popup.classList.toggle('open');
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            popup.classList.remove('open');
+        });
+    }
+
+    if (form && input) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            appendChatMessage(text, 'user');
+            setTimeout(() => {
+                const reply = generateBotReply(text);
+                appendChatMessage(reply, 'bot');
+            }, 450);
+        });
+    }
+}
+
+function sendQuickChat(questionText) {
+    const popup = document.getElementById('chatPopup');
+    if (popup) popup.classList.add('open');
+    appendChatMessage(questionText, 'user');
+    setTimeout(() => {
+        const reply = generateBotReply(questionText);
+        appendChatMessage(reply, 'bot');
+    }, 400);
+}
+
+function appendChatMessage(htmlText, sender) {
+    const box = document.getElementById('chatMessages');
+    if (!box) return;
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-msg ${sender}`;
+    msgDiv.innerHTML = `<div class="msg-bubble">${htmlText}</div>`;
+    box.appendChild(msgDiv);
+    box.scrollTop = box.scrollHeight;
+}
+
+function generateBotReply(text) {
+    const lower = text.toLowerCase();
+    if (lower.includes('bán chạy') || lower.includes('best seller') || lower.includes('ngon nhất') || lower.includes('vị nào')) {
+        return '🍓 Tại La Panna, 2 vị Best Seller được yêu thích nhất là <strong>Panna Cotta Dâu Tây</strong> (chua ngọt dịu) và <strong>Chanh Leo</strong> (thanh mát). Bạn cũng có thể chọn <strong>Set 5 Hộp Mix Vị chỉ 45.000đ</strong> để thử đủ cả 5 vị nhé!';
+    }
+    if (lower.includes('ship') || lower.includes('vận chuyển') || lower.includes('bkx')) {
+        return '🚚 La Panna <strong>Freeship 0đ</strong> toàn khu vực BKX (ĐH Bách Khoa, Kinh Tế, Xây Dựng, KTX, ngõ Tự Do) chỉ trong 15–30 phút! Nội thành Hà Nội (<5km) phí ship 15k và Freeship cho đơn từ 100k ạ.';
+    }
+    if (lower.includes('bảo quản') || lower.includes('mấy ngày') || lower.includes('hạn sử dụng')) {
+        return '❄️ Bánh không dùng chất bảo quản nên bạn giữ trong <strong>ngăn mát tủ lạnh (2–6°C)</strong> nhé, dùng ngon nhất trong <strong>3–4 ngày</strong>. Khi giao hàng shop luôn kèm túi đá gel giữ lạnh miễn phí!';
+    }
+    if (lower.includes('đổi trả') || lower.includes('hoàn tiền')) {
+        return '🛡️ La Panna cam kết <strong>Đổi mới 1-1 hoặc Hoàn tiền 100% trong 24h</strong> nếu bánh bị nghiêng đổ do vận chuyển hoặc giao sai vị. Bạn hoàn toàn yên tâm đặt bánh nha!';
+    }
+    return 'Cảm ơn bạn đã nhắn cho La Panna! Để đặt bánh siêu tốc hoặc cần hỗ trợ gấp, bạn có thể chọn bánh trực tiếp trên web hoặc gọi/nhắn Zalo Hotline <strong><a href="tel:0888231700">0888 231 700</a></strong> nhé!';
+}
+
 // --- Checkout System ---
 function openCheckoutModal() {
     if (state.cart.length === 0) return;
     const promo = calculatePromotion(state.cart);
 
-    // Cập nhật tóm tắt đơn hàng trong modal
     const summaryElem = document.getElementById('checkoutSummary');
     if (summaryElem) {
         summaryElem.innerHTML = `
@@ -603,6 +1168,20 @@ function openCheckoutModal() {
                     <span>Tổng số lượng đặt:</span>
                     <strong>${promo.totalCups} hộp panna cotta</strong>
                 </div>
+                <div class="summary-line">
+                    <span>Tạm tính tiền bánh:</span>
+                    <span>${formatMoney(promo.rawTotal)}</span>
+                </div>
+                <div class="summary-line">
+                    <span>Phí vận chuyển ước tính:</span>
+                    <span class="text-green">${promo.shippingLabel}</span>
+                </div>
+                ${promo.discountAmount > 0 ? `
+                    <div class="summary-line">
+                        <span>Mã ưu đãi (${state.voucherCode}):</span>
+                        <strong class="text-primary">-${formatMoney(promo.discountAmount)}</strong>
+                    </div>
+                ` : ''}
                 ${promo.freeGifts > 0 ? `
                     <div class="summary-line gift-highlight">
                         <span><i class="fa-solid fa-gift"></i> Quà tặng khai trương:</span>
@@ -620,7 +1199,6 @@ function openCheckoutModal() {
         `;
     }
 
-    // Hiển thị lựa chọn vị quà tặng nếu có quà
     const giftSelectGroup = document.getElementById('giftFlavorGroup');
     if (giftSelectGroup) {
         if (promo.freeGifts > 0) {
@@ -655,7 +1233,6 @@ function closeCheckoutModal() {
 
 /**
  * Hàm phân tách và đếm số lượng 5 hương vị trong giỏ hàng
- * (để gửi sang Google Sheet tính tổng số lượng theo từng vị)
  */
 function getFlavorBreakdown(cart) {
     const counts = {
@@ -688,8 +1265,7 @@ function getFlavorBreakdown(cart) {
                     }
                 });
             } else if (typeof item.desc === 'string') {
-                // Phân tích chuỗi nếu dữ liệu cũ từ sessionStorage: "Dâu (x2), Chanh leo (x1), Kiwi (x2)"
-                const matches = item.desc.matchAll(/([^,(]+)\s*\(x(\d+)\)/g);
+                const matches = item.desc.matchAll(/([^,(|]+)\s*\(x(\d+)\)/g);
                 for (const match of matches) {
                     const flvName = match[1].trim();
                     const flvCount = parseInt(match[2], 10) || 1;
@@ -723,7 +1299,6 @@ async function handleOrderSubmit(e) {
     const promo = calculatePromotion(state.cart);
     const flavorCounts = getFlavorBreakdown(state.cart);
 
-    // Chuẩn bị chi tiết đơn hàng dạng text đẹp (1 cột tổng hợp như cũ)
     const orderDetails = state.cart.map(item => {
         let detail = `• ${item.name} x${item.quantity} (${formatMoney(item.price * item.quantity)})`;
         if (item.type === 'mix') detail += `\n  - Vị: ${item.desc}`;
@@ -731,12 +1306,10 @@ async function handleOrderSubmit(e) {
     }).join('\n');
 
     const giftFlavor = promo.freeGifts > 0 ? (formData.get('giftFlavor') || 'Shop tự mix') : 'Không có';
+    const paymentMethod = formData.get('paymentMethod') || 'COD';
+    const rawNotes = (formData.get('notes') || '').trim();
+    const combinedNotes = `[TT: ${paymentMethod}] ${rawNotes}`.trim();
 
-    // Payload hoàn chỉnh gửi tới Google Sheet:
-    // - Tách 5 vị thành 5 thuộc tính số (chanhLeo, dau, vietQuat, kiwi, dao) để tính SUM
-    // - Giữ 1 cột tổng hợp chi tiết cartDetails như cũ
-    // - Tổng tiền về dạng số nguyên (totalPrice: number, ví dụ 45000)
-    // - Thêm trường facebook (optional)
     const orderData = {
         name: (formData.get('name') || '').trim(),
         phone: (formData.get('phone') || '').trim(),
@@ -751,21 +1324,18 @@ async function handleOrderSubmit(e) {
         freeGifts: promo.freeGifts > 0 ? `${promo.freeGifts} hộp (Vị: ${giftFlavor})` : '0',
         promotionApplied: promo.promoName,
         cartDetails: orderDetails,
-        totalPrice: promo.finalTotal, // DẠNG SỐ NGUYÊN (ví dụ: 45000)
-        shippingArea: SYSTEM_CONFIG.store.freeShippingNote,
-        notes: (formData.get('notes') || '').trim(),
+        totalPrice: promo.finalTotal,
+        shippingArea: promo.shippingLabel,
+        notes: combinedNotes,
         orderDate: new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })
     };
 
-    // URL Web App Google Apps Script
     const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyl-h0-UU0IPc9GE11Va_lXdb3RknriO5sN6E0lCR3dQ81lOig48DXgNrfaFWIRt6Qc/exec';
 
     try {
         if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL === 'YOUR_GOOGLE_WEB_APP_URL_HERE') {
-            console.warn("Chưa cấu hình URL Google Sheet. Giả lập thành công...");
             await new Promise(resolve => setTimeout(resolve, 1200));
         } else {
-            // Gửi dữ liệu tới Google Apps Script (text/plain để tránh lỗi CORS Preflight)
             const response = await fetch(GOOGLE_SHEET_URL, {
                 method: 'POST',
                 headers: {
@@ -791,23 +1361,25 @@ async function handleOrderSubmit(e) {
         setTimeout(() => {
             form.reset();
             state.cart = [];
+            state.voucherCode = '';
+            state.voucherDiscount = 0;
             saveCart();
             updateCartUI();
             closeCheckoutModal();
             formStatus.innerHTML = '';
             submitBtn.disabled = false;
-            submitBtn.innerHTML = 'Xác Nhận Đặt Hàng';
+            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Xác Nhận Đặt Hàng Ngay';
         }, 2200);
 
     } catch (error) {
-        console.error('Lỗi gửi đơn hàng:', error);
+        console.error('Submission error:', error);
         formStatus.innerHTML = `
             <div class="error-msg">
-                <i class="fa-solid fa-circle-exclamation"></i> 
-                ${error.message && !error.message.includes('fetch') ? error.message : 'Đã gửi thông tin đơn hàng! Nếu nhân viên chưa gọi sau 15 phút, vui lòng gọi Hotline 0888231700.'}
+                <i class="fa-solid fa-triangle-exclamation"></i> 
+                Có lỗi kết nối! Vui lòng gọi trực tiếp Hotline <b>0888231700</b> để đặt nhanh.
             </div>
         `;
         submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Xác Nhận Đặt Hàng';
+        submitBtn.innerHTML = 'Thử Lại Đặt Hàng';
     }
 }

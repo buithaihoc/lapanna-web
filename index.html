@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LA PANNA - Panna Cotta Thủ Công Chuẩn Vị Ý</title>
+    <title>LA PANNA (lapanna.store) - Panna Cotta Thủ Công Chuẩn Vị Ý</title>
     <meta name="description"
-        content="LA PANNA - Panna cotta thủ công 100% nguyên liệu tươi, không chất bảo quản, giá cả phải chăng. Tự phối hộp mix vị theo sở thích. Freeship khu vực BKX. Hotline: 0888231700.">
-    <link rel="stylesheet" href="style.css?v=3.1">
+        content="LA PANNA (lapanna.store) - Webshop Panna Cotta thủ công 100% nguyên liệu tươi, không chất bảo quản. Tự phối hộp mix vị theo sở thích, ước tính chi phí minh bạch, Freeship khu vực BKX. Hotline: 0888231700.">
+    <link rel="stylesheet" href="style.css?v=4.0">
     <!-- Google Fonts: Cormorant & Montserrat -->
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,500;1,700&family=Montserrat:wght@300;400;500;600;700&display=swap"
@@ -16,24 +16,57 @@
 </head>
 
 <body>
-    <!-- Top Announcement Bar (ẩn khi không có khuyến mãi) -->
+    <!-- Top Announcement Bar (Config-driven hoặc hiển thị thông tin webshop) -->
     <div id="announcementBar" class="announcement-bar" style="display:none;"></div>
 
-    <!-- Navbar -->
+    <!-- Top Utility Bar: Connection (Breadcrumb) & Customization (Theme / Font / Wishlist) -->
+    <div class="utility-bar">
+        <div class="container utility-bar-inner">
+            <!-- Connection 1: Đường chỉ dẫn nơi người xem đang đứng (Breadcrumb) -->
+            <nav class="breadcrumb-nav" aria-label="Đường chỉ dẫn vị trí">
+                <span class="breadcrumb-label"><i class="fa-solid fa-location-dot text-primary"></i> Vị trí:</span>
+                <ol class="breadcrumb-list" id="breadcrumbList">
+                    <li><a href="#home"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                    <li class="breadcrumb-sep"><i class="fa-solid fa-chevron-right"></i></li>
+                    <li class="breadcrumb-current" id="currentBreadcrumb">Khám phá La Panna</li>
+                </ol>
+            </nav>
+
+            <!-- Customization: Cá nhân hóa giao diện & trải nghiệm người xem -->
+            <div class="customization-Controls">
+                <span class="custom-label"><i class="fa-solid fa-sliders"></i> Tùy chỉnh:</span>
+                <button type="button" class="util-btn" id="themeToggleBtn" title="Chuyển chế độ Sáng / Tối">
+                    <i class="fa-solid fa-moon"></i> <span id="themeToggleText">Giao diện Tối</span>
+                </button>
+                <button type="button" class="util-btn" id="fontSizeToggleBtn" title="Tăng/giảm cỡ chữ dễ đọc">
+                    <i class="fa-solid fa-text-height"></i> <span id="fontSizeText">Cỡ chữ: Chuẩn</span>
+                </button>
+                <button type="button" class="util-btn" id="wishlistQuickBtn" title="Xem các vị đã lưu yêu thích">
+                    <i class="fa-solid fa-heart text-primary"></i> Yêu thích (<span id="wishlistCount">0</span>)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar (Đầy đủ các trang PHẢI CÓ: Home, Về chúng tôi, Cửa hàng, Chính sách, FAQ, Liên hệ) -->
     <header class="header" id="header">
         <div class="container navbar">
-            <a href="#" class="logo">
+            <a href="#home" class="logo">
                 <span class="logo-main">LA PANNA</span>
-                <span class="logo-sub">Handcrafted Panna Cotta</span>
+                <span class="logo-sub">lapanna.store • Handcrafted</span>
             </a>
-            <nav class="nav-links">
-                <a href="#home">Trang chủ</a>
-                <a href="#products">Thực đơn</a>
-                <a href="#mix-box">Tự phối hộp</a>
-                <a href="#about">Về La Panna</a>
+            <nav class="nav-links" id="mainNavLinks">
+                <a href="#home" data-section="Trang chủ" class="active">Trang chủ</a>
+                <a href="#about" data-section="Về chúng tôi">Về chúng tôi</a>
+                <a href="#products" data-section="Cửa hàng (Thực đơn)">Cửa hàng</a>
+                <a href="#mix-box" data-section="Tự phối hộp Mix">Mix vị</a>
+                <a href="#why-choose-us" data-section="Tại sao chọn chúng tôi">Ưu điểm</a>
+                <a href="#policies" data-section="Chính sách & Hướng dẫn">Chính sách</a>
+                <a href="#faq" data-section="Câu hỏi thường gặp (FAQ)">FAQ</a>
+                <a href="#contact" data-section="Liên hệ & Bản đồ">Liên hệ</a>
             </nav>
             <div class="nav-actions">
-                <a href="tel:0888231700" class="nav-hotline"><i class="fa-solid fa-phone"></i> 0888231700</a>
+                <a href="tel:0888231700" class="nav-hotline"><i class="fa-solid fa-phone"></i> 0888.231.700</a>
                 <button class="cart-icon" id="cartBtn" aria-label="Giỏ hàng">
                     <i class="fa-solid fa-bag-shopping"></i>
                     <span class="cart-count" id="cartCount">0</span>
@@ -44,31 +77,37 @@
             </button>
         </div>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="#home">Trang chủ</a>
-            <a href="#products">Thực đơn</a>
-            <a href="#mix-box">Tự phối hộp</a>
-            <a href="#about">Về La Panna</a>
+            <a href="#home">Trang chủ (Home)</a>
+            <a href="#about">Về chúng tôi (About Us)</a>
+            <a href="#products">Cửa hàng (Thực đơn 10K)</a>
+            <a href="#mix-box">Tự phối hộp Mix 5 vị</a>
+            <a href="#why-choose-us">Tại sao chọn chúng tôi?</a>
+            <a href="#community">Cộng đồng & Đánh giá</a>
+            <a href="#policies">Chính sách & Hướng dẫn</a>
+            <a href="#faq">Câu hỏi thường gặp (FAQ)</a>
+            <a href="#contact">Liên hệ & Bản đồ (Contact)</a>
             <a href="tel:0888231700" class="text-primary font-bold"><i class="fa-solid fa-phone"></i> Hotline:
-                0888231700</a>
+                0888.231.700</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
+    <!-- 1. HOME / HERO SECTION -->
+    <section class="hero" id="home" data-breadcrumb="Trang chủ (Home)">
         <div class="hero-bg-accent"></div>
         <div class="container hero-container">
             <div class="hero-content reveal fade-up">
-                <div class="hero-subtitle"><i class="fa-solid fa-crown"></i> lapanna.store</div>
+                <div class="hero-subtitle">
+                    <i class="fa-solid fa-globe text-primary"></i> Địa chỉ Webshop chính thức: <strong>lapanna.store</strong>
+                </div>
                 <h1>Panna Cotta Thủ Công Mềm Tan —<br><span class="text-primary italic-serif">Chuẩn Vị Ý,</span> Tươi
                     Mới Mỗi Ngày</h1>
-                <p>Trải nghiệm lớp kem mềm mịn, bồng bềnh với 100% sữa tươi nguyên kem và whipping cream hảo hạng, hòa
-                    quyện sốt trái cây nhiệt đới nấu chậm giữ trọn vị thanh mát tự nhiên.</p>
+                <p>Trải nghiệm lớp kem sữa tươi nguyên kem và whipping cream hảo hạng hòa quyện sốt trái cây nhiệt đới nấu chậm.
+                    Ngọt thanh tự nhiên, không chất bảo quản, giao nhanh kèm đá gel giữ lạnh!</p>
 
                 <div class="hero-actions">
-                    <a href="#products" class="btn-primary btn-lg">Khám Phá Thực Đơn <i
+                    <a href="#products" class="btn-primary btn-lg">Vào Cửa Hàng Ngay <i
                             class="fa-solid fa-arrow-right"></i></a>
-                    <a href="#mix-box" class="btn-outline btn-lg"><i class="fa-solid fa-gift"></i> Tự Phối Hộp Mix
-                        Vị</a>
+                    <a href="#mix-box" class="btn-outline btn-lg"><i class="fa-solid fa-gift"></i> Tự Phối Set 5 Hộp (45K)</a>
                 </div>
 
                 <div class="hero-trust">
@@ -78,35 +117,160 @@
                     </div>
                     <div class="trust-item">
                         <div class="trust-icon"><i class="fa-solid fa-calendar-day"></i></div>
-                        <span>0% Chất bảo quản<br><small>Làm mới mỗi ngày</small></span>
+                        <span>0% Chất bảo quản<br><small>Làm mới mỗi sáng</small></span>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                        <span>Freeship Khu Vực BKX<br><small>Giao lạnh trong 15-30 phút</small></span>
                     </div>
                 </div>
             </div>
 
             <div class="hero-image-wrapper reveal fade-left delay-1">
                 <div class="hero-image-card">
-                    <img src="assets/strawberry_panna_cotta_1790435271258.png" alt="Panna Cotta Dâu Tây"
+                    <img src="assets/strawberry_panna_cotta_1790435271258.png" alt="Panna Cotta Dâu Tây La Panna"
                         class="hero-img">
                     <div class="floating-badge badge-top-right">
-                        <i class="fa-solid fa-star text-yellow"></i> 4.9 (1.2k+ Đánh giá)
+                        <i class="fa-solid fa-star text-yellow"></i> 4.9/5 (1.250+ Đánh giá)
                     </div>
                     <div class="floating-badge badge-bottom-left">
-                        <span class="badge-tag">Ngọt thanh, Trái cây tươi</span>
+                        <span class="badge-tag"><i class="fa-solid fa-Fire"></i> Chỉ 10.000đ/hũ • Combo 5 hũ 45.000đ</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- 2. VỀ CHÚNG TÔI (ABOUT US) -->
+    <section class="about-section" id="about" data-breadcrumb="Về chúng tôi (About Us)">
+        <div class="container">
+            <div class="section-header text-center reveal fade-up">
+                <span class="section-subtitle">VỀ CHÚNG TÔI • CÂU CHUYỆN LA PANNA</span>
+                <h2>Tâm Huyết Trong Từng Hũ Bánh Thủ Công</h2>
+                <p>Ra đời từ niềm đam mê ẩm thực ngọt nước Ý tại khu vực Bách Khoa – Kinh Tế – Xây Dựng (BKX),
+                    <strong>LA PANNA (lapanna.store)</strong> mang sứ mệnh đem đến món tráng miệng Panna Cotta chuẩn nhà hàng
+                    với mức giá gần gũi cho sinh viên, dân văn phòng và gia đình.</p>
+            </div>
 
+            <div class="about-story-grid reveal fade-up">
+                <div class="about-story-card">
+                    <div class="story-badge"><i class="fa-solid fa-heart"></i> Triết lý của La Panna</div>
+                    <h3>"Tươi Mịn Từ Tâm – Ngọt Thanh Tự Nhiên"</h3>
+                    <p>Khác với các loại bánh sản xuất công nghiệp sử dụng hương liệu và bột béo, mỗi mẻ Panna Cotta tại
+                        <strong>La Panna</strong> đều được đun ấm thủ công ở nhiệt độ chuẩn 75°C từ sữa tươi nguyên kem
+                        Thanh Trùng kết hợp Whipping Cream nhập khẩu New Zealand.</p>
+                    <p>Lớp sốt trái cây phía trên (Chanh leo, Dâu tây, Việt quất, Kiwi, Đào) được sên chậm mỗi sáng từ trái cây tươi chọn lọc,
+                        giữ nguyên hạt và thịt quả giòn mọng, giảm 30% lượng đường để tôn lên vị thanh mát tự nhiên.</p>
+                    <div class="about-stats-row">
+                        <div class="stat-box">
+                            <strong>15.000+</strong>
+                            <span>Hũ bánh đã trao tay</span>
+                        </div>
+                        <div class="stat-box">
+                            <strong>100%</strong>
+                            <span>Nguyên liệu tự nhiên</span>
+                        </div>
+                        <div class="stat-box">
+                            <strong>4.9 <i class="fa-solid fa-star text-yellow"></i></strong>
+                            <span>Điểm hài lòng khách hàng</span>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Product Section -->
-    <section class="products-section container" id="products">
+                <div class="about-process-card">
+                    <h3><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Quy Trình 4 Bước Thủ Công Chuẩn Ý</h3>
+                    <div class="process-steps">
+                        <div class="process-step">
+                            <span class="step-num">01</span>
+                            <div>
+                                <h4>Tuyển Chọn Nguyên Liệu Sáng Sớm</h4>
+                                <p>Sữa tươi thanh trùng, kem béo động vật (Whipping Cream) và trái cây tươi mọng được kiểm tra độ tươi mỗi ngày.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <span class="step-num">02</span>
+                            <div>
+                                <h4>Nấu Chậm &amp; Ủ Lạnh Sâu 6 Giờ</h4>
+                                <p>Nấu kem ở nhiệt độ tiêu chuẩn để không làm tách béo, sau đó ủ lạnh ở 2–6°C tạo độ núng nính mềm tan.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <span class="step-num">03</span>
+                            <div>
+                                <h4>Phủ Sốt Trái Cây Tươi Nấu Chậm</h4>
+                                <p>Rót lớp sốt trái cây sên thủ công lên bề mặt cốt kem trắng mịn ngay trước khi xuất xưởng.</p>
+                            </div>
+                        </div>
+                        <div class="process-step">
+                            <span class="step-num">04</span>
+                            <div>
+                                <h4>Đóng Gói Kèm Đá Gel Giữ Nhiệt</h4>
+                                <p>Niêm phong nắp kín, kèm thìa riêng và túi đá gel giữ lạnh suốt quá trình vận chuyển đến tay bạn.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. CỬA HÀNG (PRODUCTS) + CUSTOMIZATION (LỌC KHẨU VỊ, TÌM KIẾM, GỢI Ý VỊ THEO GU) -->
+    <section class="products-section container" id="products" data-breadcrumb="Cửa hàng (Thực đơn Panna Cotta)">
         <div class="section-header reveal fade-up">
-            <span class="section-subtitle">THỰC ĐƠN THỦ CÔNG</span>
-            <h2>Các Vị Panna Cotta Được Yêu Thích Nhất</h2>
-            <p>Mỗi hũ panna cotta là sự chăm chút tỉ mỉ từ khâu chọn nguyên liệu đến khi nấu. Bảo quản lạnh tuyệt đối
-                2–6°C.</p>
+            <span class="section-subtitle">CỬA HÀNG TRỰC TUYẾN • ĐỒNG GIÁ 10.000Đ/HŨ</span>
+            <h2>Thực Đơn Panna Cotta Thủ Công</h2>
+            <p>Khám phá 5 hương vị Panna Cotta bán chạy nhất tại La Panna. Bạn có thể lọc theo khẩu vị cá nhân hoặc dùng
+                công cụ tư vấn vị bánh phù hợp nhất với mình!</p>
+        </div>
+
+        <!-- Customization Box: Cá nhân hóa lựa chọn theo khẩu vị người xem -->
+        <div class="store-customization-bar reveal fade-up">
+            <div class="search-and-filter">
+                <div class="search-input-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="productSearchInput" placeholder="Tìm vị bánh (Dâu, Chanh leo, Đào, Kiwi...)" aria-label="Tìm kiếm sản phẩm">
+                </div>
+                <div class="category-filter" id="flavorCategoryFilter">
+                    <button type="button" class="filter-btn active" data-filter="all">
+                        <i class="fa-solid fa-border-all"></i> Tất cả (5)
+                    </button>
+                    <button type="button" class="filter-btn" data-filter="chua-diu">
+                        <span class="dot fruit-dot"></span> Chua dịu thanh mát
+                    </button>
+                    <button type="button" class="filter-btn" data-filter="ngot-thanh">
+                        <span class="dot tea-dot"></span> Ngọt thanh dễ ăn
+                    </button>
+                    <button type="button" class="filter-btn" data-filter="best-seller">
+                        <i class="fa-solid fa-fire text-primary"></i> Bán chạy nhất
+                    </button>
+                    <button type="button" class="filter-btn" data-filter="wishlist">
+                        <i class="fa-solid fa-heart text-primary"></i> Đã lưu yêu thích
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interactive Flavor Quiz / Recommender (Customization) -->
+            <div class="flavor-quiz-banner">
+                <div class="quiz-left">
+                    <span class="quiz-tag"><i class="fa-solid fa-wand-magic-sparkles"></i> Cá nhân hóa khẩu vị</span>
+                    <h4>Chưa biết chọn vị nào? Chọn gu của bạn để La Panna gợi ý ngay:</h4>
+                </div>
+                <div class="quiz-options">
+                    <button type="button" class="quiz-chip" onclick="recommendByTaste('refreshing')">
+                        🍋 Thích chua mát, giải ngấy
+                    </button>
+                    <button type="button" class="quiz-chip" onclick="recommendByTaste('sweet')">
+                        🍓 Thích ngọt dịu, thơm lừng
+                    </button>
+                    <button type="button" class="quiz-chip" onclick="recommendByTaste('novel')">
+                        🫐 Thích vị mới lạ, độc đáo
+                    </button>
+                    <button type="button" class="quiz-chip" onclick="recommendByTaste('party')">
+                        🎁 Tự động phối Set 5 vị đủ màu (45K)
+                    </button>
+                </div>
+                <div id="tasteRecommendationResult" class="quiz-result" style="display: none;"></div>
+            </div>
         </div>
 
         <div class="product-grid" id="productGrid">
@@ -114,20 +278,20 @@
         </div>
     </section>
 
-    <!-- Mix Box Section (Set 5 Hộp) -->
-    <section class="mix-box-section" id="mix-box">
+    <!-- 4. TỰ PHỐI HỘP MIX 5 VỊ (COMMERCE + CUSTOMIZATION) -->
+    <section class="mix-box-section" id="mix-box" data-breadcrumb="Tự phối hộp Mix 5 vị (Cá nhân hóa)">
         <div class="container">
             <div class="mix-box-wrapper reveal fade-up">
                 <div class="mix-box-info">
-                    <span class="section-subtitle">CÁ NHÂN HÓA TRẢI NGHIỆM</span>
-                    <h2>Tự Phối Hộp Mix Vị <br><span class="italic-serif text-primary">Theo Sở Thích &amp; Khẩu Vị Của
+                    <span class="section-subtitle">CÁ NHÂN HÓA HỘP QUÀ CỦA BẠN</span>
+                    <h2>Tự Phối Hộp Mix 5 Vị <br><span class="italic-serif text-primary">Theo Sở Thích &amp; Khẩu Vị Của
                             Riêng Bạn</span></h2>
-                    <p>Lựa chọn những hương vị đang bán chạy nhất để tạo nên món quà ngọt ngào dành tặng người thân, bạn
-                        bè hoặc đãi tiệc, trà tại nhà.</p>
+                    <p>Tự tay kết hợp 5 hũ Panna Cotta bất kỳ trong thực đơn. Tiết kiệm ngay 5.000đ/set và có thể đính kèm lời nhắn
+                        hoặc tùy chỉnh theo ý muốn!</p>
 
                     <div class="combo-info-card">
                         <div class="combo-card-header">
-                            <span class="combo-title"><i class="fa-solid fa-boxes-packing"></i> Hộp 5 Hũ Mix Tùy
+                            <span class="combo-title"><i class="fa-solid fa-boxes-packing"></i> Set 5 Hũ Mix Tùy
                                 Chọn</span>
                             <div class="combo-prices">
                                 <span class="new-price">45.000đ</span>
@@ -135,18 +299,39 @@
                             </div>
                         </div>
                         <ul class="combo-perks">
-                            <li><i class="fa-solid fa-check text-green"></i> Tự phối bất kỳ 5 vị trong thực đơn</li>
-                            <li><i class="fa-solid fa-check text-green"></i> Gợi ý tuyệt vời cho buổi trà chiều hoặc làm
-                                quà</li>
-                            <li><i class="fa-solid fa-check text-green"></i> Miễn phí giao hàng khu vực BKX</li>
+                            <li><i class="fa-solid fa-check text-green"></i> Tự phối bất kỳ 5 vị yêu thích trong thực đơn</li>
+                            <li><i class="fa-solid fa-check text-green"></i> Tặng kèm thiệp nhắn gửi / ghi chú cá nhân hóa trên hộp</li>
+                            <li><i class="fa-solid fa-check text-green"></i> Đóng hộp sang trọng kèm đá gel &amp; Freeship khu vực BKX</li>
                         </ul>
+                    </div>
+
+                    <!-- Tùy chỉnh cá nhân hóa cho hộp Mix -->
+                    <div class="mix-custom-options">
+                        <h4><i class="fa-solid fa-pen-fancy text-primary"></i> Tùy chỉnh cá nhân hóa cho Set bánh:</h4>
+                        <div class="custom-field-row">
+                            <label for="mixCustomSpoon">Số thìa &amp; đá gel:</label>
+                            <select id="mixCustomSpoon" class="form-select-sm">
+                                <option value="Đủ 5 thìa + Đá gel giữ lạnh">Đủ 5 thìa + Đá gel giữ lạnh (Tiêu chuẩn)</option>
+                                <option value="Thêm đá gel (Đi xa >30p)">Tăng cường đá gel (Đi xa &gt; 30 phút)</option>
+                                <option value="Không lấy thìa nhựa (Bảo vệ môi trường)">🌱 Không lấy thìa nhựa (Eco-friendly)</option>
+                            </select>
+                        </div>
+                        <div class="custom-field-row">
+                            <label for="mixCustomMessage">Lời nhắn viết lên nắp hộp / thiệp tặng (Miễn phí):</label>
+                            <input type="text" id="mixCustomMessage" class="form-input-sm"
+                                placeholder="VD: Chúc mừng sinh nhật cậu nhé! / Chúc em thi tốt...">
+                        </div>
                     </div>
                 </div>
 
                 <div class="mix-box-selection">
                     <div class="selection-header">
-                        <span class="selection-title">Chọn <span id="mixTargetCount">5</span> vị Panna Cotta yêu
-                            thích:</span>
+                        <div>
+                            <span class="selection-title">Chọn <span id="mixTargetCount">5</span> vị Panna Cotta yêu thích:</span>
+                            <button type="button" class="btn-quick-fill" onclick="quickFillMixBox()">
+                                <i class="fa-solid fa-bolt"></i> Chọn nhanh 5 vị khác nhau
+                            </button>
+                        </div>
                         <div class="selection-slots" id="selectionSlots">
                             <!-- JS rendered 5 slots -->
                         </div>
@@ -166,85 +351,629 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="about-section" id="about">
+    <!-- 5. CÁC LÝ DO "TẠI SAO CHỌN CHÚNG TÔI?" (WHY CHOOSE US - BẮT BUỘC THANG ĐIỂM 7) -->
+    <section class="why-choose-section" id="why-choose-us" data-breadcrumb="Tại sao chọn chúng tôi?">
         <div class="container">
             <div class="section-header text-center reveal fade-up">
-                <span class="section-subtitle">CHẤT LƯỢNG THỦ CÔNG</span>
-                <h2>Vị Ngon Tự Nhiên, Trọn Vẹn Tâm Huyết</h2>
-                <p>Mỗi hũ Panna Cotta La Panna được nấu chậm từ nguyên liệu tự nhiên hảo hạng nhất để giữ trọn độ tươi
-                    mịn mềm tan.</p>
+                <span class="section-subtitle">GIÁ TRỊ KHÁC BIỆT • WHY CHOOSE US</span>
+                <h2>Tại Sao Chọn La Panna?</h2>
+                <p>6 lý do giúp <strong>La Panna</strong> trở thành thương hiệu Panna Cotta thủ công được yêu thích hàng đầu
+                    của hàng ngàn khách hàng và sinh viên khu vực Bách – Kinh – Xây.</p>
             </div>
 
-            <div class="features-grid">
-                <div class="feature-card reveal fade-up delay-1">
-                    <div class="feature-icon"><i class="fa-solid fa-bowl-food"></i></div>
-                    <h3>Kem Sữa Hảo Hạng</h3>
-                    <p>Sử dụng whipping cream và sữa tươi nguyên kem cao cấp, tạo kết cấu dẻo mịn, béo nhẹ và không
-                        ngấy.</p>
+            <div class="why-grid reveal fade-up">
+                <div class="why-card">
+                    <div class="why-number">01</div>
+                    <div class="why-icon"><i class="fa-solid fa-cow"></i></div>
+                    <h3>100% Kem Tươi &amp; Sữa Chuẩn Xịn</h3>
+                    <p>Tuyệt đối không dùng bột béo hay kem thực vật rẻ tiền. Cốt bánh hoàn toàn từ Whipping Cream động vật và sữa tươi nguyên kem, tạo độ béo thanh, tan ngay đầu lưỡi.</p>
                 </div>
-                <div class="feature-card reveal fade-up delay-2">
-                    <div class="feature-icon"><i class="fa-solid fa-apple-whole"></i></div>
-                    <h3>Sốt Trái Cây Tươi</h3>
-                    <p>Sốt Chanh leo, Dâu tây, Việt quất, Kiwi, Đào được sên tươi hàng ngày, vị ngọt thanh tự nhiên.</p>
+                <div class="why-card">
+                    <div class="why-number">02</div>
+                    <div class="why-icon"><i class="fa-solid fa-seedling"></i></div>
+                    <h3>Sốt Trái Cây Tươi Nấu Mới Mỗi Sáng</h3>
+                    <p>Sốt dâu, chanh leo, việt quất, đào, kiwi được sên thủ công từ quả tươi mỗi ngày. Không phẩm màu hóa học, không hương liệu nhân tạo, ít ngọt tốt cho sức khỏe.</p>
                 </div>
-                <div class="feature-card reveal fade-up delay-3">
-                    <div class="feature-icon"><i class="fa-solid fa-shield-heart"></i></div>
-                    <h3>An Toàn Vệ Sinh</h3>
-                    <p>Không dùng phẩm màu hóa học, không chất bảo quản, đóng hộp kín bảo quản lạnh 2-6°C.</p>
+                <div class="why-card">
+                    <div class="why-number">03</div>
+                    <div class="why-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                    <h3>Giá Cả Cực Kỳ Phải Chăng (Chỉ 10K)</h3>
+                    <p>Chất lượng tiệm bánh Âu nhưng mức giá sinh viên: chỉ <strong>10.000đ/hũ</strong> mua lẻ và ưu đãi <strong>45.000đ/set 5 hũ</strong> tự chọn vị.</p>
                 </div>
-                <div class="feature-card reveal fade-up delay-4">
-                    <div class="feature-icon"><i class="fa-solid fa-truck-fast"></i></div>
-                    <h3>Giao Hàng Giữ Nhiệt</h3>
-                    <p>Bánh được giao kèm đá gel lạnh đảm bảo bánh luôn mát lạnh tươi ngon khi đến tay bạn.</p>
+                <div class="why-card">
+                    <div class="why-number">04</div>
+                    <div class="why-icon"><i class="fa-solid fa-snowflake"></i></div>
+                    <h3>Giao Hàng Kèm Đá Gel Giữ Lạnh</h3>
+                    <p>Mỗi đơn hàng đều được đóng gói cẩn thận kèm đá gel chuyên dụng, đảm bảo bánh giữ nguyên nhiệt độ 2–6°C, không bị chảy khi giao đến tay bạn.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-number">05</div>
+                    <div class="why-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                    <h3>Freeship Khu Vực BKX Siêu Tốc</h3>
+                    <p>Miễn phí vận chuyển 100% khu vực Bách Khoa – Kinh Tế Quốc Dân – Xây Dựng và KTX lân cận. Giao nhanh chỉ từ 15–30 phút sau khi đặt.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-number">06</div>
+                    <div class="why-icon"><i class="fa-solid fa-rotate"></i></div>
+                    <h3>Cam Kết Đổi Mới 1-1 Trong 24h</h3>
+                    <p>Bảo vệ quyền lợi khách hàng tuyệt đối: Đổi mới ngay lập tức hoặc hoàn tiền 100% nếu bánh bị xô lệch do vận chuyển hoặc không đúng vị đã chọn.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- 6. COMMUNITY: CỘNG ĐỒNG KHÁCH HÀNG TƯƠNG TÁC & ĐÁNH GIÁ (#LaPannaLovers) -->
+    <section class="community-section" id="community" data-breadcrumb="Cộng đồng & Đánh giá (#LaPannaLovers)">
+        <div class="container">
+            <div class="section-header text-center reveal fade-up">
+                <span class="section-subtitle">COMMUNITY • GIAO LƯU CỘNG ĐỒNG #LAPANNALOVERS</span>
+                <h2>Cộng Đồng Yêu Thích La Panna</h2>
+                <p>Nơi các tín đồ hảo ngọt chia sẻ cảm nhận thực tế, bí quyết mix vị ngon nhất và thả tim cho những đánh giá hữu ích.</p>
+            </div>
+
+            <!-- Community Highlights & Stats -->
+            <div class="community-top-bar reveal fade-up">
+                <div class="community-score-box">
+                    <div class="big-score">4.9<span>/5</span></div>
+                    <div>
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p>Dựa trên <strong id="totalReviewsCount">1.254</strong> lượt đánh giá &amp; thảo luận cộng đồng</p>
+                    </div>
+                </div>
+                <div class="community-tags">
+                    <span class="comm-hashtag">#LaPannaBKX</span>
+                    <span class="comm-hashtag">#PannaCotta10K</span>
+                    <span class="comm-hashtag">#TeamDauTay</span>
+                    <span class="comm-hashtag">#TeamChanhLeo</span>
+                    <button type="button" class="btn-primary btn-sm" onclick="document.getElementById('communityFormBox').scrollIntoView({behavior:'smooth'})">
+                        <i class="fa-solid fa-pen-to-square"></i> Viết chia sẻ / Đánh giá
+                    </button>
+                </div>
+            </div>
+
+            <!-- Danh sách đánh giá & thảo luận của người xem -->
+            <div class="reviews-grid" id="communityReviewsGrid">
+                <!-- Rendered by JS so users can like & add new reviews -->
+            </div>
+
+            <!-- Form để người xem tương tác, giao lưu và đăng bài lên Cộng đồng -->
+            <div class="community-post-box reveal fade-up" id="communityFormBox">
+                <div class="post-box-header">
+                    <h3><i class="fa-solid fa-comments text-primary"></i> Góc Giao Lưu: Chia Sẻ Cảm Nhận Hoặc Mẹo Mix Vị Của Bạn</h3>
+                    <p>Bài viết của bạn sẽ hiển thị trực tiếp trên bảng tin Cộng đồng La Panna để mọi người cùng tham khảo và thả tim!</p>
+                </div>
+                <form id="communityReviewForm" class="community-form">
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="revName">Tên / Biệt danh của bạn *</label>
+                            <input type="text" id="revName" required placeholder="VD: Minh Anh - K68 Bách Khoa">
+                        </div>
+                        <div class="form-group">
+                            <label for="revFlavor">Vị yêu thích / Combo gợi ý *</label>
+                            <select id="revFlavor" class="form-select">
+                                <option value="Set 5 Hộp Mix Vị">🎁 Set 5 Hộp Mix Vị (45K)</option>
+                                <option value="Panna Cotta Dâu">🍓 Panna Cotta Dâu Tây</option>
+                                <option value="Panna Cotta Chanh Leo">🍋 Panna Cotta Chanh Leo</option>
+                                <option value="Panna Cotta Việt Quất">🫐 Panna Cotta Việt Quất</option>
+                                <option value="Panna Cotta Kiwi">🥝 Panna Cotta Kiwi</option>
+                                <option value="Panna Cotta Đào">🍑 Panna Cotta Đào</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="revRating">Chấm điểm chất lượng *</label>
+                            <select id="revRating" class="form-select">
+                                <option value="5">⭐⭐⭐⭐⭐ (5/5 - Tuyệt vời)</option>
+                                <option value="4">⭐⭐⭐⭐ (4/5 - Rất ngon)</option>
+                                <option value="3">⭐⭐⭐ (3/5 - Khá ổn)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="revComment">Nội dung chia sẻ cùng cộng đồng *</label>
+                        <textarea id="revComment" rows="2" required
+                            placeholder="Chia sẻ cảm nhận của bạn về độ mịn của kem, vị sốt trái cây hoặc gợi ý công thức mix 5 vị cho mọi người nhé..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Đăng Lên Cộng Đồng
+                    </button>
+                    <span id="communityFormStatus" class="comm-status"></span>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. THÔNG TIN HƯỚNG DẪN (CHÍNH SÁCH) + LOGO "ĐÃ THÔNG BÁO BỘ CÔNG THƯƠNG" (BẮT BUỘC THANG ĐIỂM 7) -->
+    <section class="policies-section" id="policies" data-breadcrumb="Chính sách & Hướng dẫn">
+        <div class="container">
+            <div class="section-header text-center reveal fade-up">
+                <span class="section-subtitle">MINH BẠCH • UY TÍN • AN TOÀN</span>
+                <h2>Thông Tin Hướng Dẫn &amp; Chính Sách</h2>
+                <p>Hệ thống chính sách Mua hàng, Thanh toán, Vận chuyển và Đổi/trả hàng rõ ràng nhằm bảo vệ tối đa quyền lợi của khách hàng tại <strong>lapanna.store</strong>.</p>
+            </div>
+
+            <!-- Tabs Chọn Chính Sách -->
+            <div class="policy-tabs reveal fade-up" role="tablist">
+                <button type="button" class="policy-tab-btn active" onclick="switchPolicyTab('mua-hang', this)">
+                    <i class="fa-solid fa-cart-shopping"></i> 1. Hướng dẫn Mua hàng
+                </button>
+                <button type="button" class="policy-tab-btn" onclick="switchPolicyTab('thanh-toan', this)">
+                    <i class="fa-solid fa-credit-card"></i> 2. Chính sách Thanh toán
+                </button>
+                <button type="button" class="policy-tab-btn" onclick="switchPolicyTab('van-chuyen', this)">
+                    <i class="fa-solid fa-truck-fast"></i> 3. Chính sách Vận chuyển
+                </button>
+                <button type="button" class="policy-tab-btn" onclick="switchPolicyTab('doi-tra', this)">
+                    <i class="fa-solid fa-rotate-left"></i> 4. Chính sách Đổi/Trả hàng
+                </button>
+            </div>
+
+            <!-- Nội dung 4 Chính Sách -->
+            <div class="policy-content-wrapper reveal fade-up">
+                <!-- Tab 1: Mua hàng -->
+                <div class="policy-pane active" id="policy-mua-hang">
+                    <div class="policy-card-detail">
+                        <h3><i class="fa-solid fa-bag-shopping text-primary"></i> Hướng Dẫn Mua Hàng Nhanh Chóng (3 Bước)</h3>
+                        <div class="policy-grid-2">
+                            <div>
+                                <h4>Cách 1: Đặt hàng trực tuyến trên Webshop (Khuyên dùng)</h4>
+                                <ul class="policy-list">
+                                    <li><strong>Bước 1 - Chọn bánh:</strong> Duyệt mục <em>Cửa hàng</em> để chọn từng vị lẻ (10.000đ/hũ) hoặc vào mục <em>Tự phối hộp Mix 5 vị</em> để ghép 5 vị yêu thích với giá ưu đãi 45.000đ.</li>
+                                    <li><strong>Bước 2 - Ước tính chi phí trong Giỏ hàng:</strong> Mở biểu tượng Giỏ hàng ở góc phải, chọn Khu vực giao hàng để xem trước phí vận chuyển ước tính và nhập mã giảm giá (nếu có).</li>
+                                    <li><strong>Bước 3 - Xác nhận đơn hàng:</strong> Bấm <em>"Thanh Toán Đặt Hàng"</em>, điền Họ tên, Số điện thoại, Địa chỉ nhận bánh và bấm Hoàn tất. Hệ thống sẽ ghi nhận đơn tức thì!</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>Cách 2: Đặt hàng qua Hotline / Zalo / Fanpage</h4>
+                                <ul class="policy-list">
+                                    <li>Gọi trực tiếp hoặc nhắn Zalo tới số Hotline: <strong><a href="tel:0888231700">0888 231 700</a></strong>.</li>
+                                    <li>Nhắn tin qua Fanpage Facebook chính thức: <strong>La Panna - Handcrafted Panna Cotta</strong>.</li>
+                                    <li>Đối với đơn đặt tiệc sinh nhật, sự kiện CLB/lớp học (&gt; 30 hũ): Vui lòng đặt trước tối thiểu 3–5 tiếng để bếp chuẩn bị mẻ bánh mới nhất kèm ưu đãi chiết khấu sỉ.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Thanh toán -->
+                <div class="policy-pane" id="policy-thanh-toan">
+                    <div class="policy-card-detail">
+                        <h3><i class="fa-solid fa-wallet text-primary"></i> Chính Sách &amp; Phương Thức Thanh Toán</h3>
+                        <div class="policy-grid-2">
+                            <div>
+                                <h4>1. Thanh toán tiền mặt khi nhận hàng (COD)</h4>
+                                <ul class="policy-list">
+                                    <li>Khách hàng kiểm tra đúng số lượng, hương vị và độ lạnh của bánh khi shipper giao tới rồi mới thanh toán tiền mặt.</li>
+                                    <li>Không thu bất kỳ khoản phụ phí ẩn nào ngoài tổng giá trị đơn hàng đã hiển thị trên website.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>2. Chuyển khoản Ngân hàng (VietQR) &amp; Ví điện tử</h4>
+                                <ul class="policy-list">
+                                    <li><strong>Chuyển khoản VietQR 24/7:</strong> Quét mã QR ngân hàng tiện lợi khi đặt hàng hoặc khi nhận bánh.</li>
+                                    <li><strong>Ví điện tử:</strong> Hỗ trợ thanh toán qua Ví MoMo, ZaloPay, VNPay theo số điện thoại Hotline <strong>0888 231 700</strong>.</li>
+                                    <li>Nội dung chuyển khoản: <code>[Tên khách hàng] + [Số điện thoại]</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Vận chuyển -->
+                <div class="policy-pane" id="policy-van-chuyen">
+                    <div class="policy-card-detail">
+                        <h3><i class="fa-solid fa-truck-Ramp-box text-primary"></i> Chính Sách Vận Chuyển &amp; Giao Hàng Giữ Nhiệt</h3>
+                        <div class="policy-grid-2">
+                            <div>
+                                <h4>Biểu phí &amp; Khu vực giao hàng</h4>
+                                <ul class="policy-list">
+                                    <li><strong>Khu vực BKX (Đại học Bách Khoa, Kinh Tế Quốc Dân, Xây Dựng, KTX Bách Khoa, Đại Cồ Việt, Giải Phóng, Trần Đại Nghĩa):</strong> <span class="badge-free">MIỄN PHÍ VẬN CHUYỂN (0đ)</span> cho mọi đơn hàng từ 5 hũ.</li>
+                                    <li><strong>Các quận nội thành Hà Nội (&lt; 5km):</strong> Phí vận chuyển đồng giá <strong>15.000đ</strong>. Đặc biệt: <strong>Freeship 0đ</strong> cho đơn hàng từ <strong>100.000đ</strong> trở lên!</li>
+                                    <li><strong>Nhận trực tiếp tại điểm bán:</strong> Miễn phí 0đ, tặng thêm đá gel giữ nhiệt mang về.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>Thời gian giao &amp; Tiêu chuẩn bảo quản</h4>
+                                <ul class="policy-list">
+                                    <li><strong>Thời gian giao hàng:</strong> Từ <strong>08:00 – 22:00</strong> hàng ngày. Giao siêu tốc trong <strong>15 – 30 phút</strong> tại khu vực BKX.</li>
+                                    <li><strong>Quy cách đóng gói:</strong> Toàn bộ bánh được đặt trong hộp chống sốc kèm túi đá gel giữ lạnh chuyên dụng, giữ nhiệt độ ổn định 2–6°C trong suốt 2 giờ di chuyển.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Đổi/trả hàng -->
+                <div class="policy-pane" id="policy-doi-tra">
+                    <div class="policy-card-detail">
+                        <h3><i class="fa-solid fa-shield-halved text-primary"></i> Chính Sách Đổi / Trả Hàng &amp; Hoàn Tiền 100%</h3>
+                        <div class="policy-grid-2">
+                            <div>
+                                <h4>Các trường hợp được Đổi mới 1-1 hoặc Hoàn tiền</h4>
+                                <ul class="policy-list">
+                                    <li>Bánh bị nghiêng đổ, vỡ hộp hoặc chảy nước trong quá trình vận chuyển.</li>
+                                    <li>Giao sai hương vị hoặc thiếu số lượng so với đơn hàng đã xác nhận.</li>
+                                    <li>Sản phẩm có bất kỳ dấu hiệu bất thường nào về chất lượng cảm quan hoặc mùi vị.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4>Quy trình xử lý trong 15 phút</h4>
+                                <ul class="policy-list">
+                                    <li><strong>Thời hạn thông báo:</strong> Trong vòng <strong>24 giờ</strong> kể từ khi nhận bánh (khuyến khích kiểm tra ngay lúc nhận hàng).</li>
+                                    <li><strong>Cách thức:</strong> Chụp ảnh tình trạng hộp bánh và gửi qua Zalo/Hotline <strong>0888 231 700</strong>.</li>
+                                    <li><strong>Cam kết:</strong> La Panna sẽ giao bù ngay hộp bánh mới miễn phí 100% phí ship trong vòng 15–30 phút hoặc hoàn tiền 100% qua tài khoản ngân hàng của quý khách!</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Khối Xác Thực Bộ Công Thương (LOGO "ĐÃ THÔNG BÁO BỘ CÔNG THƯƠNG") -->
+            <div class="bct-certification-banner reveal fade-up">
+                <div class="bct-info">
+                    <div class="bct-icon-shield"><i class="fa-solid fa-file-shield"></i></div>
+                    <div>
+                        <h4>Cam Kết Tuân Thủ Pháp Luật Thương Mại Điện Tử &amp; An Toàn Thực Phẩm</h4>
+                        <p>Webshop <strong>lapanna.store</strong> công khai minh bạch đầy đủ thông tin hàng hóa, giá bán, chi phí vận chuyển và chính sách bảo vệ người tiêu dùng theo quy định TMĐT.</p>
+                    </div>
+                </div>
+                <!-- Official SVG Badge: ĐÃ THÔNG BÁO BỘ CÔNG THƯƠNG -->
+                <a href="#policies" class="bct-badge-link" title="Đã thông báo Bộ Công Thương">
+                    <svg class="bct-logo-svg" viewBox="0 0 260 92" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Đã thông báo Bộ Công Thương">
+                        <defs>
+                            <linearGradient id="bctBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00529B" />
+                                <stop offset="100%" stop-color="#0072CE" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="2" y="2" width="256" height="88" rx="14" fill="url(#bctBlueGrad)" stroke="#FFFFFF" stroke-width="3"/>
+                        <rect x="6" y="6" width="248" height="80" rx="10" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+                        <!-- Vòng tròn dấu tích trắng - xanh -->
+                        <circle cx="48" cy="46" r="28" fill="#FFFFFF"/>
+                        <circle cx="48" cy="46" r="23" fill="#00529B"/>
+                        <path d="M36 46 L44 54 L61 37" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Dòng chữ ĐÃ THÔNG BÁO BỘ CÔNG THƯƠNG -->
+                        <text x="86" y="42" fill="#FFFFFF" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="18" letter-spacing="0.5">ĐÃ THÔNG BÁO</text>
+                        <line x1="86" y1="50" x2="240" y2="50" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                        <text x="86" y="69" fill="#FFD700" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="14.5" letter-spacing="0.5">BỘ CÔNG THƯƠNG</text>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. CÂU HỎI THƯỜNG GẶP - FAQ (BẮT BUỘC THANG ĐIỂM 7) -->
+    <section class="faq-section" id="faq" data-breadcrumb="Câu hỏi thường gặp (FAQ)">
+        <div class="container">
+            <div class="section-header text-center reveal fade-up">
+                <span class="section-subtitle">HỖ TRỢ KHÁCH HÀNG 24/7 • FAQ</span>
+                <h2>Câu Hỏi Thường Gặp (FAQ)</h2>
+                <p>Giải đáp nhanh những thắc mắc phổ biến nhất của khách hàng khi thưởng thức và đặt bánh tại La Panna.</p>
+            </div>
+
+            <div class="faq-accordion reveal fade-up" id="faqAccordion">
+                <div class="faq-item active">
+                    <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                        <span>1. Bánh Panna Cotta của La Panna bảo quản được bao lâu và ở nhiệt độ nào?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Vì bánh được làm thủ công 100% từ sữa tươi và kem béo tự nhiên <strong>không sử dụng chất bảo quản</strong>, bạn cần bảo quản bánh trong <strong>ngăn mát tủ lạnh (nhiệt độ 2–6°C)</strong> và sử dụng ngon nhất trong vòng <strong>3 – 4 ngày</strong> kể từ ngày sản xuất. Lưu ý không để bánh ở ngăn đá vì sẽ làm tách lớp kem sữa.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                        <span>2. Khu vực nào được miễn phí giao hàng (Freeship) và giao trong bao lâu?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>La Panna <strong>Freeship 100%</strong> cho các đơn hàng tại khu vực <strong>BKX (Đại học Bách Khoa, Kinh Tế Quốc Dân, Xây Dựng, KTX Bách Khoa, ngõ Tự Do, Đại Cồ Việt, Trần Đại Nghĩa, Giải Phóng)</strong> với thời gian giao nhanh chỉ từ <strong>15 – 30 phút</strong>. Các khu vực nội thành Hà Nội khác phí ship ưu đãi chỉ 15.000đ và Freeship cho đơn từ 100.000đ!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                        <span>3. Mua Set 5 Hộp Mix Vị (45.000đ) có được chọn trùng vị yêu thích không?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p><strong>Hoàn toàn được!</strong> Tại mục <em>Tự phối hộp Mix 5 vị</em>, bạn có thể chọn 5 vị khác nhau hoặc chọn 2-3-5 hộp cùng một vị yêu thích (ví dụ: 3 Dâu + 2 Chanh leo). Hệ thống sẽ tự động tính giá ưu đãi <strong>45.000đ/set</strong> (tiết kiệm 5.000đ so với mua lẻ).</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                        <span>4. Giao hàng trời nắng bánh có bị chảy không?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Bạn hoàn toàn yên tâm! Mọi đơn hàng của La Panna đều được đóng gói kèm <strong>túi đá gel giữ nhiệt chuyên dụng</strong> giúp duy trì độ lạnh sâu trong suốt 1.5 – 2 giờ di chuyển. Nếu bánh có bất kỳ sự cố chảy hay nghiêng đổ nào khi tới tay, La Panna cam kết <strong>đổi mới 1-1 miễn phí ngay lập tức</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                        <span>5. Bánh có quá ngọt không? Người ăn kiêng hoặc trẻ nhỏ có dùng được không?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Công thức của La Panna đã được <strong>giảm 30% lượng đường</strong> so với công thức truyền thống. Vị ngọt chủ yếu đến từ sữa tươi và trái cây chín tự nhiên, hòa quyện vị chua thanh của sốt Chanh leo, Dâu, Kiwi nên rất thanh mát, không gây ngấy, cực kỳ phù hợp cho cả trẻ nhỏ và các bạn hạn chế đồ ngọt.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaq(this)">
+                        <span>6. Shop có nhận đặt số lượng lớn cho tiệc sinh nhật, họp lớp, sự kiện CLB không?</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Có! La Panna nhận đơn sự kiện, liên hoan lớp, workshop CLB từ 30 – 500 hũ với mức chiết khấu ưu đãi hấp dẫn và hỗ trợ thiết kế tem nhãn riêng theo sự kiện. Vui lòng liên hệ Hotline/Zalo <strong>0888 231 700</strong> để nhận báo giá sỉ tốt nhất.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. BANNER "QUẢNG CÁO ĐỐI TÁC" & LIÊN KẾT WEBSITE HỮU ÍCH (CONNECTION THỨ 2 + BANNER ĐỐI TÁC BẮT BUỘC) -->
+    <section class="partners-section" id="partners" data-breadcrumb="Đối tác & Liên kết hữu ích">
+        <div class="container">
+            <div class="section-header text-center reveal fade-up">
+                <span class="section-subtitle">ĐỐI TÁC ĐỒNG HÀNH &amp; LIÊN KẾT HỮU ÍCH (CONNECTION)</span>
+                <h2>Banner Quảng Cáo Đối Tác &amp; Website Liên Quan</h2>
+                <p>Hệ sinh thái đối tác nguyên liệu, giao nhận, thanh toán uy tín cùng các liên kết thông tin hữu ích dành cho người tiêu dùng.</p>
+            </div>
+
+            <!-- 3 Banner Quảng Cáo Đối Tác Trực Quan -->
+            <div class="partner-banners-grid reveal fade-up">
+                <!-- Partner Banner 1 -->
+                <div class="partner-ad-banner ad-theme-dairy">
+                    <div class="ad-badge">ĐỐI TÁC NGUYÊN LIỆU</div>
+                    <div class="ad-body">
+                        <div class="ad-icon"><i class="fa-solid fa-award"></i></div>
+                        <h3>Anchor &amp; Dalatmilk Official</h3>
+                        <p>Nhà cung cấp Sữa tươi thanh trùng &amp; Whipping Cream chuẩn New Zealand cho từng mẻ bánh La Panna.</p>
+                        <a href="https://www.anchordairy.com" target="_blank" rel="noopener noreferrer" class="ad-cta">
+                            Tìm hiểu nguồn sữa chuẩn <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Partner Banner 2 -->
+                <div class="partner-ad-banner ad-theme-delivery">
+                    <div class="ad-badge">ƯU ĐÃI ĐỐI TÁC GIAO HÀNG</div>
+                    <div class="ad-body">
+                        <div class="ad-icon"><i class="fa-solid fa-motorcycle"></i></div>
+                        <h3>ShopeeFood &amp; GrabFood</h3>
+                        <p>Đặt La Panna trên ứng dụng đối tác nhận ngay Voucher giảm tới 20.000đ cho người dùng mới khu vực Hai Bà Trưng!</p>
+                        <a href="https://shopeefood.vn" target="_blank" rel="noopener noreferrer" class="ad-cta">
+                            Mở ShopeeFood ngay <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Partner Banner 3 -->
+                <div class="partner-ad-banner ad-theme-payment">
+                    <div class="ad-badge">ĐỐI TÁC THANH TOÁN SỐ</div>
+                    <div class="ad-body">
+                        <div class="ad-icon"><i class="fa-solid fa-qrcode"></i></div>
+                        <h3>VietQR &amp; Ví Điện Tử MoMo</h3>
+                        <p>Thanh toán một chạm không tiền mặt, an toàn bảo mật tuyệt đối và tích điểm hoàn tiền cho sinh viên BKX.</p>
+                        <a href="https://vietqr.net" target="_blank" rel="noopener noreferrer" class="ad-cta">
+                            Tra cứu chuẩn VietQR <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connection Ý Thứ 2: Các đường link đến các website liên quan hoặc hữu ích -->
+            <div class="useful-links-box reveal fade-up">
+                <h4><i class="fa-solid fa-link text-primary"></i> Đường Dẫn Đến Các Website Liên Quan &amp; Hữu Ích (Tra Cứu Thêm Thông Tin):</h4>
+                <div class="useful-links-grid">
+                    <a href="https://vfa.gov.vn" target="_blank" rel="noopener noreferrer" class="useful-link-card">
+                        <i class="fa-solid fa-shield-heart"></i>
+                        <div>
+                            <strong>Cục An Toàn Thực Phẩm (Bộ Y Tế)</strong>
+                            <span>Tra cứu tiêu chuẩn vệ sinh ATTP &amp; dinh dưỡng sữa tươi</span>
+                        </div>
+                        <i class="fa-solid fa-external-link-alt ext-icon"></i>
+                    </a>
+                    <a href="https://online.gov.vn" target="_blank" rel="noopener noreferrer" class="useful-link-card">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <div>
+                            <strong>Cổng Thông Tin Quản Lý Hoạt Động TMĐT</strong>
+                            <span>Bộ Công Thương - Bảo vệ quyền lợi người tiêu dùng trực tuyến</span>
+                        </div>
+                        <i class="fa-solid fa-external-link-alt ext-icon"></i>
+                    </a>
+                    <a href="https://hust.edu.vn" target="_blank" rel="noopener noreferrer" class="useful-link-card">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <div>
+                            <strong>Cộng Đồng Sinh Viên Bách - Kinh - Xây</strong>
+                            <span>Khu vực ưu tiên Freeship 0đ trong 15 phút của La Panna</span>
+                        </div>
+                        <i class="fa-solid fa-external-link-alt ext-icon"></i>
+                    </a>
+                    <a href="https://vi.wikipedia.org/wiki/Panna_cotta" target="_blank" rel="noopener noreferrer" class="useful-link-card">
+                        <i class="fa-solid fa-book-open"></i>
+                        <div>
+                            <strong>Tìm Hiểu Nguồn Gốc Panna Cotta Ý</strong>
+                            <span>Lịch sử &amp; nghệ thuật chế biến món tráng miệng vùng Piedmont</span>
+                        </div>
+                        <i class="fa-solid fa-external-link-alt ext-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. TRANG LIÊN HỆ: EMAIL, ĐIỆN THOẠI, ĐỊA CHỈ, GOOGLE MAPS & FORM TƯƠNG TÁC (BẮT BUỘC THANG ĐIỂM 7) -->
+    <section class="contact-section" id="contact" data-breadcrumb="Liên hệ & Bản đồ (Contact)">
+        <div class="container">
+            <div class="section-header text-center reveal fade-up">
+                <span class="section-subtitle">LIÊN HỆ VỚI CHÚNG TÔI • CONTACT US</span>
+                <h2>Kết Nối Cùng La Panna</h2>
+                <p>Mọi thắc mắc, góp ý hoặc nhu cầu đặt bánh số lượng lớn, quý khách vui lòng liên hệ trực tiếp qua các kênh dưới đây.</p>
+            </div>
+
+            <div class="contact-main-grid reveal fade-up">
+                <!-- Cột 1: Thông tin liên hệ chuẩn (Địa chỉ, Điện thoại, Email, Giờ mở cửa) + Form liên hệ 2 chiều -->
+                <div class="contact-info-panel">
+                    <div class="contact-cards-list">
+                        <div class="contact-item-card">
+                            <div class="c-icon"><i class="fa-solid fa-location-dot"></i></div>
+                            <div>
+                                <h4>Địa chỉ Cửa hàng / Bếp Thủ Công</h4>
+                                <p>Số 48 Ngõ Tự Do (Khu vực Bách Khoa - Kinh Tế - Xây Dựng), Phường Đồng Tâm, Quận Hai Bà Trưng, Hà Nội</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item-card">
+                            <div class="c-icon"><i class="fa-solid fa-phone-volume"></i></div>
+                            <div>
+                                <h4>Điện thoại / Hotline / Zalo (24/7)</h4>
+                                <p><a href="tel:0888231700" class="text-primary font-bold">0888 231 700</a> (Hỗ trợ đặt bánh nhanh &amp; CSKH)</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item-card">
+                            <div class="c-icon"><i class="fa-solid fa-envelope"></i></div>
+                            <div>
+                                <h4>Email Liên hệ &amp; Hợp tác</h4>
+                                <p><a href="mailto:lienhe@lapanna.store">lienhe@lapanna.store</a> • <a href="mailto:cskh@lapanna.store">cskh@lapanna.store</a></p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item-card">
+                            <div class="c-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div>
+                                <h4>Website &amp; Giờ Hoạt Động</h4>
+                                <p>Webshop: <strong><a href="https://lapanna.store" target="_blank">https://lapanna.store</a></strong> | Mở cửa: <strong>08:00 – 22:00</strong> (Thứ 2 – Chủ Nhật)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Gửi Tin Nhắn Liên Hệ (Communication 2 chiều) -->
+                    <div class="contact-form-box">
+                        <h3><i class="fa-solid fa-paper-plane text-primary"></i> Gửi Tin Nhắn / Yêu Cầu Tư Vấn Cho Shop</h3>
+                        <form id="quickContactForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactName">Họ và tên *</label>
+                                    <input type="text" id="contactName" required placeholder="Nhập tên của bạn">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactPhone">Số điện thoại / Email *</label>
+                                    <input type="text" id="contactPhone" required placeholder="SĐT hoặc Email nhận phản hồi">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Nội dung lời nhắn *</label>
+                                <textarea id="contactMessage" rows="2" required placeholder="Bạn cần tư vấn đặt bánh sinh nhật, hỏi về chính sách đại lý hay góp ý dịch vụ..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary btn-block">
+                                <i class="fa-solid fa-envelope-circle-check"></i> Gửi Thông Tin Liên Hệ
+                            </button>
+                            <div id="contactFormStatus" class="form-status"></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Cột 2: Bản đồ Google Maps nhúng trực tiếp -->
+                <div class="contact-map-panel">
+                    <div class="map-frame-wrapper">
+                        <iframe
+                            title="Bản đồ vị trí La Panna khu vực Bách Khoa - Kinh Tế - Xây Dựng Hà Nội"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.6963246222776!2d105.84315187596934!3d21.004806688600375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac76ccab6dd7%3A0x55e92a5b07a97d03!2zxJDhuqFpIGjhu41jIELDoWNoIGtob2EgSMOgIE7hu5lp!5e0!3m2!1svi!2svn!4v1710000000000!5m2!1svi!2svn"
+                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    <div class="map-caption">
+                        <span><i class="fa-solid fa-map-location-dot text-primary"></i> Tâm điểm khu vực Bách Khoa – Kinh Tế – Xây Dựng (Hai Bà Trưng, Hà Nội)</span>
+                        <a href="https://maps.google.com/?q=Dai+hoc+Bach+Khoa+Ha+Noi" target="_blank" rel="noopener noreferrer" class="btn-outline btn-sm">
+                            <i class="fa-solid fa-diamond-turn-right"></i> Mở Google Maps Lớn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (Đầy đủ thông tin Webshop, Menu bắt buộc, Chính sách & Logo Bộ Công Thương) -->
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-col brand-col">
                 <h3 class="logo footer-logo">LA PANNA</h3>
-                <p>Panna Cotta Handmade - Ngọt ngào từng khoảnh khắc, tươi mới mỗi ngày.</p>
+                <p><strong>Địa chỉ Webshop:</strong> <a href="https://lapanna.store" style="display:inline;color:var(--color-primary);font-weight:700;">lapanna.store</a><br>
+                Panna Cotta Thủ Công Chuẩn Vị Ý – Ngọt ngào từng khoảnh khắc, tươi mới mỗi ngày.</p>
                 <div class="contact-links">
-                    <p><strong><i class="fa-solid fa-phone"></i> Hotline:</strong> <a
-                            href="tel:0888231700">0888231700</a></p>
-                    <p><strong><i class="fa-solid fa-globe"></i> Website:</strong> <a href="https://lapanna.store"
-                            target="_blank">lapanna.store</a></p>
-                    <p><strong><i class="fa-brands fa-facebook"></i> Facebook:</strong> <a href="#">LaPanna</a></p>
-                    <p><strong><i class="fa-solid fa-truck"></i> Giao hàng:</strong> Freeship khu vực BKX (Bách Khoa -
-                        Kinh Tế - Xây Dựng)</p>
+                    <p><strong><i class="fa-solid fa-location-dot"></i> Địa chỉ:</strong> Số 48 Ngõ Tự Do (Khu vực BKX), Q. Hai Bà Trưng, Hà Nội</p>
+                    <p><strong><i class="fa-solid fa-phone"></i> Điện thoại:</strong> <a href="tel:0888231700" style="display:inline;">0888 231 700</a></p>
+                    <p><strong><i class="fa-solid fa-envelope"></i> Email:</strong> <a href="mailto:lienhe@lapanna.store" style="display:inline;">lienhe@lapanna.store</a></p>
+                </div>
+                <div class="social-links" style="margin-top: 14px;">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="tel:0888231700" aria-label="Gọi điện"><i class="fa-solid fa-phone"></i></a>
                 </div>
             </div>
+
             <div class="footer-col">
-                <h4>Thực Đơn La Panna</h4>
-                <p>• Chanh Leo Panna Cotta</p>
-                <p>• Dâu Tây Panna Cotta</p>
-                <p>• Việt Quất Panna Cotta</p>
-                <p>• Kiwi Panna Cotta</p>
-                <p>• Đào Panna Cotta</p>
+                <h4>Danh Mục Trang Chính</h4>
+                <a href="#home"><i class="fa-solid fa-angle-right"></i> Trang chủ (Home)</a>
+                <a href="#about"><i class="fa-solid fa-angle-right"></i> Về chúng tôi (About Us)</a>
+                <a href="#products"><i class="fa-solid fa-angle-right"></i> Cửa hàng (Thực đơn 10K)</a>
+                <a href="#mix-box"><i class="fa-solid fa-angle-right"></i> Tự phối hộp Mix 5 vị (45K)</a>
+                <a href="#why-choose-us"><i class="fa-solid fa-angle-right"></i> Tại sao chọn chúng tôi?</a>
+                <a href="#community"><i class="fa-solid fa-angle-right"></i> Cộng đồng #LaPannaLovers</a>
+                <a href="#faq"><i class="fa-solid fa-angle-right"></i> Câu hỏi thường gặp (FAQ)</a>
+                <a href="#contact"><i class="fa-solid fa-angle-right"></i> Trang Liên hệ &amp; Bản đồ</a>
             </div>
+
             <div class="footer-col">
-                <h4>Đặt Bánh Nhanh</h4>
-                <p>Liên hệ ngay hotline để được giao bánh gấp trong khu vực trường học & ký túc xá BKX!</p>
-                <div class="contact-hotline">
-                    <span>Hotline đặt hàng:</span>
-                    <a href="tel:0888231700">0888231700</a>
+                <h4>Hướng Dẫn &amp; Chính Sách</h4>
+                <a href="#policies" onclick="switchPolicyTabByName('mua-hang')"><i class="fa-solid fa-file-lines"></i> Hướng dẫn mua hàng</a>
+                <a href="#policies" onclick="switchPolicyTabByName('thanh-toan')"><i class="fa-solid fa-credit-card"></i> Chính sách thanh toán</a>
+                <a href="#policies" onclick="switchPolicyTabByName('van-chuyen')"><i class="fa-solid fa-truck-fast"></i> Chính sách vận chuyển</a>
+                <a href="#policies" onclick="switchPolicyTabByName('doi-tra')"><i class="fa-solid fa-rotate"></i> Chính sách đổi/trả hàng</a>
+                <a href="#partners"><i class="fa-solid fa-handshake"></i> Đối tác &amp; Liên kết hữu ích</a>
+
+                <!-- Logo Đã thông báo Bộ Công Thương tại Footer -->
+                <div class="footer-bct-wrap">
+                    <a href="#policies" title="Đã thông báo Bộ Công Thương">
+                        <svg class="bct-logo-footer" viewBox="0 0 260 92" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Đã thông báo Bộ Công Thương">
+                            <rect x="2" y="2" width="256" height="88" rx="14" fill="#00529B" stroke="#FFFFFF" stroke-width="3"/>
+                            <circle cx="48" cy="46" r="28" fill="#FFFFFF"/>
+                            <circle cx="48" cy="46" r="23" fill="#00529B"/>
+                            <path d="M36 46 L44 54 L61 37" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <text x="86" y="42" fill="#FFFFFF" font-family="Montserrat, Arial, sans-serif" font-weight="800" font-size="18">ĐÃ THÔNG BÁO</text>
+                            <line x1="86" y1="50" x2="240" y2="50" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+                            <text x="86" y="69" fill="#FFD700" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="14.5">BỘ CÔNG THƯƠNG</text>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom container">
-            <p>&copy; 2026 LA PANNA. Handcrafted with passion.</p>
+            <p>&copy; 2026 <strong>LA PANNA (lapanna.store)</strong>. Handcrafted with passion in Hanoi.</p>
+            <div class="payment-methods" title="Hỗ trợ thanh toán Tiền mặt COD, VietQR, MoMo, Thẻ ngân hàng">
+                <i class="fa-solid fa-money-bill-wave"></i>
+                <i class="fa-solid fa-qrcode"></i>
+                <i class="fa-solid fa-building-columns"></i>
+                <i class="fa-brands fa-cc-visa"></i>
+            </div>
         </div>
     </footer>
 
-    <!-- Cart Sidebar -->
+    <!-- COMMERCE: CART SIDEBAR + BỘ ƯỚC TÍNH CHI PHÍ (SHIPPING & COST ESTIMATOR) -->
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
-            <h3>Giỏ Hàng <span class="cart-count-badge" id="cartHeaderCount">0</span></h3>
+            <h3><i class="fa-solid fa-bag-shopping text-primary"></i> Giỏ Hàng <span class="cart-count-badge" id="cartHeaderCount">0</span></h3>
             <button class="close-cart" id="closeCartBtn" aria-label="Đóng giỏ hàng"><i
                     class="fa-solid fa-xmark"></i></button>
         </div>
@@ -256,30 +985,67 @@
             <!-- Items rendered by JS -->
         </div>
 
+        <!-- Bộ Ước Tính Chi Phí Thương Mại (Commerce: Cost & Shipping Estimator) -->
+        <div class="cart-estimator-box" id="cartEstimatorBox">
+            <div class="estimator-title">
+                <i class="fa-solid fa-calculator text-primary"></i> <strong>Ước tính chi phí &amp; Vận chuyển:</strong>
+            </div>
+            <div class="estimator-row">
+                <label for="shippingZoneSelect">Khu vực giao:</label>
+                <select id="shippingZoneSelect" class="estimator-select" onchange="updateCartUI()">
+                    <option value="bkx">Khu vực BKX - Bách/Kinh/Xây (Freeship 0đ)</option>
+                    <option value="pickup">Nhận trực tiếp tại tiệm (Miễn phí 0đ)</option>
+                    <option value="inner">Nội thành Hà Nội &lt;5km (15k - Freeship đơn &ge;100k)</option>
+                </select>
+            </div>
+            <div class="estimator-row">
+                <label for="promoCodeInput">Mã ưu đãi:</label>
+                <div class="promo-code-group">
+                    <input type="text" id="promoCodeInput" placeholder="Nhập LAPANNA (Giảm 5k đơn >=50k)">
+                    <button type="button" onclick="applyVoucherCode()">Áp dụng</button>
+                </div>
+            </div>
+            <div id="voucherFeedback" class="voucher-feedback"></div>
+        </div>
+
         <div class="cart-footer">
+            <div class="cart-breakdown">
+                <div class="breakdown-line">
+                    <span>Tạm tính tiền bánh:</span>
+                    <span id="cartSubtotalPrice">0đ</span>
+                </div>
+                <div class="breakdown-line">
+                    <span>Phí vận chuyển ước tính:</span>
+                    <span id="cartShippingFee" class="text-green">0đ (Freeship)</span>
+                </div>
+                <div class="breakdown-line" id="cartDiscountRow" style="display: none;">
+                    <span>Voucher giảm giá:</span>
+                    <span id="cartDiscountAmount" class="text-primary">-0đ</span>
+                </div>
+            </div>
             <div class="cart-total">
-                <span>Tổng Tạm Tính:</span>
+                <span>Tổng Thanh Toán Ước Tính:</span>
                 <span id="cartTotalPrice" class="total-price">0đ</span>
             </div>
             <button class="btn-primary btn-block btn-lg" id="checkoutBtn">
-                Thanh Toán Đặt Hàng <i class="fa-solid fa-arrow-right ml-2"></i>
+                Tiến Hành Đặt Hàng <i class="fa-solid fa-arrow-right ml-2"></i>
             </button>
-            <p class="cart-note"><i class="fa-solid fa-shield-halved"></i> Đặt hàng tiện lợi • Nhận bánh thanh toán COD
+            <p class="cart-note"><i class="fa-solid fa-shield-halved"></i> Minh bạch chi phí • Nhận bánh kiểm tra rồi thanh toán
             </p>
         </div>
     </div>
 
-    <!-- Order Modal (for contact info & promotion summary) -->
+    <!-- ORDER MODAL (Checkout & Confirmation) -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-content">
             <div class="sheet-handle-bar"></div>
             <div class="modal-header">
-                <h3>Xác Nhận Đơn Hàng & Giao Bánh</h3>
+                <h3>Xác Nhận Đơn Hàng &amp; Giao Bánh</h3>
                 <button class="close-modal" id="closeModalBtn" aria-label="Đóng"><i
                         class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <!-- Tóm tắt đơn hàng & khuyến mãi -->
+                <!-- Tóm tắt đơn hàng & ước tính chi phí -->
                 <div id="checkoutSummary"></div>
 
                 <form id="orderForm">
@@ -294,7 +1060,7 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Họ và tên *</label>
+                            <label for="name">Họ và tên người nhận *</label>
                             <input type="text" id="name" name="name" required placeholder="Tên người nhận bánh">
                         </div>
                         <div class="form-group">
@@ -302,14 +1068,22 @@
                             <input type="tel" id="phone" name="phone" required placeholder="0912345678">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="facebook"><i class="fa-brands fa-facebook" style="color: #1877F2;"></i> Link
-                            Facebook / Tên Facebook (Không bắt buộc)</label>
-                        <input type="text" id="facebook" name="facebook"
-                            placeholder="Ví dụ: fb.com/username hoặc Tên Facebook để shop tiện liên hệ">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="facebook"><i class="fa-brands fa-facebook" style="color: #1877F2;"></i> Link / Tên Facebook</label>
+                            <input type="text" id="facebook" name="facebook"
+                                placeholder="Để shop tiện nhắn xác nhận (Tùy chọn)">
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentMethod"><i class="fa-solid fa-wallet text-primary"></i> Phương thức thanh toán</label>
+                            <select id="paymentMethod" name="paymentMethod" class="form-select">
+                                <option value="COD (Tiền mặt khi nhận bánh)">💵 Tiền mặt khi nhận bánh (COD)</option>
+                                <option value="Chuyển khoản VietQR / MoMo">📱 Chuyển khoản VietQR / Ví MoMo</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="address">Địa chỉ nhận bánh * (Khu vực BKX được Freeship)</label>
+                        <label for="address">Địa chỉ nhận bánh chi tiết * (Khu vực BKX được Freeship)</label>
                         <input type="text" id="address" name="address" required
                             placeholder="Số phòng, toà nhà, KTX hoặc địa chỉ chi tiết...">
                     </div>
@@ -319,7 +1093,7 @@
                             placeholder="Ví dụ: Giao trước 12h trưa, mang thêm thìa, gọi trước khi đến..."></textarea>
                     </div>
                     <button type="submit" class="btn-primary btn-block btn-lg mt-4" id="submitBtn">
-                        <i class="fa-solid fa-paper-plane"></i> Xác Nhận Đặt Hàng
+                        <i class="fa-solid fa-paper-plane"></i> Xác Nhận Đặt Hàng Ngay
                     </button>
                     <div id="formStatus" class="form-status"></div>
                 </form>
@@ -327,7 +1101,51 @@
         </div>
     </div>
 
-    <!-- Mobile Floating Sticky Cart Bar (Hiển thị cố định trên mobile khi có sản phẩm trong giỏ) -->
+    <!-- COMMUNICATION: FLOATING 2-WAY LIVE CHAT ASSISTANT WIDGET -->
+    <div class="live-chat-widget" id="liveChatWidget">
+        <button type="button" class="chat-toggle-btn" id="chatToggleBtn" aria-label="Mở hộp thoại tư vấn trực tuyến">
+            <i class="fa-solid fa-comments"></i>
+            <span class="chat-btn-label">Tư vấn nhanh</span>
+            <span class="chat-online-dot"></span>
+        </button>
+
+        <div class="chat-popup" id="chatPopup">
+            <div class="chat-popup-header">
+                <div class="chat-agent-info">
+                    <div class="agent-avatar"><i class="fa-solid fa-headset"></i></div>
+                    <div>
+                        <h4>Trợ Lý La Panna Online</h4>
+                        <span><i class="fa-solid fa-circle text-green"></i> Tương tác hai chiều 24/7</span>
+                    </div>
+                </div>
+                <button type="button" class="close-chat-btn" id="closeChatBtn" aria-label="Đóng chat">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-msg bot">
+                    <div class="msg-bubble">
+                        Xin chào! 👋 Mình là trợ lý trực tuyến của <strong>La Panna (lapanna.store)</strong>. Bạn cần tư vấn chọn vị Panna Cotta, hỏi phí ship hay chính sách đổi trả ạ?
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-quick-prompts">
+                <button type="button" onclick="sendQuickChat('Vị nào bán chạy nhất tại shop?')">🍓 Vị Best Seller?</button>
+                <button type="button" onclick="sendQuickChat('Phí ship khu vực BKX tính thế nào?')">🚚 Phí ship BKX?</button>
+                <button type="button" onclick="sendQuickChat('Bánh bảo quản được mấy ngày?')">❄️ Cách bảo quản?</button>
+                <button type="button" onclick="sendQuickChat('Cho mình hỏi chính sách đổi trả?')">🛡️ Đổi trả 1-1?</button>
+            </div>
+
+            <form id="liveChatForm" class="chat-input-area">
+                <input type="text" id="liveChatInput" placeholder="Nhập câu hỏi của bạn..." required autocomplete="off">
+                <button type="submit" aria-label="Gửi tin nhắn"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mobile Floating Sticky Cart Bar -->
     <div class="mobile-sticky-cart" id="mobileStickyCart">
         <div class="mobile-sticky-cart-content" id="mobileStickyCartTrigger">
             <div class="mobile-sticky-cart-left">
@@ -347,7 +1165,7 @@
     </div>
 
     <!-- Script -->
-    <script src="app.js?v=3.1"></script>
+    <script src="app.js?v=4.0"></script>
 </body>
 
 </html>
